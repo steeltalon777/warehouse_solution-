@@ -1,0 +1,19 @@
+# Root repository ignore rules (solution-level).
+# This repo treats nested apps as independent git repos.
+
+# Ignore nested repos entirely
+SyncServer/
+Warehouse_web/
+
+# IDE/editor
+.idea/
+.vscode/
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Python caches (root-level only; nested repos handle their own ignores)
+__pycache__/
+*.pyc
+

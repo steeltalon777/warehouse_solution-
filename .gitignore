@@ -1,9 +1,12 @@
 # Root repository ignore rules (solution-level).
 # This repo treats nested apps as independent git repos.
 
-# Ignore nested repos entirely
+# Projects with their own repositories
 SyncServer/
 Warehouse_web/
+WarehouseAIWorkstation/
+WarehouseDesktop/
+Warehouse_frontend/
 
 # IDE/editor
 .idea/
@@ -17,3 +20,6 @@ Desktop.ini
 __pycache__/
 *.pyc
 
+
+# Separate repository: Android mobile client
+/WarehouseMobile/

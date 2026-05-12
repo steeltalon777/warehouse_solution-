@@ -1,6 +1,6 @@
 # Git State
 
-Generated at: `2026-05-12T14:36`
+Generated at: `2026-05-12T14:55`
 Root: `D:\PROG\Warehouse_solution`
 Fetch before scan: `no`
 
@@ -8,10 +8,10 @@ Fetch before scan: `no`
 
 | Repo | Branch | Upstream | Ahead | Behind | Dirty | HEAD | Last commit |
 |---|---|---|---:|---:|---|---|---|
-| `Warehouse_solution` | `main` | `origin/main` | 0 | 0 | YES | `7495282` | Add nested repositories git state report |
+| `Warehouse_solution` | `main` | `origin/main` | 0 | 0 | YES | `a849d78` | Refine nested repositories git state report |
 | `SyncServer` | `dev` | `origin/dev` | 0 | 0 | no | `74327ab` | Clean generated artifacts and temporary files |
 | `Warehouse_frontend` | `No commits yet on master` | `-` | 0 | 0 | YES | `-` | - |
-| `Warehouse_web` | `dev` | `origin/dev` | 0 | 0 | YES | `6297fbe` | fix: remove all visibility restrictions for storekeeper role |
+| `Warehouse_web` | `dev` | `origin/dev` | 0 | 0 | no | `4924deb` | Remove generated repository map |
 | `WarehouseAIWorkstation` | `main` | `origin/main` | 1 | 0 | YES | `04daeae` | Bootstrap ready |
 | `WarehouseMobile` | `master` | `-` | 0 | 0 | YES | `e516d56` | First |
 
@@ -24,10 +24,10 @@ Fetch before scan: `no`
 - Upstream: `origin/main`
 - Ahead/behind: `0 / 0`
 - Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 1 / 2`
-- HEAD: `7495282`
-- HEAD subject: Add nested repositories git state report
-- HEAD author/date: `Maksim Kuzmin / 2026-05-12 14:31:31 +0900`
+- Staged / unstaged / untracked: `0 / 1 / 0`
+- HEAD: `a849d78`
+- HEAD subject: Refine nested repositories git state report
+- HEAD author/date: `Maksim Kuzmin / 2026-05-12 14:39:43 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
@@ -45,19 +45,17 @@ Fetch before scan: `no`
 #### Working tree status
 
 ```text
- M collect_git_state.py
-?? .opencode/
-?? .playwright-mcp/
+ M GIT_STATE.md
 ```
 
 #### Recent commits
 
 ```text
+a849d78 | 2026-05-12 14:39:43 +0900 | Maksim Kuzmin | Refine nested repositories git state report
 7495282 | 2026-05-12 14:31:31 +0900 | Maksim Kuzmin | Add nested repositories git state report
 b9d237a | 2026-05-12 14:16:37 +0900 | Maksim Kuzmin | Add repository map generator
 66dfcd9 | 2026-05-12 13:46:55 +0900 | Maksim Kuzmin | Clean solution repository structure
 8fbd8a0 | 2026-04-28 17:05:40 +0900 | Maksim Kuzmin | Ignore WarehouseMobile independent repository
-130d7b3 | 2026-04-22 14:20:59 +0900 | Maksim Kuzmin | chore: ignore nested repos (SyncServer, Warehouse_web)
 ```
 
 ### SyncServer
@@ -170,11 +168,11 @@ A  tsconfig.json
 - Current branch: `dev`
 - Upstream: `origin/dev`
 - Ahead/behind: `0 / 0`
-- Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 0 / 1`
-- HEAD: `6297fbe`
-- HEAD subject: fix: remove all visibility restrictions for storekeeper role
-- HEAD author/date: `Maksim Kuzmin / 2026-05-07 13:50:12 +0900`
+- Dirty: `no`
+- Staged / unstaged / untracked: `0 / 0 / 0`
+- HEAD: `4924deb`
+- HEAD subject: Remove generated repository map
+- HEAD author/date: `Maksim Kuzmin / 2026-05-12 14:53:38 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
@@ -211,17 +209,17 @@ A  tsconfig.json
 #### Working tree status
 
 ```text
-?? repo_map_Warehouse_web_1205261414.md
+clean
 ```
 
 #### Recent commits
 
 ```text
+4924deb | 2026-05-12 14:53:38 +0900 | Maksim Kuzmin | Remove generated repository map
+5ade221 | 2026-05-12 14:46:27 +0900 | Maksim Kuzmin | Ignore generated repository maps
 6297fbe | 2026-05-07 13:50:12 +0900 | Maksim Kuzmin | fix: remove all visibility restrictions for storekeeper role
 c8d10a2 | 2026-05-07 12:28:01 +0900 | Maksim Kuzmin | fix: remove forced site-id filter for storekeeper balances, add session token fallback
 489df27 | 2026-05-07 09:33:40 +0900 | Maksim Kuzmin | 2.1
-fbad7c1 | 2026-05-01 09:36:17 +0900 | Maksim Kuzmin | Работа с деревьями
-f904c06 | 2026-04-29 17:21:01 +0900 | Maksim Kuzmin | Prepare Django 2.0 release
 ```
 
 ### WarehouseAIWorkstation

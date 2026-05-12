@@ -26,3 +26,8 @@ repo_map.json
 # OS
 Thumbs.db
 Desktop.ini
+
+# Generated repository maps
+repo_map_*.md
+repo_map_*.txt
+repo_map_*.json

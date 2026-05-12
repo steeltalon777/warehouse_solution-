@@ -7,7 +7,9 @@ Generate an AI-friendly repository snapshot from the project root.
 Usage:
     python build_repo_map.py
     python build_repo_map.py --root .
-    python build_repo_map.py --output repo_map.txt
+    python build_repo_map.py --root SyncServer
+    python build_repo_map.py --root ../Warehouse_web
+    python build_repo_map.py --output repo_map.md
     python build_repo_map.py --format json
     python build_repo_map.py --output repo_map.json --format json
     python build_repo_map.py --include-hidden
@@ -20,7 +22,9 @@ What it does:
 - Lists models, repos, services, schemas
 - Detects basic route -> service/repo/model dependency hints
 - Reads env vars from .env.example and optionally .env
-- Produces text report by default, JSON with --format json
+- Produces Markdown report by default, JSON with --format json
+- If --output is not passed, names the file automatically:
+  repo_map_<repository_name>_<ddmmyyhhmm>.md
 
 Safe defaults:
 - Hides noisy folders like .git, .idea, .venv, node_modules, __pycache__
@@ -36,9 +40,9 @@ import json
 import os
 import re
 from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
 from typing import Iterable, Any
-
 
 DEFAULT_EXCLUDE_DIRS = {
     ".git",
@@ -70,6 +74,7 @@ DEFAULT_EXCLUDE_FILES = {
     "yarn.lock",
     "pnpm-lock.yaml",
     "repo_map.txt",
+    "repo_map.md",
     "repo_map.json",
 }
 
@@ -135,13 +140,21 @@ INFRA_FILENAMES = {
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build AI-friendly repo map")
-    parser.add_argument("--root", default=".", help="Project root directory")
-    parser.add_argument("--output", default=None, help="Output file path (default depends on format)")
+    parser.add_argument(
+        "--root",
+        default=".",
+        help="Project root directory. Can be absolute or relative to the current working directory.",
+    )
+    parser.add_argument(
+        "--output",
+        default=None,
+        help="Output file path. If omitted, generated automatically inside --root.",
+    )
     parser.add_argument(
         "--format",
-        choices=["txt", "json"],
-        default="txt",
-        help="Output format: txt (default) or json",
+        choices=["md", "txt", "json"],
+        default="md",
+        help="Output format: md (default), txt, or json",
     )
     parser.add_argument(
         "--include-hidden",
@@ -182,6 +195,9 @@ def should_skip(path: Path, root: Path, include_hidden: bool) -> bool:
     if path.name in DEFAULT_EXCLUDE_FILES:
         return True
 
+    if re.fullmatch(r"repo_map_.+\\.(md|txt|json)", path.name):
+        return True
+
     if not include_hidden and is_hidden(rel):
         return True
 
@@ -216,7 +232,9 @@ def build_tree(root: Path, include_hidden: bool, max_entries: int) -> list[str]:
 
         try:
             children = []
-            for child in sorted(directory.iterdir(), key=lambda p: (not p.is_dir(), p.name.lower())):
+            for child in sorted(
+                directory.iterdir(), key=lambda p: (not p.is_dir(), p.name.lower())
+            ):
                 if should_skip(child, root, include_hidden):
                     continue
                 children.append(child)
@@ -271,7 +289,11 @@ def detect_project_type(root: Path) -> list[str]:
         hints.append("Django")
     if any(root.rglob("fastapi*.py")) or any(root.rglob("routes*.py")):
         hints.append("FastAPI-style routes (possible)")
-    if (root / "docker-compose.yml").exists() or (root / "compose.yml").exists() or (root / "Dockerfile").exists():
+    if (
+        (root / "docker-compose.yml").exists()
+        or (root / "compose.yml").exists()
+        or (root / "Dockerfile").exists()
+    ):
         hints.append("Docker")
     if (root / "tests").exists():
         hints.append("Tests")
@@ -292,23 +314,63 @@ def detect_architecture_signals(root: Path) -> list[dict[str, str]]:
         signals.append({"signal": name, "confidence": confidence, "evidence": evidence})
 
     if (root / "app" / "services").exists() or any(root.rglob("services")):
-        add("Service layer likely present", "Confirmed by structure", "Found services directory")
-    if (root / "app" / "repos").exists() or any(root.rglob("repos")) or any(root.rglob("repositories")):
-        add("Repository/data access layer likely present", "Confirmed by structure", "Found repos/repositories directory")
+        add(
+            "Service layer likely present",
+            "Confirmed by structure",
+            "Found services directory",
+        )
+    if (
+        (root / "app" / "repos").exists()
+        or any(root.rglob("repos"))
+        or any(root.rglob("repositories"))
+    ):
+        add(
+            "Repository/data access layer likely present",
+            "Confirmed by structure",
+            "Found repos/repositories directory",
+        )
     if (root / "app" / "models").exists() or any(root.rglob("models")):
-        add("Model layer likely present", "Confirmed by structure", "Found models directory")
+        add(
+            "Model layer likely present",
+            "Confirmed by structure",
+            "Found models directory",
+        )
     if any(root.rglob("uow.py")) or any(root.rglob("*unit_of_work*.py")):
-        add("Unit of work pattern likely present", "Confirmed by filename", "Found uow/unit_of_work file")
+        add(
+            "Unit of work pattern likely present",
+            "Confirmed by filename",
+            "Found uow/unit_of_work file",
+        )
     if (root / "manage.py").exists():
         add("Django application detected", "Confirmed by code", "manage.py exists")
     if any(root.rglob("APIRouter")) or any(root.rglob("fastapi")):
-        add("FastAPI-style routing likely present", "Inferred from repository structure", "FastAPI/router-related files found")
-    if (root / "Dockerfile").exists() or (root / "docker-compose.yml").exists() or (root / "compose.yml").exists():
-        add("Containerized development/deployment likely present", "Confirmed by files", "Docker-related files found")
+        add(
+            "FastAPI-style routing likely present",
+            "Inferred from repository structure",
+            "FastAPI/router-related files found",
+        )
+    if (
+        (root / "Dockerfile").exists()
+        or (root / "docker-compose.yml").exists()
+        or (root / "compose.yml").exists()
+    ):
+        add(
+            "Containerized development/deployment likely present",
+            "Confirmed by files",
+            "Docker-related files found",
+        )
     if any(root.rglob(".github/workflows")):
-        add("CI workflow likely present", "Confirmed by structure", ".github/workflows found")
+        add(
+            "CI workflow likely present",
+            "Confirmed by structure",
+            ".github/workflows found",
+        )
     if any(root.rglob("alembic.ini")) or (root / "migrations").exists():
-        add("Schema migration mechanism likely present", "Confirmed by files", "Migration files found")
+        add(
+            "Schema migration mechanism likely present",
+            "Confirmed by files",
+            "Migration files found",
+        )
 
     return signals
 
@@ -387,7 +449,12 @@ def collect_module_map(root: Path) -> dict[str, list[str]]:
             groups["API"].append(rel)
         elif rel.startswith("app/services/") or "/services/" in rel:
             groups["Services"].append(rel)
-        elif rel.startswith("app/repos/") or rel.startswith("app/repositories/") or "/repos/" in rel or "/repositories/" in rel:
+        elif (
+            rel.startswith("app/repos/")
+            or rel.startswith("app/repositories/")
+            or "/repos/" in rel
+            or "/repositories/" in rel
+        ):
             groups["Repositories"].append(rel)
         elif rel.startswith("app/models/") or "/models/" in rel:
             groups["Models"].append(rel)
@@ -401,7 +468,16 @@ def collect_module_map(root: Path) -> dict[str, list[str]]:
             groups["Docs"].append(rel)
         elif rel.startswith("tests/") or "/tests/" in rel:
             groups["Tests"].append(rel)
-        elif any(seg in rel for seg in [".github/workflows", "Dockerfile", "docker-compose.yml", "compose.yml", "nginx"]):
+        elif any(
+            seg in rel
+            for seg in [
+                ".github/workflows",
+                "Dockerfile",
+                "docker-compose.yml",
+                "compose.yml",
+                "nginx",
+            ]
+        ):
             groups["Infra"].append(rel)
         elif rel.endswith(".py"):
             groups["Python files"].append(rel)
@@ -430,7 +506,9 @@ def parse_fastapi_routes(file_path: Path, root: Path) -> list[dict[str, Any]]:
                     if isinstance(func, ast.Name) and func.id == "APIRouter":
                         prefix = ""
                         for kw in node.value.keywords:
-                            if kw.arg == "prefix" and isinstance(kw.value, ast.Constant):
+                            if kw.arg == "prefix" and isinstance(
+                                kw.value, ast.Constant
+                            ):
                                 prefix = str(kw.value.value)
                         for target in node.targets:
                             if isinstance(target, ast.Name):
@@ -442,13 +520,19 @@ def parse_fastapi_routes(file_path: Path, root: Path) -> list[dict[str, Any]]:
         def visit_Expr(self, node: ast.Expr) -> None:
             try:
                 value = node.value
-                if isinstance(value, ast.Call) and isinstance(value.func, ast.Attribute):
-                    if value.func.attr == "include_router" and isinstance(value.func.value, ast.Name):
+                if isinstance(value, ast.Call) and isinstance(
+                    value.func, ast.Attribute
+                ):
+                    if value.func.attr == "include_router" and isinstance(
+                        value.func.value, ast.Name
+                    ):
                         target_router = value.func.value.id
                         included = ""
                         if value.args and isinstance(value.args[0], ast.Name):
                             included = value.args[0].id
-                        include_router_refs.append({"target": target_router, "included": included})
+                        include_router_refs.append(
+                            {"target": target_router, "included": included}
+                        )
             except Exception:
                 pass
             self.generic_visit(node)
@@ -636,11 +720,22 @@ def collect_import_hints(root: Path, max_items: int) -> list[dict[str, str]]:
 
 def collect_dependency_hints(root: Path, max_items: int) -> list[dict[str, str]]:
     hints: list[dict[str, str]] = []
-    files = [p for p in root.rglob("*.py") if not should_skip(p, root, include_hidden=False)]
+    files = [
+        p for p in root.rglob("*.py") if not should_skip(p, root, include_hidden=False)
+    ]
 
-    service_names = {p.stem for p in files if "/services/" in p.relative_to(root).as_posix()}
-    repo_names = {p.stem for p in files if "/repos/" in p.relative_to(root).as_posix() or "/repositories/" in p.relative_to(root).as_posix()}
-    model_names = {p.stem for p in files if "/models/" in p.relative_to(root).as_posix()}
+    service_names = {
+        p.stem for p in files if "/services/" in p.relative_to(root).as_posix()
+    }
+    repo_names = {
+        p.stem
+        for p in files
+        if "/repos/" in p.relative_to(root).as_posix()
+        or "/repositories/" in p.relative_to(root).as_posix()
+    }
+    model_names = {
+        p.stem for p in files if "/models/" in p.relative_to(root).as_posix()
+    }
 
     for path in files:
         if len(hints) >= max_items:
@@ -650,24 +745,52 @@ def collect_dependency_hints(root: Path, max_items: int) -> list[dict[str, str]]
         if "/api/" in rel or path.name.startswith("routes"):
             for service in sorted(service_names):
                 if service and re.search(rf"\b{re.escape(service)}\b", text):
-                    hints.append({"kind": "route_to_service", "from": rel, "to": service, "hint": f"{rel} references service {service}"})
+                    hints.append(
+                        {
+                            "kind": "route_to_service",
+                            "from": rel,
+                            "to": service,
+                            "hint": f"{rel} references service {service}",
+                        }
+                    )
                     if len(hints) >= max_items:
                         break
         if "/services/" in rel:
             for repo in sorted(repo_names):
                 if repo and re.search(rf"\b{re.escape(repo)}\b", text):
-                    hints.append({"kind": "service_to_repo", "from": rel, "to": repo, "hint": f"{rel} references repo {repo}"})
+                    hints.append(
+                        {
+                            "kind": "service_to_repo",
+                            "from": rel,
+                            "to": repo,
+                            "hint": f"{rel} references repo {repo}",
+                        }
+                    )
                     if len(hints) >= max_items:
                         break
             for model in sorted(model_names):
                 if model and re.search(rf"\b{re.escape(model)}\b", text):
-                    hints.append({"kind": "service_to_model", "from": rel, "to": model, "hint": f"{rel} references model {model}"})
+                    hints.append(
+                        {
+                            "kind": "service_to_model",
+                            "from": rel,
+                            "to": model,
+                            "hint": f"{rel} references model {model}",
+                        }
+                    )
                     if len(hints) >= max_items:
                         break
         if "/repos/" in rel or "/repositories/" in rel:
             for model in sorted(model_names):
                 if model and re.search(rf"\b{re.escape(model)}\b", text):
-                    hints.append({"kind": "repo_to_model", "from": rel, "to": model, "hint": f"{rel} references model {model}"})
+                    hints.append(
+                        {
+                            "kind": "repo_to_model",
+                            "from": rel,
+                            "to": model,
+                            "hint": f"{rel} references model {model}",
+                        }
+                    )
                     if len(hints) >= max_items:
                         break
 
@@ -707,13 +830,22 @@ def extract_env_refs_from_python(path: Path) -> list[str]:
         # os.getenv("NAME")
         if isinstance(node, ast.Call):
             if isinstance(node.func, ast.Attribute):
-                if node.func.attr == "getenv" and node.args and isinstance(node.args[0], ast.Constant) and isinstance(node.args[0].value, str):
+                if (
+                    node.func.attr == "getenv"
+                    and node.args
+                    and isinstance(node.args[0], ast.Constant)
+                    and isinstance(node.args[0].value, str)
+                ):
                     key = node.args[0].value
                     if re.fullmatch(r"[A-Z][A-Z0-9_]*", key):
                         found.add(key)
             # Field(..., env="NAME")
             for kw in node.keywords:
-                if kw.arg == "env" and isinstance(kw.value, ast.Constant) and isinstance(kw.value.value, str):
+                if (
+                    kw.arg == "env"
+                    and isinstance(kw.value, ast.Constant)
+                    and isinstance(kw.value.value, str)
+                ):
                     key = kw.value.value
                     if re.fullmatch(r"[A-Z][A-Z0-9_]*", key):
                         found.add(key)
@@ -836,7 +968,20 @@ def collect_infra_map(root: Path) -> list[dict[str, str]]:
         rel = path.relative_to(root).as_posix()
         if path.is_dir():
             continue
-        if any(token in rel for token in ["Dockerfile", "docker-compose.yml", "compose.yml", ".github/workflows", "nginx", "terraform", "helm", "k8s", "kubernetes"]):
+        if any(
+            token in rel
+            for token in [
+                "Dockerfile",
+                "docker-compose.yml",
+                "compose.yml",
+                ".github/workflows",
+                "nginx",
+                "terraform",
+                "helm",
+                "k8s",
+                "kubernetes",
+            ]
+        ):
             infra.append({"file": rel, "summary": summarize_path(rel)})
     return infra
 
@@ -855,19 +1000,30 @@ def collect_sensitive_areas(root: Path, max_items: int) -> list[dict[str, str]]:
     return items
 
 
-def collect_unknowns(root: Path, api_map: list[dict[str, Any]], entry_points: list[str], infra_map: list[dict[str, str]]) -> list[str]:
+def collect_unknowns(
+    root: Path,
+    api_map: list[dict[str, Any]],
+    entry_points: list[str],
+    infra_map: list[dict[str, str]],
+) -> list[str]:
     unknowns: list[str] = []
     if not entry_points:
         unknowns.append("Application startup entry point not clearly detected.")
     if not api_map:
-        unknowns.append("No HTTP route map detected, or framework route extraction is incomplete.")
+        unknowns.append(
+            "No HTTP route map detected, or framework route extraction is incomplete."
+        )
     if not infra_map:
         unknowns.append("Deployment/infrastructure files not clearly detected.")
     if not (root / "README.md").exists():
         unknowns.append("README.md not found.")
     if not any(root.rglob("tests")):
         unknowns.append("Tests directory not clearly detected.")
-    if not any(root.rglob("*.sql")) and not any(root.rglob("alembic.ini")) and not (root / "migrations").exists():
+    if (
+        not any(root.rglob("*.sql"))
+        and not any(root.rglob("alembic.ini"))
+        and not (root / "migrations").exists()
+    ):
         unknowns.append("Migration strategy not clearly detected.")
     return unknowns
 
@@ -884,13 +1040,21 @@ def guess_flows(root: Path, dependency_hints: list[dict[str, str]]) -> list[str]
     if service_to_repo:
         guesses.append("Data flow likely present: service layer -> repository layer")
     if repo_to_model:
-        guesses.append("Persistence flow likely present: repository layer -> model/entity layer")
+        guesses.append(
+            "Persistence flow likely present: repository layer -> model/entity layer"
+        )
     if (root / "app" / "services" / "uow.py").exists():
-        guesses.append("Transaction flow likely present: service/route -> UnitOfWork -> repositories -> commit/rollback")
+        guesses.append(
+            "Transaction flow likely present: service/route -> UnitOfWork -> repositories -> commit/rollback"
+        )
     if (root / "manage.py").exists():
-        guesses.append("Django flow likely present: URL config -> view -> service/model/ORM")
+        guesses.append(
+            "Django flow likely present: URL config -> view -> service/model/ORM"
+        )
     if any(p for p in root.rglob("*.py") if "APIRouter" in read_text_safe(p)):
-        guesses.append("FastAPI flow likely present: APIRouter -> endpoint handler -> service -> repository/database")
+        guesses.append(
+            "FastAPI flow likely present: APIRouter -> endpoint handler -> service -> repository/database"
+        )
 
     if not guesses:
         guesses.append("No reliable flow chain inferred automatically.")
@@ -898,11 +1062,19 @@ def guess_flows(root: Path, dependency_hints: list[dict[str, str]]) -> list[str]
     return guesses
 
 
-def build_repo_snapshot(root: Path, include_hidden: bool, include_dotenv: bool, max_tree_entries: int, max_section_items: int) -> dict[str, Any]:
+def build_repo_snapshot(
+    root: Path,
+    include_hidden: bool,
+    include_dotenv: bool,
+    max_tree_entries: int,
+    max_section_items: int,
+) -> dict[str, Any]:
     project_name = root.resolve().name
     project_type = detect_project_type(root)
     architecture_signals = detect_architecture_signals(root)
-    tree_lines = build_tree(root, include_hidden=include_hidden, max_entries=max_tree_entries)
+    tree_lines = build_tree(
+        root, include_hidden=include_hidden, max_entries=max_tree_entries
+    )
     entry_points = detect_entry_points(root)
     module_map = collect_module_map(root)
     api_map = collect_api_map(root)
@@ -923,6 +1095,7 @@ def build_repo_snapshot(root: Path, include_hidden: bool, include_dotenv: bool, 
             "root": str(root.resolve()),
             "detected_stack_hints": project_type,
             "generated_by": "build_repo_map.py",
+            "generated_at": datetime.now().isoformat(timespec="minutes"),
             "notes": "Auto-generated snapshot for AI/context sharing.",
         },
         "architecture_signals": architecture_signals,
@@ -944,7 +1117,8 @@ def build_repo_snapshot(root: Path, include_hidden: bool, include_dotenv: bool, 
         "dependency_hints": dependency_hints,
         "important_flows_auto_guessed": flow_guesses,
         "sensitive_areas": sensitive_areas,
-        "unknowns_and_limitations": unknowns + [
+        "unknowns_and_limitations": unknowns
+        + [
             "Auto-generator does not infer business rules from full code semantics.",
             "Manual review is still required for auth, security, and destructive operations.",
             "Route extraction is partial for complex dynamic router setups.",
@@ -957,6 +1131,21 @@ def format_section(title: str) -> str:
     return f"{line}\n{title}\n{line}"
 
 
+def sanitize_filename_part(value: str) -> str:
+    """Return a filesystem-friendly filename fragment."""
+    cleaned = re.sub(r"[^\w.-]+", "_", value.strip(), flags=re.UNICODE)
+    cleaned = cleaned.strip("._-")
+    return cleaned or "repository"
+
+
+def make_default_output_path(root: Path, output_format: str) -> Path:
+    """Build repo_map_<repo>_<ddmmyyhhmm>.<ext> inside the selected root."""
+    repo_name = sanitize_filename_part(root.resolve().name)
+    timestamp = datetime.now().strftime("%d%m%y%H%M")
+    ext = "json" if output_format == "json" else output_format
+    return root / f"repo_map_{repo_name}_{timestamp}.{ext}"
+
+
 def render_txt(snapshot: dict[str, Any], max_section_items: int) -> str:
     lines: list[str] = []
 
@@ -964,22 +1153,28 @@ def render_txt(snapshot: dict[str, Any], max_section_items: int) -> str:
     lines.append(format_section("PROJECT META"))
     lines.append(f"Name: {meta['name']}")
     lines.append(f"Root: {meta['root']}")
-    lines.append(f"Detected stack/hints: {', '.join(meta['detected_stack_hints']) or 'Unknown'}")
+    lines.append(
+        f"Detected stack/hints: {', '.join(meta['detected_stack_hints']) or 'Unknown'}"
+    )
     lines.append(f"Generated by: {meta['generated_by']}")
+    if meta.get("generated_at"):
+        lines.append(f"Generated at: {meta['generated_at']}")
     lines.append(f"Notes: {meta['notes']}")
     lines.append("")
 
     lines.append(format_section("ARCHITECTURE SIGNALS"))
     if snapshot["architecture_signals"]:
         for item in snapshot["architecture_signals"][:max_section_items]:
-            lines.append(f"- {item['signal']} :: {item['confidence']} :: evidence={item['evidence']}")
+            lines.append(
+                f"- {item['signal']} :: {item['confidence']} :: evidence={item['evidence']}"
+            )
     else:
         lines.append("(none detected)")
     lines.append("")
 
     lines.append(format_section("DIRECTORY TREE"))
     if snapshot["directory_tree"]:
-        lines.extend(snapshot["directory_tree"][:max_section_items * 10])
+        lines.extend(snapshot["directory_tree"][: max_section_items * 10])
     else:
         lines.append("(no visible files found)")
     lines.append("")
@@ -994,7 +1189,9 @@ def render_txt(snapshot: dict[str, Any], max_section_items: int) -> str:
 
     lines.append(format_section("CRITICAL FILES TO READ FIRST"))
     if snapshot["critical_files_to_read_first"]:
-        for idx, item in enumerate(snapshot["critical_files_to_read_first"][:max_section_items], start=1):
+        for idx, item in enumerate(
+            snapshot["critical_files_to_read_first"][:max_section_items], start=1
+        ):
             lines.append(f"{idx}. {item}")
     else:
         lines.append("(none detected)")
@@ -1045,7 +1242,9 @@ def render_txt(snapshot: dict[str, Any], max_section_items: int) -> str:
     lines.append(format_section("IMPORT HINTS"))
     if snapshot["import_hints"]:
         for item in snapshot["import_hints"][:max_section_items]:
-            lines.append(f"- {item['from_file']} :: {item['relation']} :: {item['to_module']}")
+            lines.append(
+                f"- {item['from_file']} :: {item['relation']} :: {item['to_module']}"
+            )
     else:
         lines.append("(no import hints detected)")
     lines.append("")
@@ -1061,7 +1260,9 @@ def render_txt(snapshot: dict[str, Any], max_section_items: int) -> str:
     lines.append(format_section("ENV / CONFIG MAP"))
     if snapshot["env_config_map"]:
         for item in snapshot["env_config_map"][:max_section_items]:
-            lines.append(f"- {item['key']} :: source={item['source']} :: value={item['value']}")
+            lines.append(
+                f"- {item['key']} :: source={item['source']} :: value={item['value']}"
+            )
     else:
         lines.append("(no env variables detected from .env.example/config)")
     lines.append("")
@@ -1115,13 +1316,17 @@ def main() -> int:
         if not output_path.is_absolute():
             output_path = root / output_path
     else:
-        output_name = "repo_map.json" if args.format == "json" else "repo_map.txt"
-        output_path = root / output_name
+        output_path = make_default_output_path(root, args.format)
 
     if args.format == "json":
-        output_path.write_text(json.dumps(snapshot, ensure_ascii=False, indent=2), encoding="utf-8")
+        output_path.write_text(
+            json.dumps(snapshot, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
     else:
-        output_path.write_text(render_txt(snapshot, max_section_items=args.max_section_items), encoding="utf-8")
+        output_path.write_text(
+            render_txt(snapshot, max_section_items=args.max_section_items),
+            encoding="utf-8",
+        )
 
     print(f"repo map written to: {output_path}")
     return 0

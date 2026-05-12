@@ -31,3 +31,6 @@ Desktop.ini
 repo_map_*.md
 repo_map_*.txt
 repo_map_*.json
+
+# Generated machine-readable git state
+git_state.json

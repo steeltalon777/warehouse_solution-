@@ -1,6 +1,6 @@
 # Git State
 
-Generated at: `2026-05-12T14:30`
+Generated at: `2026-05-12T14:36`
 Root: `D:\PROG\Warehouse_solution`
 Fetch before scan: `no`
 
@@ -8,31 +8,26 @@ Fetch before scan: `no`
 
 | Repo | Branch | Upstream | Ahead | Behind | Dirty | HEAD | Last commit |
 |---|---|---|---:|---:|---|---|---|
-| `.opencode` | `main` | `origin/main` | 0 | 0 | YES | `b9d237a` | Add repository map generator |
-| `.playwright-mcp` | `main` | `origin/main` | 0 | 0 | YES | `b9d237a` | Add repository map generator |
-| `docs` | `main` | `origin/main` | 0 | 0 | YES | `b9d237a` | Add repository map generator |
-| `plans` | `main` | `origin/main` | 0 | 0 | YES | `b9d237a` | Add repository map generator |
+| `Warehouse_solution` | `main` | `origin/main` | 0 | 0 | YES | `7495282` | Add nested repositories git state report |
 | `SyncServer` | `dev` | `origin/dev` | 0 | 0 | no | `74327ab` | Clean generated artifacts and temporary files |
-| `Warehouse_client_core` | `main` | `origin/main` | 0 | 0 | YES | `b9d237a` | Add repository map generator |
 | `Warehouse_frontend` | `No commits yet on master` | `-` | 0 | 0 | YES | `-` | - |
 | `Warehouse_web` | `dev` | `origin/dev` | 0 | 0 | YES | `6297fbe` | fix: remove all visibility restrictions for storekeeper role |
 | `WarehouseAIWorkstation` | `main` | `origin/main` | 1 | 0 | YES | `04daeae` | Bootstrap ready |
-| `WarehouseDesktop` | `main` | `origin/main` | 0 | 0 | YES | `b9d237a` | Add repository map generator |
 | `WarehouseMobile` | `master` | `-` | 0 | 0 | YES | `e516d56` | First |
 
 ## Details
 
-### .opencode
+### Warehouse_solution
 
-- Path: `.opencode`
+- Path: `.`
 - Current branch: `main`
 - Upstream: `origin/main`
 - Ahead/behind: `0 / 0`
 - Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 0 / 3`
-- HEAD: `b9d237a`
-- HEAD subject: Add repository map generator
-- HEAD author/date: `Maksim Kuzmin / 2026-05-12 14:16:37 +0900`
+- Staged / unstaged / untracked: `0 / 1 / 2`
+- HEAD: `7495282`
+- HEAD subject: Add nested repositories git state report
+- HEAD author/date: `Maksim Kuzmin / 2026-05-12 14:31:31 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
@@ -50,148 +45,19 @@ Fetch before scan: `no`
 #### Working tree status
 
 ```text
-?? ./
-?? ../.playwright-mcp/
-?? ../collect_git_state.py
+ M collect_git_state.py
+?? .opencode/
+?? .playwright-mcp/
 ```
 
 #### Recent commits
 
 ```text
+7495282 | 2026-05-12 14:31:31 +0900 | Maksim Kuzmin | Add nested repositories git state report
 b9d237a | 2026-05-12 14:16:37 +0900 | Maksim Kuzmin | Add repository map generator
 66dfcd9 | 2026-05-12 13:46:55 +0900 | Maksim Kuzmin | Clean solution repository structure
 8fbd8a0 | 2026-04-28 17:05:40 +0900 | Maksim Kuzmin | Ignore WarehouseMobile independent repository
 130d7b3 | 2026-04-22 14:20:59 +0900 | Maksim Kuzmin | chore: ignore nested repos (SyncServer, Warehouse_web)
-62878f5 | 2026-04-09 11:43:58 +0900 | Maksim Kuzmin | added domain model and api map
-```
-
-### .playwright-mcp
-
-- Path: `.playwright-mcp`
-- Current branch: `main`
-- Upstream: `origin/main`
-- Ahead/behind: `0 / 0`
-- Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 0 / 3`
-- HEAD: `b9d237a`
-- HEAD subject: Add repository map generator
-- HEAD author/date: `Maksim Kuzmin / 2026-05-12 14:16:37 +0900`
-- Tags at HEAD: `-`
-
-#### Remotes
-
-- `origin`: `https://github.com/steeltalon777/warehouse_solution-.git`
-
-#### Local branches
-
-- `main` ← current
-
-#### Remote branches
-
-- `origin/main`
-
-#### Working tree status
-
-```text
-?? ../.opencode/
-?? ./
-?? ../collect_git_state.py
-```
-
-#### Recent commits
-
-```text
-b9d237a | 2026-05-12 14:16:37 +0900 | Maksim Kuzmin | Add repository map generator
-66dfcd9 | 2026-05-12 13:46:55 +0900 | Maksim Kuzmin | Clean solution repository structure
-8fbd8a0 | 2026-04-28 17:05:40 +0900 | Maksim Kuzmin | Ignore WarehouseMobile independent repository
-130d7b3 | 2026-04-22 14:20:59 +0900 | Maksim Kuzmin | chore: ignore nested repos (SyncServer, Warehouse_web)
-62878f5 | 2026-04-09 11:43:58 +0900 | Maksim Kuzmin | added domain model and api map
-```
-
-### docs
-
-- Path: `docs`
-- Current branch: `main`
-- Upstream: `origin/main`
-- Ahead/behind: `0 / 0`
-- Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 0 / 3`
-- HEAD: `b9d237a`
-- HEAD subject: Add repository map generator
-- HEAD author/date: `Maksim Kuzmin / 2026-05-12 14:16:37 +0900`
-- Tags at HEAD: `-`
-
-#### Remotes
-
-- `origin`: `https://github.com/steeltalon777/warehouse_solution-.git`
-
-#### Local branches
-
-- `main` ← current
-
-#### Remote branches
-
-- `origin/main`
-
-#### Working tree status
-
-```text
-?? ../.opencode/
-?? ../.playwright-mcp/
-?? ../collect_git_state.py
-```
-
-#### Recent commits
-
-```text
-b9d237a | 2026-05-12 14:16:37 +0900 | Maksim Kuzmin | Add repository map generator
-66dfcd9 | 2026-05-12 13:46:55 +0900 | Maksim Kuzmin | Clean solution repository structure
-8fbd8a0 | 2026-04-28 17:05:40 +0900 | Maksim Kuzmin | Ignore WarehouseMobile independent repository
-130d7b3 | 2026-04-22 14:20:59 +0900 | Maksim Kuzmin | chore: ignore nested repos (SyncServer, Warehouse_web)
-62878f5 | 2026-04-09 11:43:58 +0900 | Maksim Kuzmin | added domain model and api map
-```
-
-### plans
-
-- Path: `plans`
-- Current branch: `main`
-- Upstream: `origin/main`
-- Ahead/behind: `0 / 0`
-- Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 0 / 3`
-- HEAD: `b9d237a`
-- HEAD subject: Add repository map generator
-- HEAD author/date: `Maksim Kuzmin / 2026-05-12 14:16:37 +0900`
-- Tags at HEAD: `-`
-
-#### Remotes
-
-- `origin`: `https://github.com/steeltalon777/warehouse_solution-.git`
-
-#### Local branches
-
-- `main` ← current
-
-#### Remote branches
-
-- `origin/main`
-
-#### Working tree status
-
-```text
-?? ../.opencode/
-?? ../.playwright-mcp/
-?? ../collect_git_state.py
-```
-
-#### Recent commits
-
-```text
-b9d237a | 2026-05-12 14:16:37 +0900 | Maksim Kuzmin | Add repository map generator
-66dfcd9 | 2026-05-12 13:46:55 +0900 | Maksim Kuzmin | Clean solution repository structure
-8fbd8a0 | 2026-04-28 17:05:40 +0900 | Maksim Kuzmin | Ignore WarehouseMobile independent repository
-130d7b3 | 2026-04-22 14:20:59 +0900 | Maksim Kuzmin | chore: ignore nested repos (SyncServer, Warehouse_web)
-62878f5 | 2026-04-09 11:43:58 +0900 | Maksim Kuzmin | added domain model and api map
 ```
 
 ### SyncServer
@@ -248,49 +114,6 @@ clean
 d52ec23 | 2026-04-23 10:05:15 +0900 | Maksim Kuzmin | Preprod 2.0
 c714332 | 2026-04-22 12:27:58 +0900 | Maksim Kuzmin | TM ites phase 1
 3445982 | 2026-04-15 16:18:11 +0900 | Maksim Kuzmin | updated 2.0
-```
-
-### Warehouse_client_core
-
-- Path: `Warehouse_client_core`
-- Current branch: `main`
-- Upstream: `origin/main`
-- Ahead/behind: `0 / 0`
-- Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 0 / 3`
-- HEAD: `b9d237a`
-- HEAD subject: Add repository map generator
-- HEAD author/date: `Maksim Kuzmin / 2026-05-12 14:16:37 +0900`
-- Tags at HEAD: `-`
-
-#### Remotes
-
-- `origin`: `https://github.com/steeltalon777/warehouse_solution-.git`
-
-#### Local branches
-
-- `main` ← current
-
-#### Remote branches
-
-- `origin/main`
-
-#### Working tree status
-
-```text
-?? ../.opencode/
-?? ../.playwright-mcp/
-?? ../collect_git_state.py
-```
-
-#### Recent commits
-
-```text
-b9d237a | 2026-05-12 14:16:37 +0900 | Maksim Kuzmin | Add repository map generator
-66dfcd9 | 2026-05-12 13:46:55 +0900 | Maksim Kuzmin | Clean solution repository structure
-8fbd8a0 | 2026-04-28 17:05:40 +0900 | Maksim Kuzmin | Ignore WarehouseMobile independent repository
-130d7b3 | 2026-04-22 14:20:59 +0900 | Maksim Kuzmin | chore: ignore nested repos (SyncServer, Warehouse_web)
-62878f5 | 2026-04-09 11:43:58 +0900 | Maksim Kuzmin | added domain model and api map
 ```
 
 ### Warehouse_frontend
@@ -481,49 +304,6 @@ f904c06 | 2026-04-29 17:21:01 +0900 | Maksim Kuzmin | Prepare Django 2.0 release
 f414330 | 2026-04-12 22:53:15 +0900 | Maksim Kuzmin | fix(stage5): close Directory workspace runtime defects and add smoke gate\n\n- Add missing theme resources (BrushTextSecondary, BrushError, BrushWarning, BrushSuccess)\n- Fix XAML command bindings to match actual ViewModel command names (NewItemCommand, SaveSelectedCommand, etc.)\n- Remove unsafe Task.Run initialization; move to Loaded event handler on UI thread\n- Complete detail panels with all business fields (Description, Code, SortOrder, IsActive)\n- Render AI flags as read-only (TextBlock with muted styling, not editable TextBox)\n- Normalize contract matrix auth format to X-User-Token (role: ...)\n- Add WPF smoke tests for Row ViewModel round-trips and flag formatting\n- Add Presentation reference to UnitTests project (net8.0-windows)\n\nBuild: 0 warnings, 0 errors. Tests: 73 passed.
 2ed7442 | 2026-04-11 23:17:28 +0900 | Maksim Kuzmin | Harden bootstrap login flow and add stage 4 spec
 27a9ede | 2026-04-11 22:50:11 +0900 | Maksim Kuzmin | fix(stage3): close remaining gaps — root setup visibility, logout flow, user management UI
-```
-
-### WarehouseDesktop
-
-- Path: `WarehouseDesktop`
-- Current branch: `main`
-- Upstream: `origin/main`
-- Ahead/behind: `0 / 0`
-- Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 0 / 3`
-- HEAD: `b9d237a`
-- HEAD subject: Add repository map generator
-- HEAD author/date: `Maksim Kuzmin / 2026-05-12 14:16:37 +0900`
-- Tags at HEAD: `-`
-
-#### Remotes
-
-- `origin`: `https://github.com/steeltalon777/warehouse_solution-.git`
-
-#### Local branches
-
-- `main` ← current
-
-#### Remote branches
-
-- `origin/main`
-
-#### Working tree status
-
-```text
-?? ../.opencode/
-?? ../.playwright-mcp/
-?? ../collect_git_state.py
-```
-
-#### Recent commits
-
-```text
-b9d237a | 2026-05-12 14:16:37 +0900 | Maksim Kuzmin | Add repository map generator
-66dfcd9 | 2026-05-12 13:46:55 +0900 | Maksim Kuzmin | Clean solution repository structure
-8fbd8a0 | 2026-04-28 17:05:40 +0900 | Maksim Kuzmin | Ignore WarehouseMobile independent repository
-130d7b3 | 2026-04-22 14:20:59 +0900 | Maksim Kuzmin | chore: ignore nested repos (SyncServer, Warehouse_web)
-62878f5 | 2026-04-09 11:43:58 +0900 | Maksim Kuzmin | added domain model and api map
 ```
 
 ### WarehouseMobile

@@ -34,3 +34,8 @@ repo_map_*.json
 
 # Generated machine-readable git state
 git_state.json
+
+# Local AI/tooling state
+.opencode/
+.playwright-mcp/
+

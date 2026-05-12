@@ -149,11 +149,20 @@ def run_git(repo: Path, args: list[str], timeout: int = 20) -> GitCommandResult:
         )
 
 
-def is_git_repo(path: Path) -> bool:
-    git_marker = path / ".git"
-    if git_marker.exists():
-        return True
+def has_own_git_marker(path: Path) -> bool:
+    """
+    True only when this directory is a Git repository root:
+    - normal repo: .git directory
+    - worktree/submodule: .git file
+    """
+    return (path / ".git").exists()
 
+
+def is_git_worktree(path: Path) -> bool:
+    """
+    True when path is inside any Git worktree.
+    Use this only for --include-root validation, not for child repo discovery.
+    """
     result = run_git(path, ["rev-parse", "--is-inside-work-tree"])
     return result.ok and result.stdout.strip() == "true"
 
@@ -378,7 +387,7 @@ def collect_repo_state(
 def find_repos(root: Path, include_root: bool, recursive: bool) -> list[Path]:
     repos: list[Path] = []
 
-    if include_root and is_git_repo(root):
+    if include_root and is_git_worktree(root):
         repos.append(root)
 
     if recursive:
@@ -390,7 +399,7 @@ def find_repos(root: Path, include_root: bool, recursive: bool) -> list[Path]:
             if any(part in DEFAULT_EXCLUDE_DIRS for part in rel_parts):
                 continue
 
-            if is_git_repo(path):
+            if has_own_git_marker(path):
                 repos.append(path)
     else:
         for path in sorted(root.iterdir(), key=lambda p: p.name.lower()):
@@ -400,10 +409,9 @@ def find_repos(root: Path, include_root: bool, recursive: bool) -> list[Path]:
             if path.name in DEFAULT_EXCLUDE_DIRS:
                 continue
 
-            if is_git_repo(path):
+            if has_own_git_marker(path):
                 repos.append(path)
 
-    # Remove duplicates and nested duplicates caused by recursive scanning.
     unique: list[Path] = []
     seen: set[Path] = set()
 

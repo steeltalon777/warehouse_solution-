@@ -34,6 +34,7 @@ repo_map_*.json
 
 # Generated machine-readable git state
 git_state.json
+GIT_STATE.md
 
 # Local AI/tooling state
 .opencode/

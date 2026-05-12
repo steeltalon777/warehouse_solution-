@@ -1,25 +1,28 @@
 # Root repository ignore rules (solution-level).
-# This repo treats nested apps as independent git repos.
+# Nested apps are independent git repositories.
 
-# Projects with their own repositories
-SyncServer/
-Warehouse_web/
-WarehouseAIWorkstation/
-WarehouseDesktop/
-Warehouse_frontend/
+# Nested repositories
+/SyncServer/
+/Warehouse_web/
+/WarehouseAIWorkstation/
+/WarehouseDesktop/
+/Warehouse_frontend/
+/Warehouse_client_core/
+/WarehouseMobile/
 
-# IDE/editor
+# Local IDE/editor
 .idea/
 .vscode/
+
+# Local tooling/cache
+.pytest_cache/
+__pycache__/
+*.pyc
+
+# Generated repo maps
+repo_map.txt
+repo_map.json
 
 # OS
 Thumbs.db
 Desktop.ini
-
-# Python caches (root-level only; nested repos handle their own ignores)
-__pycache__/
-*.pyc
-
-
-# Separate repository: Android mobile client
-/WarehouseMobile/

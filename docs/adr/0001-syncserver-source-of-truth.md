@@ -11,7 +11,7 @@ The repository contains a FastAPI backend (`SyncServer`) and multiple client app
 - `SyncServer/app/repos/` — All persistence logic (16 modules) bound to syncserver PostgreSQL
 - `SyncServer/app/models/` — Authoritative warehouse entities (18 SQLAlchemy ORM models)
 - `Warehouse_web/apps/sync_client/` — Django calls SyncServer via 16 HTTP client wrappers, never accesses SyncServer DB directly
-- `Warehouse_web/apps/catalog/models.py` — Legacy local catalog models explicitly not authoritative
+- `Warehouse_web/apps/catalog/models.py` — local catalog ORM was removed from active domain ownership; SyncServer is authoritative
 - `WarehouseAIWorkstation/src/Integrations.Sync/` — WPF client routes all warehouse access through SyncServer HTTP API
 - `ARCHITECTURE.md` — Explicitly states "SyncServer is the single source of truth"
 - All `.gitignore` entries — Each project is a separate repository with independent code

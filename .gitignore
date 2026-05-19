@@ -40,3 +40,9 @@ GIT_STATE.md
 .opencode/
 .playwright-mcp/
 
+
+# Local generated/state files
+db.sqlite3
+*.sqlite3
+GIT_STATE.md
+.idea/

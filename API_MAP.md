@@ -1,141 +1,154 @@
-# API Map
+# SyncServer API Map
 
-Полная техническая карта API SyncServer — все эндпоинты, аутентификация, форматы запросов/ответов.
+Полная карта API SyncServer для клиентских команд.
 
-## Base
-- Base prefix: `/api/v1`
-- OpenAPI docs: `/api/docs`
-- OpenAPI JSON: `/api/openapi.json`
-- Redoc: `/api/redoc`
+> **Frozen:** single snapshot, 2026-05-18. Derives from `SyncServer/main.py`, `app/api/routes_*.py`, actual route code.
 
 ---
 
-## Real Headers
+## Base
 
-### User auth
-- `X-User-Token: <uuid>`
+| Item | Path |
+|---|---|
+| API prefix | `/api/v1` |
+| OpenAPI docs | `/api/docs` |
+| OpenAPI JSON | `/api/openapi.json` |
+| Redoc | `/api/redoc` |
 
-Used by:
-- `/auth/*`
-- `/admin/*`
-- `/catalog/*` primary read API
-- `/catalog/admin/*`
-- `/operations/*`
-- `/balances/*`
-- `/temporary-items/*`
-- `/documents/*`
-- `/recipients/*`
-- `/pending-acceptance`, `/lost-assets/*`, `/issued-assets`
-- `/reports/*`
+---
 
-### Device auth
-- `X-Device-Token: <uuid>`
+## Auth Contract
 
-Used by:
-- `/ping`
-- `/push`
-- `/pull`
-- legacy `POST /catalog/items`
-- legacy `POST /catalog/categories`
-- legacy `POST /catalog/units`
+SyncServer uses exactly two transport headers for authentication. No optional auth context headers remain.
 
-### Optional auth context headers
-- `X-Device-Id: <device_id>`
-  - optional on `/auth/me`, `/auth/context`, `/auth/sync-user`
-- `X-Site-Id: <site_id>`
-  - required for `chief_storekeeper` on `/catalog/admin/*`
-- `X-Client-Version: <version>`
-  - optional on `/ping`, `/push`, `/pull`, `/bootstrap/sync`
-- `Authorization: Bearer <service_token>`
-  - legacy compatibility only, used by `/business/*`
-- `X-Acting-User-Id`, `X-Acting-Site-Id`
-  - legacy compatibility only, used by `/business/*`
+| Header | Format | Meaning | Required for |
+|---|---|---|---|
+| `X-User-Token` | `<uuid>` | User identity and authorization context | `/auth/*`, `/admin/*`, `/catalog/*`, `/catalog/admin/*`, `/operations/*`, `/balances/*`, `/temporary-items/*`, `/documents/*`, `/recipients/*`, `/assets/*`, `/reports/*`, `/bootstrap/sync` |
+| `X-Device-Token` | `<uuid>` | Device identity and sync context | `/ping`, `/push`, `/pull` |
 
-### Common request header
-- `Content-Type: application/json`
+Common request header: `Content-Type: application/json`.
+
+**Forbidden:** `Authorization: Bearer`, JWT, access_token, refresh_token, service tokens, `X-Device-Id`, `X-Site-Id`, `X-Client-Version`, `X-Acting-User-Id`, `X-Acting-Site-Id`.
 
 ---
 
 ## Auth Modes
 
-| Mode | Real Header(s) | Where Used |
+| Mode | Header | Used by |
 |---|---|---|
-| User token | `X-User-Token` | primary app/admin/catalog/operations/balances/temporary-items/documents/recipients/reports/assets |
-| Device token | `X-Device-Token` | sync and legacy catalog read |
-| Service token | `Authorization: Bearer ...` | legacy `/business/*` only |
+| User token | `X-User-Token` | Primary: auth, admin, catalog, operations, balances, temp items, documents, recipients, assets, reports, bootstrap |
+| Device token | `X-Device-Token` | Sync: `/ping`, `/push`, `/pull` |
 
 ---
 
-## Endpoint Groups
+## Roles
 
-### Root / Utility
-
-| Method | Path | Auth | Request | Response |
-|---|---|---|---|---|
-| `GET` | `/` | none | no body | `{message, status, env, version}` |
-| `GET` | `/db_check` | none | no body | `SELECT 1` result, DB connectivity test |
+| Role | Scope | Permissions |
+|---|---|---|
+| `root` | Global | Full authority: all reads, writes, admin operations, user/device/token management |
+| `chief_storekeeper` | Global business access | Catalog admin, device/site admin basics, operations write, recipients merge, asset resolution |
+| `storekeeper` | Site-scoped via access scopes | Operations write, catalog/balance read, document generate, temporary item moderation |
+| `observer` | Site-scoped via access scopes | Read-only: catalog, balances, operations, documents, reports, assets |
 
 ---
 
-### Auth API
+## /api/v1 — Root / Utility
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
-| `POST` | `/auth/sync-user` | root `X-User-Token` | user payload: `id`, `username`, `email`, `full_name`, `is_active`, `is_root=false`, `role`, `default_site_id` | `{status, user, synced_by}` with `user.user_token` |
-| `GET` | `/auth/me` | `X-User-Token` | no body | `{user, device}` |
-| `GET` | `/auth/sites` | `X-User-Token` | no body | `{is_root, available_sites}` |
-| `GET` | `/auth/context` | `X-User-Token` | no body | `{user, role, is_root, default_site, available_sites, permissions_summary, device}` |
+| `GET` | `/` | none | — | `{message, status, env, version}` |
+| `GET` | `/db_check` | none | — | `{db_status, result}` |
+
+---
+
+## /api/v1/auth — Auth API
+
+| Method | Path | Auth | Request | Response |
+|---|---|---|---|---|
+| `POST` | `/auth/sync-user` | `X-User-Token` (root) | `{id?, username, email, full_name, is_active, is_root, role, default_site_id?}` | `{status, user: {…user_token}, synced_by}` |
+| `GET` | `/auth/me` | `X-User-Token` | — | `{user, device}` |
+| `GET` | `/auth/sites` | `X-User-Token` | — | `{is_root, available_sites}` |
+| `GET` | `/auth/context` | `X-User-Token` | — | `{user, role, is_root, default_site, available_sites, permissions_summary, device}` |
 
 Notes:
-- `sync-user` is root-only.
-- `sync-user` cannot create or update root users.
-- `auth/me` does not return `user_token`.
+- `sync-user` is root-only. Cannot create/update root users.
+- `auth/me` never returns `user_token`.
+- Device info included in `me` and `context` responses when a device token is also provided.
 
 ---
 
-### Admin API
+## /api/v1/admin — Admin API
+
+Client teams: this group is for administrative tooling (staff dashboard, admin CLI). Most client-facing apps should use `/auth/*` and domain endpoints instead.
+
+### Roles
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
-| `GET` | `/admin/roles` | `X-User-Token` | no body | `list[str]` |
+| `GET` | `/admin/roles` | `X-User-Token` | — | `list[str]` |
+
+### Sites
+
+| Method | Path | Auth | Request | Response |
+|---|---|---|---|---|
 | `GET` | `/admin/sites` | `X-User-Token` | query: `is_active`, `search`, `page`, `page_size` | `{sites, total_count, page, page_size}` |
 | `POST` | `/admin/sites` | `X-User-Token` | `{code, name, is_active, description}` | `SiteResponse` |
-| `PATCH` | `/admin/sites/{site_id}` | `X-User-Token` | partial site payload | `SiteResponse` |
-| `GET` | `/admin/users` | root `X-User-Token` | query: `is_active`, `is_root`, `role`, `search`, `page`, `page_size` | `{users, total_count, page, page_size}` |
-| `GET` | `/admin/users/{user_id}` | root `X-User-Token` | no body | `UserResponse` |
-| `POST` | `/admin/users` | root `X-User-Token` | `UserCreate` | `UserResponse` |
-| `PATCH` | `/admin/users/{user_id}` | root `X-User-Token` | `UserUpdate` | `UserResponse` |
-| `DELETE` | `/admin/users/{user_id}` | root `X-User-Token` | no body | `UserResponse` (soft-deactivated) |
-| `GET` | `/admin/users/{user_id}/sync-state` | root `X-User-Token` | no body | `{user, scopes}` with `user.user_token` |
-| `PUT` | `/admin/users/{user_id}/scopes` | root `X-User-Token` | `{scopes:[{site_id, can_view, can_operate, can_manage_catalog}]}` | `list[UserAccessScopeResponse]` |
-| `POST` | `/admin/users/{user_id}/rotate-token` | root `X-User-Token` | no body | `{user_id, username, user_token, generated_at}` |
-| `GET` | `/admin/access/scopes` | root `X-User-Token` | query: `user_id`, `site_id`, `is_active`, `limit`, `offset` | `list[UserAccessScopeResponse]` |
-| `POST` | `/admin/access/scopes` | root `X-User-Token` | `UserAccessScopeCreate` | `UserAccessScopeResponse` |
-| `PATCH` | `/admin/access/scopes/{scope_id}` | root `X-User-Token` | `UserAccessScopeUpdate` | `UserAccessScopeResponse` |
-| `GET` | `/admin/devices` | `X-User-Token` | query: `site_id`, `is_active`, `search`, `page`, `page_size` | `{devices, total_count, page, page_size}` |
-| `GET` | `/admin/devices/{device_id}` | `X-User-Token` | no body | `DeviceResponse` |
-| `POST` | `/admin/devices` | `X-User-Token` | `DeviceCreate` | `DeviceWithTokenResponse` (includes `device_token` in response) |
-| `PATCH` | `/admin/devices/{device_id}` | `X-User-Token` | `DeviceUpdate` | `DeviceResponse` |
-| `DELETE` | `/admin/devices/{device_id}` | `X-User-Token` | no body | `DeviceResponse` |
-| `POST` | `/admin/devices/{device_id}/rotate-token` | `X-User-Token` | no body | `{device_id, device_code, device_token, generated_at}` |
+| `PATCH` | `/admin/sites/{site_id}` | `X-User-Token` | partial site | `SiteResponse` |
 
----
-
-### Catalog Read API
+### Users (root only)
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
-| `GET` | `/catalog/items` | `X-User-Token` | query: `updated_after`, `limit`, `site_id` | `{items, server_time, next_updated_after}` |
-| `GET` | `/catalog/categories` | `X-User-Token` | query: `updated_after`, `limit`, `site_id` | `{categories, server_time, next_updated_after}` |
+| `GET` | `/admin/users` | `X-User-Token` (root) | query: `is_active`, `is_root`, `role`, `search`, `page`, `page_size` | `{users, total_count, page, page_size}` |
+| `GET` | `/admin/users/{user_id}` | `X-User-Token` (root) | — | `UserResponse` |
+| `POST` | `/admin/users` | `X-User-Token` (root) | `UserCreate` | `UserResponse` |
+| `PATCH` | `/admin/users/{user_id}` | `X-User-Token` (root) | `UserUpdate` | `UserResponse` |
+| `DELETE` | `/admin/users/{user_id}` | `X-User-Token` (root) | — | `UserResponse` (soft-deactivated) |
+| `GET` | `/admin/users/{user_id}/sync-state` | `X-User-Token` (root) | — | `{user: {…user_token}, scopes}` |
+| `PUT` | `/admin/users/{user_id}/scopes` | `X-User-Token` (root) | `{scopes: [{site_id, can_view, can_operate, can_manage_catalog}]}` | `list[UserAccessScopeResponse]` |
+| `POST` | `/admin/users/{user_id}/rotate-token` | `X-User-Token` (root) | — | `{user_id, username, user_token, generated_at}` |
+
+### Access Scopes (root only)
+
+| Method | Path | Auth | Request | Response |
+|---|---|---|---|---|
+| `GET` | `/admin/access/scopes` | `X-User-Token` (root) | query: `user_id`, `site_id`, `is_active`, `limit`, `offset` | `list[UserAccessScopeResponse]` |
+| `POST` | `/admin/access/scopes` | `X-User-Token` (root) | `UserAccessScopeCreate` | `UserAccessScopeResponse` |
+| `PATCH` | `/admin/access/scopes/{scope_id}` | `X-User-Token` (root) | `UserAccessScopeUpdate` | `UserAccessScopeResponse` |
+
+### Devices
+
+| Method | Path | Auth | Request | Response |
+|---|---|---|---|---|
+| `GET` | `/admin/devices` | `X-User-Token` | query: `site_id`, `is_active`, `search`, `page`, `page_size` | `{devices, total_count, page, page_size}` |
+| `GET` | `/admin/devices/{device_id}` | `X-User-Token` | — | `DeviceResponse` |
+| `POST` | `/admin/devices` | `X-User-Token` | `DeviceCreate` | `DeviceWithTokenResponse` (includes `device_token`) |
+| `PATCH` | `/admin/devices/{device_id}` | `X-User-Token` | `DeviceUpdate` | `DeviceResponse` |
+| `DELETE` | `/admin/devices/{device_id}` | `X-User-Token` | — | `DeviceResponse` |
+| `POST` | `/admin/devices/{device_id}/rotate-token` | `X-User-Token` | — | `{device_id, device_code, device_token, generated_at}` |
+
+---
+
+## /api/v1/catalog — Catalog Read API
+
+All read endpoints use `X-User-Token`. Access is user-scoped; `site_id` query param filters to accessible sites.
+
+### Primary read (sync-optimized, `updated_after` cursor)
+
+| Method | Path | Auth | Request | Response |
+|---|---|---|---|---|
+| `GET` | `/catalog/items` | `X-User-Token` | query: `updated_after`, `limit` (100, max 1000), `site_id` | `{items, server_time, next_updated_after}` |
+| `GET` | `/catalog/categories` | `X-User-Token` | query: `updated_after`, `limit` (100, max 1000), `site_id` | `{categories, server_time, next_updated_after}` |
 | `GET` | `/catalog/categories/tree` | `X-User-Token` | query: `site_id` | `list[CategoryTreeNode]` |
-| `GET` | `/catalog/units` | `X-User-Token` | query: `updated_after`, `limit`, `site_id` | `{units, server_time, next_updated_after}` |
+| `GET` | `/catalog/units` | `X-User-Token` | query: `updated_after`, `limit` (100, max 1000), `site_id` | `{units, server_time, next_updated_after}` |
 | `GET` | `/catalog/sites` | `X-User-Token` | query: `is_active` | `{sites, server_time}` |
 
 Notes:
-- `site_id` on catalog read is an access-context check, not a true data partition for items/categories/units.
-- `root`, `chief_storekeeper`, `storekeeper`, `observer` can read if access rules pass.
+- `updated_after` cursor is ISO 8601 datetime; response includes `next_updated_after` for incremental sync.
+- `site_id` is an access filter, not a data partition. `root` and `chief_storekeeper` see all items regardless of site_id.
+- Roles: `root`, `chief_storekeeper`, `storekeeper`, `observer`.
 
-#### Catalog Read — Browse Endpoints (paginated with search)
+### Browse read (paginated, search)
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
@@ -147,149 +160,153 @@ Notes:
 
 ---
 
-### Catalog Admin API
+## /api/v1/catalog/admin — Catalog Admin API
+
+Mutation endpoints for units, categories, items. Requires `X-User-Token`. Authorization is role-based (no site header).
+- `root`: full access.
+- `chief_storekeeper`: full access (global business access).
+- `storekeeper`, `observer`: denied.
+
+### Units
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
 | `GET` | `/catalog/admin/units` | `X-User-Token` | query: `include_inactive`, `include_deleted`, `page`, `page_size` | `{items, total_count, page, page_size}` |
-| `GET` | `/catalog/admin/units/{unit_id}` | `X-User-Token` | no body | `UnitResponse` |
+| `GET` | `/catalog/admin/units/{unit_id}` | `X-User-Token` | — | `UnitResponse` |
 | `POST` | `/catalog/admin/units` | `X-User-Token` | `{name, symbol, sort_order, is_active}` | `UnitResponse` |
-| `POST` | `/catalog/admin/units/bulk` | `X-User-Token` | `{items:[{name, symbol, sort_order, is_active}]}` | `{items:[UnitResponse]}` |
-| `PATCH` | `/catalog/admin/units/{unit_id}` | `X-User-Token` | partial unit payload | `UnitResponse` |
-| `DELETE` | `/catalog/admin/units/{unit_id}` | `X-User-Token` | no body | 204 No Content |
+| `POST` | `/catalog/admin/units/bulk` | `X-User-Token` | `{items: [{name, symbol, sort_order, is_active}]}` | `{items: [UnitResponse]}` |
+| `PATCH` | `/catalog/admin/units/{unit_id}` | `X-User-Token` | partial unit | `UnitResponse` |
+| `DELETE` | `/catalog/admin/units/{unit_id}` | `X-User-Token` | — | 204 |
+
+### Categories
+
+| Method | Path | Auth | Request | Response |
+|---|---|---|---|---|
 | `GET` | `/catalog/admin/categories` | `X-User-Token` | query: `include_inactive`, `include_deleted`, `page`, `page_size` | `{items, total_count, page, page_size}` |
-| `GET` | `/catalog/admin/categories/{category_id}` | `X-User-Token` | no body | `CategoryResponse` |
-| `POST` | `/catalog/admin/categories` | `X-User-Token` | `{name, code, parent_id, sort_order, is_active}` | `CategoryResponse` |
-| `POST` | `/catalog/admin/categories/bulk` | `X-User-Token` | `{items:[{name, code, parent_id, sort_order, is_active}]}` | `{items:[CategoryResponse]}` |
-| `PATCH` | `/catalog/admin/categories/{category_id}` | `X-User-Token` | partial category payload | `CategoryResponse` |
-| `DELETE` | `/catalog/admin/categories/{category_id}` | `X-User-Token` | no body | 204 No Content |
+| `GET` | `/catalog/admin/categories/{category_id}` | `X-User-Token` | — | `CategoryResponse` |
+| `POST` | `/catalog/admin/categories` | `X-User-Token` | `{name, code, parent_id?, sort_order, is_active}` | `CategoryResponse` |
+| `POST` | `/catalog/admin/categories/bulk` | `X-User-Token` | `{items: [{name, code, parent_id?, sort_order, is_active}]}` | `{items: [CategoryResponse]}` |
+| `PATCH` | `/catalog/admin/categories/{category_id}` | `X-User-Token` | partial category | `CategoryResponse` |
+| `DELETE` | `/catalog/admin/categories/{category_id}` | `X-User-Token` | — | 204 |
+
+### Items
+
+| Method | Path | Auth | Request | Response |
+|---|---|---|---|---|
 | `GET` | `/catalog/admin/items` | `X-User-Token` | query: `include_inactive`, `include_deleted`, `page`, `page_size` | `{items, total_count, page, page_size}` |
-| `GET` | `/catalog/admin/items/{item_id}` | `X-User-Token` | no body | `ItemResponse` |
+| `GET` | `/catalog/admin/items/{item_id}` | `X-User-Token` | — | `ItemResponse` |
 | `POST` | `/catalog/admin/items` | `X-User-Token` | `{sku, name, category_id, unit_id, description, is_active}` | `ItemResponse` |
-| `PATCH` | `/catalog/admin/items/{item_id}` | `X-User-Token` | partial item payload | `ItemResponse` |
-| `DELETE` | `/catalog/admin/items/{item_id}` | `X-User-Token` | no body | 204 No Content |
-
-Notes:
-- `root` may call these without `X-Site-Id`.
-- `chief_storekeeper` must send `X-Site-Id` and have `can_manage_catalog=true` on that site.
-- `storekeeper` and `observer` cannot mutate catalog.
-
-Postman examples:
-- bulk units: `POST /api/v1/catalog/admin/units/bulk` with `X-User-Token`, optional `X-Site-Id`, `Content-Type: application/json`
-```json
-{ "items": [ { "name": "Box", "symbol": "box" }, { "name": "Pallet", "symbol": "pallet" } ] }
-```
-- bulk categories: `POST /api/v1/catalog/admin/categories/bulk` with `X-User-Token`, optional `X-Site-Id`, `Content-Type: application/json`
-```json
-{ "items": [ { "name": "Food" }, { "name": "Drinks", "parent_id": 1 } ] }
-```
+| `PATCH` | `/catalog/admin/items/{item_id}` | `X-User-Token` | partial item | `ItemResponse` |
+| `DELETE` | `/catalog/admin/items/{item_id}` | `X-User-Token` | — | 204 |
 
 ---
 
-### Operations API
+## /api/v1/operations — Operations API
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
 | `GET` | `/operations` | `X-User-Token` | query: `site_id`, `type`, `status`, `created_by_user_id`, `effective_after`, `effective_before`, `created_after`, `created_before`, `updated_after`, `updated_before`, `search`, `page`, `page_size` | `{items, total_count, page, page_size}` |
-| `GET` | `/operations/{operation_id}` | `X-User-Token` | no body | `OperationResponse` |
+| `GET` | `/operations/{operation_id}` | `X-User-Token` | — | `OperationResponse` |
 | `POST` | `/operations` | `X-User-Token` | `OperationCreate` | `OperationResponse` |
 | `PATCH` | `/operations/{operation_id}` | `X-User-Token` | `OperationUpdate` | `OperationResponse` |
 | `PATCH` | `/operations/{operation_id}/effective-at` | `X-User-Token` | `{effective_at}` | `OperationResponse` |
 | `POST` | `/operations/{operation_id}/submit` | `X-User-Token` | `{submit: true}` | `OperationResponse` |
-| `POST` | `/operations/{operation_id}/cancel` | `X-User-Token` | `{cancel: true, reason}` | `OperationResponse` |
-| `POST` | `/operations/{operation_id}/accept-lines` | `X-User-Token` | `{lines:[{operation_line_id, accepted_qty, lost_qty, note}]}` | `OperationResponse` |
+| `POST` | `/operations/{operation_id}/cancel` | `X-User-Token` | `{cancel: true, reason?}` | `OperationResponse` |
+| `POST` | `/operations/{operation_id}/accept-lines` | `X-User-Token` | `{lines: [{operation_line_id, accepted_qty, lost_qty, note?}]}` | `OperationResponse` |
 
 Notes:
-- Read roles: `root`, `chief_storekeeper`, `storekeeper`, `observer`
-- Write roles: `root`, `chief_storekeeper`, `storekeeper`
-- MOVE requires both `source_site_id` and `destination_site_id`
-- `effective_at` must be changed via dedicated `PATCH /operations/{id}/effective-at`, not via the general `PATCH /operations/{id}`
+- Read roles: `root`, `chief_storekeeper`, `storekeeper`, `observer`.
+- Write roles: `root`, `chief_storekeeper`, `storekeeper`.
+- MOVE operations require `source_site_id` + `destination_site_id` in create/update payloads and corresponding site access.
+- `effective_at` must be changed via the dedicated `PATCH /operations/{id}/effective-at`, not through generic `PATCH /operations/{id}`.
 
 ---
 
-### Balances API
+## /api/v1/balances — Balances API
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
 | `GET` | `/balances` | `X-User-Token` | query: `site_id`, `item_id`, `category_id`, `search`, `only_positive`, `page`, `page_size` | `{items, total_count, page, page_size}` |
 | `GET` | `/balances/by-site` | `X-User-Token` | query: `site_id` (required), `only_positive`, `page`, `page_size` | `{items, total_count, page, page_size}` |
-| `GET` | `/balances/summary` | `X-User-Token` | no body | `{accessible_sites_count, summary}` |
+| `GET` | `/balances/summary` | `X-User-Token` | — | `{accessible_sites_count, summary}` |
 
 Notes:
-- Read roles: `root`, `chief_storekeeper`, `storekeeper`, `observer`
-- Non-root users only see balances for accessible sites
+- Read roles: `root`, `chief_storekeeper`, `storekeeper`, `observer`.
+- Non-root users only see balances for sites they have `can_view` access to.
 
 ---
 
-### Temporary Items API
+## /api/v1/temporary-items — Temporary Items API
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
 | `GET` | `/temporary-items` | `X-User-Token` | query: `status`, `search`, `created_by_user_id`, `resolved_item_id`, `created_after`, `created_before`, `page`, `page_size` | `{items, total_count, page, page_size}` |
-| `GET` | `/temporary-items/{temporary_item_id}` | `X-User-Token` | no body | `TemporaryItemResponse` |
-| `POST` | `/temporary-items/{temporary_item_id}/approve-as-item` | `X-User-Token` | no body | `TemporaryItemResponse` (creates a new catalog item) |
-| `GET` | `/temporary-items/{temporary_item_id}/operations` | `X-User-Token` | query: `page`, `page_size` | `{items, total_count, page, page_size}` (operations referencing this temp item) |
-| `POST` | `/temporary-items/{temporary_item_id}/merge` | `X-User-Token` | `{target_item_id, comment}` | `TemporaryItemResponse` (merges into existing catalog item) |
-| `DELETE` | `/temporary-items/{temporary_item_id}` | `X-User-Token` | no body | `TemporaryItemResponse` (soft-delete) |
+| `GET` | `/temporary-items/{temporary_item_id}` | `X-User-Token` | — | `TemporaryItemResponse` |
+| `GET` | `/temporary-items/{temporary_item_id}/operations` | `X-User-Token` | query: `page`, `page_size` | `{items, total_count, page, page_size}` |
+| `POST` | `/temporary-items/{temporary_item_id}/approve-as-item` | `X-User-Token` | — | `TemporaryItemResponse` (creates catalog item) |
+| `POST` | `/temporary-items/{temporary_item_id}/merge` | `X-User-Token` | `{target_item_id, comment?}` | `TemporaryItemResponse` (merges into existing catalog item) |
+| `DELETE` | `/temporary-items/{temporary_item_id}` | `X-User-Token` | — | `TemporaryItemResponse` (soft-delete) |
 
 Notes:
-- Requires temporary item moderation role (managed by `OperationsPolicy`).
+- Requires temporary item moderation role (via `OperationsPolicy.require_temporary_item_moderation`).
+- `approve-as-item` creates a new catalog item from the temporary one; approval is server-authoritative.
 
 ---
 
-### Documents API
+## /api/v1/documents — Documents API
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
-| `POST` | `/documents/generate` | `X-User-Token` | `DocumentGenerateRequest`: `operation_id`, `document_type`, `template_name`, `auto_finalize`, `language`, `basis_type`, `basis_number`, `basis_date` | `{document, operation_id, generated_at}` |
-| `GET` | `/documents/{document_id}` | `X-User-Token` | no body | `DocumentResponse` |
-| `GET` | `/documents/{document_id}/render` | `X-User-Token` | query: `format` (`html` or `pdf`) | HTML or PDF binary |
+| `POST` | `/documents/generate` | `X-User-Token` | `{operation_id, document_type, template_name?, auto_finalize?, language?, basis_type?, basis_number?, basis_date?}` | `{document, operation_id, generated_at}` |
 | `GET` | `/documents` | `X-User-Token` | query: `site_id`, `document_type`, `status`, `created_by_user_id`, `date_from`, `date_to`, `offset`, `limit` | `{items, total, offset, limit}` |
-| `PATCH` | `/documents/{document_id}/status` | `X-User-Token` | `DocumentUpdate` (`status`, `finalized_at`, `payload`, `payload_hash`) | `DocumentResponse` |
+| `GET` | `/documents/{document_id}` | `X-User-Token` | — | `DocumentResponse` |
+| `GET` | `/documents/{document_id}/render` | `X-User-Token` | query: `format` (html/pdf) | HTML or PDF binary |
+| `PATCH` | `/documents/{document_id}/status` | `X-User-Token` | `{status, finalized_at?, payload?, payload_hash?}` | `DocumentResponse` |
 | `GET` | `/documents/operations/{operation_id}/documents` | `X-User-Token` | query: `document_type` | `list[DocumentResponse]` |
-| `POST` | `/documents/operations/{operation_id}/documents` | `X-User-Token` | query: `document_type` (waybill), `template_name`, `auto_finalize`, `language` (ru), `basis_type`, `basis_number`, `basis_date` | `{document, operation_id, generated_at}` |
+| `POST` | `/documents/operations/{operation_id}/documents` | `X-User-Token` | query: `document_type` (waybill), `template_name?`, `auto_finalize?`, `language?` (ru), `basis_type?`, `basis_number?`, `basis_date?` | `{document, operation_id, generated_at}` |
 
 Notes:
-- Write roles: `chief_storekeeper`, `storekeeper`
-- Documents can be finalized or voided via status update
-- Shortcut `POST /documents/operations/{id}/documents` allows generating documents via query params instead of JSON body
+- Write roles: `chief_storekeeper`, `storekeeper`.
+- Documents can be finalized or voided via status PATCH.
+- Shortcut `POST /documents/operations/{id}/documents` accepts query params instead of JSON body.
 
 ---
 
-### Recipients API
+## /api/v1/recipients — Recipients API
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
 | `GET` | `/recipients` | `X-User-Token` | query: `search`, `recipient_type`, `include_inactive`, `include_deleted`, `page`, `page_size` | `{items, total_count, page, page_size}` |
-| `POST` | `/recipients` | `X-User-Token` | `{display_name, recipient_type, personnel_no}` | `RecipientResponse` |
-| `POST` | `/recipients/merge` | `X-User-Token` (manager-only) | `{source_id, target_id}` | `RecipientResponse` |
-| `GET` | `/recipients/{recipient_id}` | `X-User-Token` | no body | `RecipientResponse` |
-| `PATCH` | `/recipients/{recipient_id}` | `X-User-Token` | partial recipient payload | `RecipientResponse` |
-| `DELETE` | `/recipients/{recipient_id}` | `X-User-Token` | no body | 204 No Content |
+| `POST` | `/recipients` | `X-User-Token` | `{display_name, recipient_type, personnel_no?}` | `RecipientResponse` |
+| `POST` | `/recipients/merge` | `X-User-Token` | `{source_id, target_id}` | `RecipientResponse` |
+| `GET` | `/recipients/{recipient_id}` | `X-User-Token` | — | `RecipientResponse` |
+| `PATCH` | `/recipients/{recipient_id}` | `X-User-Token` | partial recipient | `RecipientResponse` |
+| `DELETE` | `/recipients/{recipient_id}` | `X-User-Token` | — | 204 |
 
 Notes:
-- Write roles: `chief_storekeeper`, `storekeeper`
-- Merge requires `chief_storekeeper` or `root`
+- Write roles: `chief_storekeeper`, `storekeeper`.
+- Merge requires `chief_storekeeper` or `root`.
 
 ---
 
-### Asset Registers API
+## /api/v1 — Asset Registers API
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
 | `GET` | `/pending-acceptance` | `X-User-Token` | query: `site_id`, `operation_id`, `item_id`, `search`, `page`, `page_size` | `{items, total_count, page, page_size}` |
 | `GET` | `/lost-assets` | `X-User-Token` | query: `site_id`, `source_site_id`, `operation_id`, `item_id`, `search`, `updated_after`, `updated_before`, `qty_from`, `qty_to`, `page`, `page_size` | `{items, total_count, page, page_size}` |
-| `GET` | `/lost-assets/{operation_line_id}` | `X-User-Token` | no body | `LostAssetRow` |
-| `POST` | `/lost-assets/{operation_line_id}/resolve` | `X-User-Token` | `{action, qty, note, responsible_recipient_id}` | `{...}` (varies by action) |
+| `GET` | `/lost-assets/{operation_line_id}` | `X-User-Token` | — | `LostAssetRow` |
+| `POST` | `/lost-assets/{operation_line_id}/resolve` | `X-User-Token` | `{action, qty, note?, responsible_recipient_id?}` | `{...}` (varies by action) |
 | `GET` | `/issued-assets` | `X-User-Token` | query: `recipient_id`, `item_id`, `search`, `page`, `page_size` | `{items, total_count, page, page_size}` |
 
 Notes:
-- Requires `OperationsPolicy.require_assets_read_access` for read endpoints
-- Resolve requires `OperationsPolicy.require_lost_resolve_access`
+- Read requires `OperationsPolicy.require_assets_read_access`.
+- Resolve requires `OperationsPolicy.require_lost_resolve_access`.
+- Site filtering is access-scoped; users only see their accessible sites.
 
 ---
 
-### Reports API
+## /api/v1/reports — Reports API
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
@@ -298,105 +315,50 @@ Notes:
 
 ---
 
-### Device Sync API
+## /api/v1 — Device Sync API
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
 | `POST` | `/ping` | `X-Device-Token` | `{site_id, device_id, last_server_seq, outbox_count, client_time}` | `{server_time, server_seq_upto, backoff_seconds}` |
-| `POST` | `/push` | `X-Device-Token` | `{site_id, device_id, batch_id, events:[...]}` | `{accepted, duplicates, rejected, server_seq_upto}` |
+| `POST` | `/push` | `X-Device-Token` | `{site_id, device_id, batch_id, events: [...]}` | `{accepted, duplicates, rejected, server_seq_upto}` |
 | `POST` | `/pull` | `X-Device-Token` | `{site_id, device_id, since_seq, limit}` | `{events, server_time, server_seq_upto, next_since_seq}` |
-| `POST` | `/bootstrap/sync` | root `X-User-Token` | `{site_id, device_id}` (can be 0) | `{server_time, protocol_version, is_root, root_user, root_role, device_id, device_registered, message, bootstrap_data}` |
+| `POST` | `/bootstrap/sync` | `X-User-Token` (root) | `{site_id, device_id}` (can be 0) | `{server_time, protocol_version, is_root, root_user, root_role, device_id, device_registered, message, bootstrap_data}` |
 
 Notes:
-- `bootstrap/sync` is root-only, X-User-Token (not device token).
-- PUSH has a max event batch limit (`settings.MAX_PUSH_EVENTS`).
+- Device sync (`/ping`, `/push`, `/pull`) uses `X-Device-Token` only.
+- Bootstrap uses `X-User-Token` (root), with optional `X-Device-Token` for device binding.
+- PUSH has a max event batch limit from server config.
+- PULL returns events with `server_seq` cursor, monotonic per site.
+- Push idempotency is per-event UUID; duplicate-same-payload is classified separately from UUID collision.
 
 ---
 
-### Health API
+## /api/v1/health — Health API
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
-| `GET` | `/health` | none | no body | `{status: "ok"}` |
-| `GET` | `/ready` | none | no body | `{status: "ready", db: 1}` |
-| `GET` | `/health/detailed` | none | no body | `{status, checks}` — comprehensive dependency check |
-| `GET` | `/health/readiness` | none | no body | `{ready, details}` — for load balancers |
-| `GET` | `/health/liveness` | none | no body | `{alive}` — for Kubernetes |
+| `GET` | `/health` | none | — | `{status: "ok"}` |
+| `GET` | `/ready` | none | — | `{status: "ready", db: 1}` |
+| `GET` | `/health/detailed` | none | — | `{status, checks: {db, config, cache?}}` |
+| `GET` | `/health/readiness` | none | — | `{ready, details}` |
+| `GET` | `/health/liveness` | none | — | `{alive}` |
 
 ---
 
-### Legacy Compatibility API
+## Client Integration Notes
 
-| Method | Path | Auth | Request | Response |
-|---|---|---|---|---|
-| `POST` | `/catalog/items` | `X-Device-Token` + catalog headers | `CatalogRequest` | `CatalogItemsResponse` |
-| `POST` | `/catalog/categories` | `X-Device-Token` + catalog headers | `CatalogRequest` | `CatalogCategoriesResponse` |
-| `POST` | `/catalog/units` | `X-Device-Token` + catalog headers | `CatalogRequest` | `CatalogUnitsResponse` |
-| `POST` | `/business/catalog/items` | `Authorization: Bearer ...` + acting headers | compatibility payload | `CatalogItemsResponse` |
-| `POST` | `/business/catalog/categories` | `Authorization: Bearer ...` + acting headers | compatibility payload | `CatalogCategoriesResponse` |
-| `POST` | `/business/catalog/units` | `Authorization: Bearer ...` + acting headers | compatibility payload | `CatalogUnitsResponse` |
-| `GET` | `/business/catalog/categories/tree` | `Authorization: Bearer ...` + acting headers | no body | `list[CategoryTreeNode]` |
+### For `Warehouse_client_core` (Rust)
 
----
+Core already has typed HTTP clients for all endpoint groups above. The two-token contract matches core's `FfiTokenProvider` / `warehouse_set_user_token` / `warehouse_set_device_token`. API map should be cross-referenced with `crates/warehouse_core/src/syncserver/*.rs` modules.
 
-## Real Auth Rules
-- `root` = global authority
-- `chief_storekeeper` = site-level admin for catalog and device/site admin basics
-- `storekeeper` = operational user
-- `observer` = read-only user
-- device routes do not use user roles; they use registered device token
+### For `Warehouse_web` (Django BFF)
 
----
+All calls to SyncServer must go through `apps/sync_client/client.py` (`SyncServerClient`) or `apps/sync_client/root_admin_client.py` (`SyncServerRootAdminClient`). Browser-facing BFF endpoints must never expose SyncServer tokens. The Django client sends `X-User-Token` (from user binding/session) and optionally `X-Device-Token` (audit context).
 
-## Verified Endpoints
+### For Android (Kotlin/JNA)
 
-Verified in repository tests:
-- `POST /api/v1/ping`
-- `POST /api/v1/push`
-- `POST /api/v1/pull`
-- `POST /api/v1/catalog/items` (legacy device-auth read)
-- `POST /api/v1/catalog/admin/units`
-- `POST /api/v1/catalog/admin/categories`
-- `POST /api/v1/catalog/admin/items`
-- `PATCH /api/v1/catalog/admin/items/{item_id}`
-- `PATCH /api/v1/catalog/admin/categories/{category_id}` including cycle validation
-- `GET /api/v1/auth/me` (no token leak in normal response)
-- `POST /api/v1/auth/sync-user`
-- `PUT /api/v1/admin/users/{user_id}/scopes`
-- `GET /api/v1/admin/users/{user_id}/sync-state`
-- `POST /api/v1/admin/users/{user_id}/rotate-token`
+Use `warehouse_ffi` exports for warehouse domain operations. The FFI communicates with SyncServer through core's HTTP client internally. Platform owns secure token storage; tokens are injected via `warehouse_set_user_token` and `warehouse_set_device_token`. See `Warehouse_client_core/docs/ANDROID_BINDINGS.md`.
 
-Verification sources:
-- `tests/test_http_sync.py`
-- `tests/test_auth_routes.py`
-- `tests/test_user_admin_flow.py`
+### For WPF (C#/P/Invoke)
 
----
-
-## TODO
-
-High-priority verification TODO:
-- dedicated tests for `/admin/sites`
-- dedicated tests for `/admin/users` CRUD
-- dedicated tests for `/admin/access/scopes`
-- dedicated tests for `/admin/devices` and device token rotation
-- dedicated tests for primary `GET /catalog/items|categories|units|sites|categories/tree`
-- dedicated tests for `/catalog/read/*`
-- dedicated tests for `/operations/*`
-- dedicated tests for `/balances*`
-- dedicated tests for `/temporary-items/*`
-- dedicated tests for `/documents/*`
-- dedicated tests for `/recipients/*`
-- dedicated tests for `/pending-acceptance`, `/lost-assets/*`, `/issued-assets`
-- dedicated tests for `/reports/*`
-- dedicated tests for `/health`, `/ready`, `/health/detailed`, `/health/readiness`, `/health/liveness`
-- dedicated tests for `/bootstrap/sync`
-- dedicated tests for `/business/*` legacy compatibility routes
-- dedicated tests for `/` and `/db_check`
-
-Documentation TODO:
-- keep `docs/API_REFERENCE.md` and this file in sync when routes change
-- keep `docs/ENDPOINT_INVENTORY.md` synchronized with actual router set
-
-Environment TODO:
-- stabilize test database setup so the endpoint verification suite can be run end-to-end without manual DB preparation
+Use `warehouse_ffi.dll` via P/Invoke for domain operations. The core manages SyncServer HTTP internally. Platform injects tokens from secure storage. See `Warehouse_client_core/docs/WPF_BINDINGS.md`.

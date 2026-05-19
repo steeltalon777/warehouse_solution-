@@ -1,156 +1,89 @@
 # Warehouse Solution
 
-## Project Overview
+`Warehouse Solution` is a coordination workspace for the warehouse management system. Runtime code lives in project directories; the root keeps cross-project documentation, ADRs, agent guidance, and project maps.
 
-`Warehouse Solution` is a **multi-repository workspace** for a warehouse management system. The root repo holds cross-project documentation, AI navigation files, ADRs, and coordination scripts. Application code lives in nested independent repositories.
+## Current Product Shape
 
-**System type:** Multi-project client-server system with one authoritative backend and multiple client applications.
+| Project | Role | Status |
+|---|---|---|
+| `SyncServer/` | Authoritative FastAPI backend and source of truth | Active, highest backend priority |
+| `Warehouse_web/` | Active Django web client, session host, admin UI, BFF | Active web client |
+| `Warehouse_frontend/` | Angular shell hosted by Django | High priority |
+| `Warehouse_client_core/` | Planned Rust offline-first runtime | Architecture/planning |
+| `WarehouseDesktop/` | Future offline desktop client over `Warehouse_client_core` | Rebuild later |
+| `WarehouseMobile/` | Future offline Android client over `Warehouse_client_core` | Rebuild later |
+| `WarehouseAIWorkstation/` | AI workstation | Paused unless explicitly resumed |
 
-## What Problem It Solves
+## Core Architecture
 
-Warehouse inventory management with multi-site support, user access control, operation tracking, balance derivation, document generation, and device synchronization.
+```text
+Browser
+  -> Warehouse_web (Django session, SSR/admin/BFF)
+    -> SyncServer API (/api/v1)
+      -> Services -> UnitOfWork/Repos -> PostgreSQL
 
-## Tech Stack
+Browser
+  -> Django-hosted Angular shell from Warehouse_frontend
+    -> Django BFF endpoints
+      -> Warehouse_web apps/sync_client
+        -> SyncServer API (/api/v1)
 
-| Project | Stack |
-|---|---|
-| **SyncServer** | Python 3.13, FastAPI, Pydantic v2, SQLAlchemy 2 async, asyncpg, PostgreSQL, Alembic, WeasyPrint |
-| **Warehouse_web** | Python 3.12, Django 5.2, httpx, WhiteNoise, Gunicorn |
-| **WarehouseAIWorkstation** | .NET, C#, WPF, SQLite (local), OpenAI-compatible chat client |
-| **WarehouseDesktop** | .NET 8, C#, WPF |
-| **WarehouseMobile** | Kotlin, Android, Gradle (Kotlin DSL), Room/SQLite |
-| **Warehouse_frontend** | TypeScript 5.5 (placeholder) |
-| **Operations** | Docker, docker-compose |
+Future offline desktop/mobile
+  -> Warehouse_client_core facade
+    -> local SQLite/outbox/cache
+    -> SyncServer sync/API contracts
+```
+
+`SyncServer` owns warehouse domain data and business rules. Django owns web technical state only: auth, sessions, user binding, cache, and BFF state. Angular never receives SyncServer tokens and never calls SyncServer directly from the browser.
 
 ## Project Structure
 
-```
-SyncServer/                    Authoritative FastAPI backend (source of truth)
-Warehouse_web/                 Django SSR web client + admin integration
-WarehouseAIWorkstation/        WPF desktop AI-powered warehouse workstation
-WarehouseDesktop/              WPF desktop client
-WarehouseMobile/               Android mobile client
-Warehouse_frontend/            TypeScript frontend (placeholder)
-
-README.md                      Solution workspace overview
-ARCHITECTURE.md                Cross-project architecture
-INDEX.md                       Quick navigation for humans and AI
-AI_CONTEXT.md                  Architectural rules and constraints for AI agents
-AI_ENTRY_POINTS.md             Key source entry points for AI agents
-MEMORY.md                      Stable architectural memory
-API_MAP.md                     Practical SyncServer API reference
-Domain_model.md                Domain model notes (Russian)
-Role Matrix.md                 Permission matrix (4 roles)
-docs/adr/                      Solution-level ADRs (5 records)
-plans/                         Roadmap plans
-build_repo_map.py              AI-friendly repo snapshot generator
-repo_map.txt                   Auto-generated repo snapshot
-```
-
-## Architecture Overview (Confirmed by Code)
-
 ```text
-Browser users
-    -> Warehouse_web (Django SSR)
-        -> SyncServer API (/api/v1)
-            -> Services -> Repos/UoW -> PostgreSQL
+SyncServer/              FastAPI backend, PostgreSQL, Alembic, API contracts
+Warehouse_web/           Django web client, admin UI, BFF, SyncServer HTTP wrappers
+Warehouse_frontend/      Angular shell target hosted by Django
+Warehouse_client_core/   Planned Rust offline-first runtime
+WarehouseDesktop/        Future WPF offline client over warehouse core
+WarehouseMobile/         Future Android offline client over warehouse core
+WarehouseAIWorkstation/  Paused WPF AI workstation
 
-Desktop/mobile/AI clients
-    -> SyncServer API (/api/v1)
-        -> Services -> Repos/UoW -> PostgreSQL
+AGENTS.md               Agent contract and verification matrix
+ARCHITECTURE.md         Cross-project architecture
+INDEX.md                Navigation index
+AI_CONTEXT.md           Agent reasoning rules
+AI_ENTRY_POINTS.md      Source entry points
+MEMORY.md               Stable project memory
+API_MAP.md              SyncServer API map
+docs/adr/               Solution-level ADRs
+plans/                  Working plans
 ```
 
-**Key principle:** SyncServer is the single source of truth for warehouse domain data and business rules. All other projects are API-consuming clients.
+## Verification
 
-## Setup
-
-### SyncServer (Required First)
-
-**Confirmed by code** — `SyncServer/main.py`, `SyncServer/requirements.txt`, `SyncServer/alembic.ini`
-
-1. Copy `SyncServer/.env.example` to `SyncServer/.env` and configure `DATABASE_URL` (PostgreSQL)
-2. Install and migrate:
-   ```bash
-   cd SyncServer
-   pip install -r requirements.txt
-   alembic upgrade head
-   ```
-3. Start: `uvicorn main:app --reload`
-
-### Warehouse_web (Django Client)
-
-**Confirmed by code** — `Warehouse_web/requirements.txt`, `Warehouse_web/.env`
-
-1. Install: `cd Warehouse_web && pip install -r requirements.txt`
-2. Configure `.env` with `SECRET_KEY`, `SYNC_SERVER_URL`, `SYNC_ROOT_USER_TOKEN`, `SYNC_DEVICE_TOKEN`
-3. Migrate: `python manage.py migrate`
-4. Start: `python manage.py runserver`
-
-### Other Clients
-
-- **WarehouseAIWorkstation:** .NET WPF app. **Not confirmed** — exact build steps not documented
-- **WarehouseDesktop:** .NET 8 WPF app. **Not confirmed** — exact build steps not documented
-- **WarehouseMobile:** Android/Kotlin. **Not confirmed** — Gradle build steps not confirmed
-- **Warehouse_frontend:** Placeholder. `npm install && npm run build`
-
-### Containerized
-
-**Confirmed by code** — Dockerfiles and compose files exist for SyncServer and Warehouse_web:
-- `SyncServer/docker-compose.yml`
-- `Warehouse_web/docker-compose.yml`
-
-## Main Modules
-
-| Module | Purpose |
+| Project | Command |
 |---|---|
-| `SyncServer/app/api/` | REST API routes under `/api/v1` |
-| `SyncServer/app/services/` | Business logic, access control, sync processing, document generation |
-| `SyncServer/app/repos/` | Data access layer behind request-scoped UnitOfWork |
-| `SyncServer/app/models/` | Authoritative warehouse entities (SQLAlchemy ORM) |
-| `SyncServer/app/schemas/` | Pydantic DTOs |
-| `Warehouse_web/apps/sync_client/` | Canonical SyncServer HTTP integration |
-| `Warehouse_web/apps/users/` | Django auth + SyncUserBinding |
-| `Warehouse_web/apps/catalog/`, `operations/`, `balances/`, `client/` | SSR UI modules |
-| `WarehouseAIWorkstation/src/` | AI-powered WPF workstation (7 projects) |
-| `WarehouseDesktop/` | WPF desktop client (5 projects) |
+| `SyncServer/` | `python -m pytest` |
+| `Warehouse_web/` | `python manage.py test` |
+| `Warehouse_frontend/` | `npm run build` once Angular scripts exist |
+| `Warehouse_client_core/` | `cargo fmt --all -- --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace` once Rust workspace exists |
+| `WarehouseDesktop/` | `dotnet test WarehouseDesktop.sln` when touched |
+| `WarehouseMobile/` | `gradlew.bat test` when touched |
+| `WarehouseAIWorkstation/` | `dotnet test WarehouseAIWorkstation.sln` only when explicitly resumed |
 
-## Entry Points
+## Main Rules
 
-| Entry | File | Type |
-|---|---|---|
-| SyncServer API | `SyncServer/main.py` | `uvicorn main:app` |
-| Warehouse_web CLI | `Warehouse_web/manage.py` | Django CLI |
-| Warehouse_web WSGI | `Warehouse_web/config/wsgi.py` | Gunicorn |
-| WarehouseAIWorkstation | `WarehouseAIWorkstation/src/WarehouseAIWorkstation.App/` | WPF App |
-| WarehouseDesktop | `WarehouseDesktop/WarehouseDesktop.Wpf/App.xaml` | WPF App |
-| WarehouseMobile | `WarehouseMobile/app/src/main/` | Android Activity |
-| Warehouse_frontend | `Warehouse_frontend/src/index.ts` | Node.js (placeholder) |
+- All warehouse domain writes go through `SyncServer` services.
+- Clients must not connect directly to the SyncServer database.
+- Django catalog and Angular nomenclature features must use Django services/BFF plus `Warehouse_web/apps/sync_client/`.
+- Future offline clients must share `Warehouse_client_core` for local storage, outbox, sync, DTO mapping, and conflicts.
+- Root repository remains coordination/docs only.
 
-## API Overview
+## Useful Docs
 
-**Confirmed by code** — `SyncServer/app/api/routes_*.py` files
-
-The authoritative API is `SyncServer` under `/api/v1`:
-
-- `/auth` — identity, site context, user sync
-- `/admin` — users, sites, devices, access scopes
-- `/catalog` + `/catalog/admin` — catalog read and management
-- `/operations` — warehouse operation lifecycle
-- `/balances` — derived inventory read models
-- `/documents` — document generation
-- `/sync` — device ping/push/pull
-- `/recipients`, `/reports`, `/temporary-items`, `/health`, `/assets`
-
-Auth: `X-User-Token` (user flows), `X-Device-Token` (device sync flows)
-
-## Documentation Map
-
-- [ARCHITECTURE.md](ARCHITECTURE.md) — System architecture and layers
-- [INDEX.md](INDEX.md) — Quick navigation
-- [AI_CONTEXT.md](AI_CONTEXT.md) — Rules for AI agents
-- [AI_ENTRY_POINTS.md](AI_ENTRY_POINTS.md) — Entry point inventory
-- [MEMORY.md](MEMORY.md) — Stable knowledge base
-- [API_MAP.md](API_MAP.md) — Practical API reference
-- [Domain_model.md](Domain_model.md) — Domain model (RU)
-- [Role Matrix.md](Role%20Matrix.md) — Permission matrix
-- [docs/adr/](docs/adr/) — Architecture Decision Records
+- [AGENTS.md](AGENTS.md) - agent contract
+- [ARCHITECTURE.md](ARCHITECTURE.md) - architecture and data ownership
+- [INDEX.md](INDEX.md) - navigation
+- [AI_CONTEXT.md](AI_CONTEXT.md) - agent rules
+- [AI_ENTRY_POINTS.md](AI_ENTRY_POINTS.md) - source entry points
+- [API_MAP.md](API_MAP.md) - SyncServer endpoint map
+- [SOLUTION_ROADMAP.md](SOLUTION_ROADMAP.md) - priority roadmap

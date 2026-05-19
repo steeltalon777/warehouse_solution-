@@ -45,7 +45,6 @@ The repository supports browser users, root administrators, desktop application 
 ### Cons
 - Token lifecycle and binding management add operational overhead
 - Integrations must supply correct headers and acting context
-- Legacy `/business/*` routes use different auth (`Authorization: Bearer`), creating dual auth models
 - If sync tokens expire, device sync silently fails
 
 ## Alternatives Considered

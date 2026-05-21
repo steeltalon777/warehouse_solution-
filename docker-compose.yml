@@ -1,0 +1,96 @@
+name: warehouse-solution
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: warehouse_postgres
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-warehouse}
+      POSTGRES_USER: ${POSTGRES_USER:-warehouse_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-warehouse_pass}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-warehouse_user}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  syncserver:
+    build: ./SyncServer
+    container_name: warehouse_syncserver
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://warehouse_user:warehouse_pass@postgres:5432/warehouse}
+    volumes:
+      - ./SyncServer:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    working_dir: /app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  warehouse_web:
+    build: ./Warehouse_web
+    container_name: warehouse_web
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    environment:
+      DJANGO_ENV: ${DJANGO_ENV:-development}
+      DJANGO_SETTINGS_MODULE: config.settings
+      SECRET_KEY: ${SECRET_KEY:-django-insecure-dev-only-change-in-production}
+      DEBUG: ${DEBUG:-True}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-127.0.0.1,localhost,warehouse_web}
+      DB_ENGINE: ${DB_ENGINE:-django.db.backends.postgresql}
+      DB_NAME: ${DB_NAME:-warehouse}
+      DB_USER: ${DB_USER:-warehouse_user}
+      DB_PASSWORD: ${DB_PASSWORD:-warehouse_pass}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      SYNC_SERVER_URL: ${SYNC_SERVER_URL:-http://syncserver:8000/api/v1}
+      FRONTEND_MODE: ${FRONTEND_MODE:-dev}
+      FRONTEND_DEV_SERVER_URL: ${FRONTEND_DEV_SERVER_URL:-http://angular:4200}
+    volumes:
+      - ./Warehouse_web:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      syncserver:
+        condition: service_started
+    working_dir: /app
+    command: python manage.py runserver 0.0.0.0:8001
+
+  angular:
+    build: ./Warehouse_frontend
+    container_name: warehouse_angular
+    restart: unless-stopped
+    ports:
+      - "4200:4200"
+    env_file:
+      - .env
+    volumes:
+      - ./Warehouse_frontend:/app
+      - /app/node_modules
+    working_dir: /app
+    depends_on:
+      warehouse_web:
+        condition: service_started
+      syncserver:
+        condition: service_started
+    command: sh -c "npm install --prefer-offline --no-audit --no-fund && npm start -- --host 0.0.0.0 --port 4200"
+
+volumes:
+  postgres_data:

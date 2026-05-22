@@ -1,7 +1,7 @@
 # Makefile для управления dev-стендом Warehouse Solution
 # Одна команда для старта:  make dev
 
-.PHONY: help up down build logs ps shell clean migrate status dev init setup
+.PHONY: help up down build logs ps shell clean migrate status dev init setup bootstrap-root bootstrap-root-migrate rotate-tokens rotate-tokens-root rotate-tokens-device
 
 # Цвета для вывода
 GREEN := \033[0;32m
@@ -98,6 +98,23 @@ migrate-sync-autogen: ## Сгенерировать авто-миграцию Sy
 
 migrate-web-makemigrations: ## Создать миграции Django
 	docker compose exec warehouse_web python manage.py makemigrations
+
+# ----- SyncServer скрипты -----
+
+bootstrap-root: ## Запустить bootstrap корневого пользователя и Django устройства (SyncServer)
+	docker compose exec syncserver python scripts/bootstrap_root.py
+
+bootstrap-root-migrate: ## Запустить миграции + bootstrap корневого пользователя
+	docker compose exec syncserver python scripts/bootstrap_root.py --run-migrations
+
+rotate-tokens: ## Ротировать токены root и Django устройства (оба)
+	docker compose exec syncserver python scripts/rotate_tokens.py --root --django-device
+
+rotate-tokens-root: ## Ротировать только токен root пользователя
+	docker compose exec syncserver python scripts/rotate_tokens.py --root
+
+rotate-tokens-device: ## Ротировать только токен Django устройства
+	docker compose exec syncserver python scripts/rotate_tokens.py --django-device
 
 # ----- Статус -----
 

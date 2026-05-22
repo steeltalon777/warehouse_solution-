@@ -32,15 +32,16 @@ Stable facts about the Warehouse Solution workspace.
 
 The test stand is usually running locally:
 
-| Service | Address | Health Check |
-|---|---|---|
-| SyncServer API | `http://localhost:8000` | `GET /api/v1/health` |
-| Django (Warehouse_web) | `http://localhost:8001` | `GET /healthz/` |
-| PostgreSQL (VM, via SSH) | `localhost:5434` | — |
+| Service | Address | Health Check | Container |
+|---|---|---|---|
+| SyncServer API | `http://localhost:8000` | `GET /api/v1/health` | `warehouse_syncserver` |
+| Django (Warehouse_web) | `http://localhost:8001` | `GET /healthz/` | `warehouse_web` |
+| PostgreSQL | `localhost:5432` | `pg_isready -h localhost -p 5432 -t 3` | `warehouse_postgres` (`postgres:15-alpine`) |
+| Angular (Warehouse_frontend) | `http://localhost:4200` | `GET /` | `warehouse_angular` |
 
-SSH tunnel to VM database: `ssh -p 2222 makc@127.0.0.1` (agents never run this; user maintains the tunnel).
+Run from workspace root: `make up` or `docker compose up -d`. Legacy VM database tunnel is obsolete.
 
-**Protocol:** agents probe health endpoints before real-stand tests. If the stand is not running, agents stop and ask the user to start it. Agents never attempt to start the stand themselves.
+**Protocol:** agents probe health endpoints before real-stand tests, including Angular at `http://localhost:4200/` for UI checks. If the stand is not running, agents try `make up`, then `docker compose up -d`. If Docker/compose cannot start the stand, agents report the blocker and leave the relevant checklist item unchecked.
 
 ## Verification Memory
 

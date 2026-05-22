@@ -72,38 +72,35 @@ This workspace contains one authoritative backend, one active web client, one hi
 - Keep project-specific `AGENTS.md` files shorter and more concrete than root docs.
 - Historical reports may remain historical, but active docs must describe the current target state.
 
-## Test Stand Configuration
+## Test Stand Configuration (Linux / Docker)
 
-The test stand is **usually** running at these addresses. Agents must probe stand availability before any real-stand test step.
+The test stand runs in Docker from the workspace root `/home/makc/AI_sandbox/warehouse_solution`. Agents must probe stand availability before any real-stand test step.
 
-| Service | Address | Health Check |
-|---|---|---|
-| SyncServer API | `http://localhost:8000` | `GET /api/v1/health` |
-| Django (Warehouse_web) | `http://localhost:8001` | `GET /healthz/` |
-| PostgreSQL (via SSH tunnel) | `localhost:5434` | — |
+| Service | Address | Health Check | Container |
+|---|---|---|---|
+| SyncServer API | `http://localhost:8000` | `GET /api/v1/health` | `warehouse_syncserver` |
+| Django (Warehouse_web) | `http://localhost:8001` | `GET /healthz/` | `warehouse_web` |
+| PostgreSQL | `localhost:5432` | `pg_isready -h localhost -p 5432 -t 3` | `warehouse_postgres` (`postgres:15-alpine`) |
+| Angular (Warehouse_frontend) | `http://localhost:4200` | `GET /` | `warehouse_angular` |
 
-### SSH Tunnel To Database
+### Stand Management
 
-The user maintains an SSH tunnel to the VM database. Tunnel command (for reference only — agents never run this):
-
-```
-ssh -p 2222 makc@127.0.0.1
-```
-
-Port mapping: VM PostgreSQL → `localhost:5434`.
+- Preferred start command: `make up` from the workspace root.
+- Alternative start command: `docker compose up -d` from the workspace root.
+- Status check: `make status` or `docker compose ps`.
+- `make dev` tails logs; use a PTY/background session if continuous logs are required.
+- Legacy VM database tunnel is obsolete.
 
 ### Stand Availability Protocol
 
 **When an agent needs a real test stand for smoke/integration/UI tests:**
 
-1. Agent probes health endpoints (`/api/v1/health` on `:8000`, `/healthz/` on `:8001`).
+1. Agent probes `http://localhost:8000/api/v1/health`, `http://localhost:8001/healthz/`, and `pg_isready -h localhost -p 5432 -t 3`. For Angular/UI tests, also probe `http://localhost:4200/`.
 2. If **stand is running** → proceed with tests.
-3. If **stand is NOT running** → agent STOPS and reports to the user:
-   - «Стенд не обнаружен. Подними стенд (Django :8001 + SyncServer :8000 + SSH-туннель :5434).»
-   - Agent does NOT attempt to start the stand itself.
-   - Agent waits for user confirmation before continuing.
-4. User responds with instructions (stand may already be up, or user may start it, or user may say skip).
-5. If stand cannot be brought up, agent leaves the relevant checklist item unchecked with the blocker note: «стенд недоступен».
+3. If **stand is NOT running** → agent tries `make up` from `/home/makc/AI_sandbox/warehouse_solution`.
+4. If Makefile is unavailable or fails, agent may try `docker compose up -d` from the same directory.
+5. If Docker/compose cannot start the stand, agent reports: «Стенд не обнаружен. Запусти `make up` или `docker compose up -d` из `/home/makc/AI_sandbox/warehouse_solution/`.»
+6. If stand cannot be brought up, agent leaves the relevant checklist item unchecked with the blocker note: «стенд недоступен».
 
 ### Stand Environment Variables (names only, never values)
 

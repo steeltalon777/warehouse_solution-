@@ -39,6 +39,7 @@ GIT_STATE.md
 # Local AI/tooling state
 .opencode/
 .playwright-mcp/
+docs/archive/
 
 
 # Local generated/state files

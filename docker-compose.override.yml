@@ -1,0 +1,6 @@
+services:
+  warehouse_web:
+    volumes:
+      - ./Warehouse_frontend/dist/warehouse-frontend/browser:/angular-build
+    environment:
+      FRONTEND_BUILD_DIR: /angular-build

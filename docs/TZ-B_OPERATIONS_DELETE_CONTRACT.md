@@ -25,7 +25,7 @@
 
 ## 1. Purpose
 
-Close audit gap #3 from `docs/AUDIT_FUNCTIONAL_SPEC_2026-05-19.md`:
+Close the documented operations-delete gap from the 2026-05-19 functional compliance review:
 
 - Functional spec requires cancelled operations to be deletable.
 - SyncServer currently has no `DELETE /operations/{id}` route.

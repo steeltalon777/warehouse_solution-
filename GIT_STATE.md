@@ -1,104 +1,86 @@
 # Git State
 
-Generated at: `2026-05-19T23:13`
-Root: `D:\PROG\Warehouse_solution`
+Generated at: `2026-05-22T14:35`
+Root: `/home/makc/AI_sandbox/warehouse_solution`
 Fetch before scan: `no`
 
 ## Summary
 
 | Repo | Branch | Upstream | Ahead | Behind | Dirty | HEAD | Last commit |
 |---|---|---|---:|---:|---|---|---|
-| `Warehouse_solution` | `dev` | `-` | 0 | 0 | YES | `030f138` | chore: add GIT_STATE.md to gitignore |
-| `SyncServer` | `dev` | `origin/dev` | 0 | 0 | YES | `74327ab` | Clean generated artifacts and temporary files |
-| `Warehouse_client_core` | `dev` | `origin/dev` | 0 | 0 | YES | `6276862` | bootstrap rust offline core workspace |
-| `Warehouse_frontend` | `dev` | `origin/dev` | 1 | 0 | YES | `68d8187` | feat: operations hardening (sorting, auth context, double-submit, badges), shared style system (wh-* SCSS partials), unit tests, fix toLowerCase runtime error |
-| `Warehouse_web` | `dev` | `origin/dev` | 1 | 0 | YES | `e257852` | feat: mount OperationsSPAView at /operations/, move SSR fallback to /operations/ssr/, add POST/PATCH nomenclature mutation endpoints, fix SPA template base href and asset prefix |
-| `WarehouseAIWorkstation` | `main` | `origin/main` | 1 | 0 | YES | `04daeae` | Bootstrap ready |
-| `WarehouseMobile` | `master` | `-` | 0 | 0 | YES | `e516d56` | First |
+| `warehouse_solution` | `dev` | `origin/dev` | 0 | 0 | YES | `7bd1c21` | chore: setup dev environment — Makefile, docker-compose, .env, quickstart.sh |
+| `SyncServer` | `dev` | `origin/dev` | 0 | 0 | YES | `f5936b2` | to devstand migrate |
+| `Warehouse_client_core` | `dev` | `origin/dev` | 0 | 0 | no | `306a593` | to devstand migrate |
+| `Warehouse_frontend` | `dev` | `origin/dev` | 0 | 0 | YES | `22ddbf8` | fix: resolve TS build errors in new Angular components |
+| `Warehouse_web` | `dev` | `origin/dev` | 0 | 0 | YES | `70a8f5e` | fix: add missing imports for review_items views |
+| `WarehouseAIWorkstation` | `main` | `origin/main` | 0 | 0 | no | `981edf7` | stage5 |
 
 ## Details
 
-### Warehouse_solution
+### warehouse_solution
 
 - Path: `.`
 - Current branch: `dev`
-- Upstream: `-`
+- Upstream: `origin/dev`
 - Ahead/behind: `0 / 0`
 - Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 13 / 26`
-- HEAD: `030f138`
-- HEAD subject: chore: add GIT_STATE.md to gitignore
-- HEAD author/date: `Maksim Kuzmin / 2026-05-12 15:33:02 +0900`
+- Staged / unstaged / untracked: `0 / 19 / 5`
+- HEAD: `7bd1c21`
+- HEAD subject: chore: setup dev environment — Makefile, docker-compose, .env, quickstart.sh
+- HEAD author/date: `makc / 2026-05-21 09:17:59 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
 
-- `origin`: `https://github.com/steeltalon777/warehouse_solution-.git`
+- `origin`: `git@github.com:steeltalon777/warehouse_solution-.git`
 
 #### Local branches
 
 - `dev` ← current
 - `main`
-- `opencode/proud-nebula`
-- `opencode/shiny-cactus`
-- `opencode/shiny-comet`
 
 #### Remote branches
 
+- `origin/dev`
 - `origin/main`
 
 #### Working tree status
 
 ```text
  M .gitignore
- M AI_CONTEXT.md
- M AI_ENTRY_POINTS.md
- M API_MAP.md
- M ARCHITECTURE.md
+ M AGENTS.md
+ D Domain_model.md
+ M "Functional and WorkLogik.md"
  M GIT_STATE.md
- M INDEX.md
  M MEMORY.md
- M README.md
- M REPOSITORY_MAP.md
- M SOLUTION_ROADMAP.md
- M docs/adr/0001-syncserver-source-of-truth.md
- M docs/adr/0005-token-auth-and-site-scoped-access.md
-?? AGENTS.md
-?? "Functional and WorkLogik.md"
-?? VaibMastery.md
-?? docs/AGENT_TZ_WORKFLOW.md
-?? docs/AUDIT_FUNCTIONAL_SPEC_2026-05-19.md
-?? docs/AUDIT_IV_TEMPORARY_ITEMS_2026-05-19.md
-?? docs/OPENCODE_AGENT_MODES.md
-?? docs/PLAN_PRE_ANGULAR_FUNCTIONAL_GAPS_2026-05-19.md
-?? docs/TZ-B_OPERATIONS_DELETE_CONTRACT.md
-?? docs/TZ_AUTH_CONTRACT_CLEANUP.md
-?? docs/TZ_nomenclature_spec_upgrade.md
-?? docs/adr/0006-mobile-bridge-strategy.md
-?? docs/adr/0007-core-http-sync-contract.md
-?? docs/adr/0008-outbox-push-transport.md
-?? docs/adr/0009-ffi-strategy.md
-?? docs/adr/0010-token-ownership.md
-?? nomenclature-shared-style.png
-?? operations-shared-style-error.png
-?? plans/bff_api_complete_tz.md
-?? plans/general_roadmap.md
-?? smoke_test.py
-?? stand-smoke-login-page.png
-?? stand-smoke-nomenclature-page-final.png
-?? stand-smoke-nomenclature-page.png
-?? stand-smoke-operations-page-final.png
-?? stand-smoke-operations-page.png
+ M Makefile
+ D PLAN_UI_TEST.md
+ M "Role Matrix.md"
+ D TODOlist.md
+ D UI_test_reports.md
+ M docs/AGENT_TZ_WORKFLOW.md
+ D docs/AUDIT_FUNCTIONAL_SPEC_2026-05-19.md
+ D docs/AUDIT_IV_TEMPORARY_ITEMS_2026-05-19.md
+ D docs/OPENCODE_AGENT_MODES.md
+ D docs/PLAN_PRE_ANGULAR_FUNCTIONAL_GAPS_2026-05-19.md
+ M docs/TZ-B_OPERATIONS_DELETE_CONTRACT.md
+ D plans/general_roadmap.md
+ D plans/temporary_items_delete_implementation.md
+?? Makefile.bak.2026-05-20_14-11-26
+?? docker-compose.override.yml
+?? docs/TZ-NOMENCLATURE_BATCH_CATALOG_CRUD.md
+?? docs/TZ-OPERATIONS_CREATE_MODAL_CACHED_SEARCH.md
+?? start_opencode_web.sh
 ```
 
 #### Recent commits
 
 ```text
+7bd1c21 | 2026-05-21 09:17:59 +0900 | makc | chore: setup dev environment — Makefile, docker-compose, .env, quickstart.sh
+9cc34b2 | 2026-05-20 10:22:03 +0900 | Maksim Kuzmin | add ubuntu setup script
+b15db14 | 2026-05-19 23:27:26 +0900 | Maksim Kuzmin | Root: AGENTS.md update, Functional and WorkLogik.md, pre-Angular plan, ADRs 0006-0010, audit reports, GIT_STATE update
 030f138 | 2026-05-12 15:33:02 +0900 | Maksim Kuzmin | chore: add GIT_STATE.md to gitignore
 66fa41f | 2026-05-12 14:55:43 +0900 | Maksim Kuzmin | Update repository state after release branch sync
-a849d78 | 2026-05-12 14:39:43 +0900 | Maksim Kuzmin | Refine nested repositories git state report
-7495282 | 2026-05-12 14:31:31 +0900 | Maksim Kuzmin | Add nested repositories git state report
-b9d237a | 2026-05-12 14:16:37 +0900 | Maksim Kuzmin | Add repository map generator
 ```
 
 ### SyncServer
@@ -108,19 +90,18 @@ b9d237a | 2026-05-12 14:16:37 +0900 | Maksim Kuzmin | Add repository map generat
 - Upstream: `origin/dev`
 - Ahead/behind: `0 / 0`
 - Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 20 / 14`
-- HEAD: `74327ab`
-- HEAD subject: Clean generated artifacts and temporary files
-- HEAD author/date: `Maksim Kuzmin / 2026-05-12 14:25:12 +0900`
+- Staged / unstaged / untracked: `0 / 4 / 3`
+- HEAD: `f5936b2`
+- HEAD subject: to devstand migrate
+- HEAD author/date: `Maksim Kuzmin / 2026-05-21 08:57:11 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
 
-- `origin`: `git@github.com:steeltalon777/SyncServer.git`
+- `origin`: `https://github.com/steeltalon777/SyncServer.git`
 
 #### Local branches
 
-- `backup/main-before-reset-2026-04-20`
 - `dev` ← current
 - `main`
 
@@ -144,50 +125,23 @@ b9d237a | 2026-05-12 14:16:37 +0900 | Maksim Kuzmin | Add repository map generat
 #### Working tree status
 
 ```text
- M app/api/deps.py
+ M Dockerfile
  M app/api/routes_catalog_admin.py
- M app/api/routes_operations.py
- M app/api/routes_sync.py
- M app/models/operation.py
- M app/repos/asset_registers_repo.py
- M app/repos/operations_repo.py
+ M app/schemas/catalog.py
  M app/services/catalog_admin_service.py
- M app/services/identity_service.py
- M app/services/operations_policy.py
- M app/services/operations_service.py
- M app/services/operations_workflow_policy.py
- M docs/API_MAP.md
- M docs/API_REFERENCE.md
- M docs/TEST_STAND_GUIDE.md
- M pytest.ini
- M tests/conftest.py
- M tests/test_operations_permissions.py
- M tests/test_operations_workflow_policy.py
- M tests/test_temporary_items_delete.py
-?? AGENTS.md
-?? alembic/versions/7538376fd139_add_operations_deleted_fields.py
-?? check_columns.py.bak
-?? docs/TZ-A_BOOTSTRAP_ROOT_TOKEN_RECOVERY.md
-?? docs/TZ-C_LOST_ASSETS_CATALOG_FREEZE.md
-?? scripts/bootstrap_root.py
-?? scripts/rotate_tokens.py
-?? scripts/verify_alembic.py
-?? tests/test_alembic_migrations.py
-?? tests/test_bootstrap_root.py
-?? tests/test_catalog_freeze.py
-?? tests/test_fast_baseline.py
-?? tests/test_operations_delete_api.py
-?? tests/test_operations_service_delete.py
+?? .venv/
+?? test.db
+?? tests/test_catalog_batch.py
 ```
 
 #### Recent commits
 
 ```text
+f5936b2 | 2026-05-21 08:57:11 +0900 | Maksim Kuzmin | to devstand migrate
+f1d5049 | 2026-05-20 20:00:03 +0900 | Maksim Kuzmin | fix(catalog): filter soft-deleted categories from tree
+6d2f2cc | 2026-05-19 23:14:05 +0900 | Maksim Kuzmin | SyncServer: bootstrap + root-token recovery + DELETE cancelled operations + catalog freeze for lost assets
 74327ab | 2026-05-12 14:25:12 +0900 | Maksim Kuzmin | Clean generated artifacts and temporary files
 8aa9d0c | 2026-04-25 10:13:24 +0900 | Maksim Kuzmin | препатч 2.0
-d52ec23 | 2026-04-23 10:05:15 +0900 | Maksim Kuzmin | Preprod 2.0
-c714332 | 2026-04-22 12:27:58 +0900 | Maksim Kuzmin | TM ites phase 1
-3445982 | 2026-04-15 16:18:11 +0900 | Maksim Kuzmin | updated 2.0
 ```
 
 ### Warehouse_client_core
@@ -196,11 +150,11 @@ c714332 | 2026-04-22 12:27:58 +0900 | Maksim Kuzmin | TM ites phase 1
 - Current branch: `dev`
 - Upstream: `origin/dev`
 - Ahead/behind: `0 / 0`
-- Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 2 / 2`
-- HEAD: `6276862`
-- HEAD subject: bootstrap rust offline core workspace
-- HEAD author/date: `Maksim Kuzmin / 2026-05-18 11:20:49 +0900`
+- Dirty: `no`
+- Staged / unstaged / untracked: `0 / 0 / 0`
+- HEAD: `306a593`
+- HEAD subject: to devstand migrate
+- HEAD author/date: `Maksim Kuzmin / 2026-05-21 08:57:51 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
@@ -220,15 +174,13 @@ c714332 | 2026-04-22 12:27:58 +0900 | Maksim Kuzmin | TM ites phase 1
 #### Working tree status
 
 ```text
- M AGENTS.md
- M docs/TZ_CORE_CLIENT_READY_COMPLETION.md
-?? docs/CORE_STAND_SMOKE_REPORT.md
-?? docs/TZ_CORE_STAND_CONTRACT_FIXES_BEFORE_AIWORKSTATION.md
+clean
 ```
 
 #### Recent commits
 
 ```text
+306a593 | 2026-05-21 08:57:51 +0900 | Maksim Kuzmin | to devstand migrate
 6276862 | 2026-05-18 11:20:49 +0900 | Maksim Kuzmin | bootstrap rust offline core workspace
 9eebff0 | 2026-05-16 21:16:00 +0900 | Maksim Kuzmin | first commit
 ```
@@ -238,17 +190,17 @@ c714332 | 2026-04-22 12:27:58 +0900 | Maksim Kuzmin | TM ites phase 1
 - Path: `Warehouse_frontend`
 - Current branch: `dev`
 - Upstream: `origin/dev`
-- Ahead/behind: `1 / 0`
+- Ahead/behind: `0 / 0`
 - Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 7 / 47`
-- HEAD: `68d8187`
-- HEAD subject: feat: operations hardening (sorting, auth context, double-submit, badges), shared style system (wh-* SCSS partials), unit tests, fix toLowerCase runtime error
-- HEAD author/date: `Maksim Kuzmin / 2026-05-19 21:21:55 +0900`
+- Staged / unstaged / untracked: `0 / 12 / 1`
+- HEAD: `22ddbf8`
+- HEAD subject: fix: resolve TS build errors in new Angular components
+- HEAD author/date: `makc / 2026-05-21 09:17:59 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
 
-- `origin`: `https://github.com/steeltalon777/Warehouse_frontend.git`
+- `origin`: `git@github.com:steeltalon777/Warehouse_frontend.git`
 
 #### Local branches
 
@@ -263,54 +215,29 @@ c714332 | 2026-04-22 12:27:58 +0900 | Maksim Kuzmin | TM ites phase 1
 #### Working tree status
 
 ```text
- D .DS_Store
- M .gitignore
- M .idea/workspace.xml
- D README.md
- M package.json
- D src/index.ts
- M tsconfig.json
-?? .editorconfig
-?? .prettierrc
-?? .vscode/
-?? AGENTS.md
-?? OPERATIONS_IMPLEMENTATION.md
-?? angular.json
-?? docs/ARCHITECTURE_FRONTEND_SPA.md
-?? docs/AUDIT_vs_TZ_2026-05-18.md
-?? docs/TZ_FRONTEND_SHARED_STYLE_SYSTEM.md
-?? docs/TZ_TEMPORARY_ITEMS_ANGULAR.md
-?? docs/nomenclature-screen-spec.md
-?? docs/nomenculature_plan.md
-?? docs/screens_plan/
-?? e2e/
-?? nomenclature-snapshot.md
-?? package-lock.json
-?? public/
-?? src/app/app.config.ts
-?? src/app/app.html
-?? src/app/app.routes.ts
-?? src/app/app.scss
-?? src/app/app.ts
-?? src/app/core/api/
-?? src/app/core/models/admin.models.ts
-?? src/app/core/models/assets.models.ts
-?? src/app/core/models/auth.models.ts
-?? src/app/core/models/balances.models.ts
-?? src/app/core/models/documents.models.ts
-?? src/app/core/models/health.models.ts
-?? src/app/core/models/nomenclature.models.ts
-?? src/app/core/models/recipients.models.ts
-?? src/app/core/models/reports.models.ts
-?? src/app/core/models/temp-items.models.ts
-... 14 more
+ M package-lock.json
+ M src/app/core/models/nomenclature.models.ts
+ M src/app/core/models/operations.models.ts
+ M src/app/core/services/catalog-search.service.ts
+ M src/app/core/services/nomenclature.service.ts
+ M src/app/features/nomenclature/action-buttons/action-buttons.ts
+ M src/app/features/nomenclature/category-edit-form/category-edit-form.ts
+ M src/app/features/nomenclature/item-edit-form/item-edit-form.ts
+ M src/app/features/nomenclature/nomenclature-page/nomenclature-page.ts
+ M src/app/features/nomenclature/right-panel/right-panel.ts
+ M src/app/features/operations/components/item-cache-search/item-cache-search.component.ts
+ M src/app/features/operations/components/operation-create-modal/operation-create-modal.component.ts
+?? src/app/features/nomenclature/unit-edit-form/
 ```
 
 #### Recent commits
 
 ```text
-68d8187 | 2026-05-19 21:21:55 +0900 | Maksim Kuzmin | feat: operations hardening (sorting, auth context, double-submit, badges), shared style system (wh-* SCSS partials), unit tests, fix toLowerCase runtime error
-a3fb5e3 | 2026-05-15 18:29:35 +0900 | Maksim Kuzmin | first commit
+22ddbf8 | 2026-05-21 09:17:59 +0900 | makc | fix: resolve TS build errors in new Angular components
+5ca526b | 2026-05-21 08:58:33 +0900 | Maksim Kuzmin | to devstand migrate
+be92fce | 2026-05-20 22:18:56 +0900 | Maksim Kuzmin | fix(operations): compact filters, scrollable table, sortable headers for FHD
+6c937eb | 2026-05-20 21:07:16 +0900 | Maksim Kuzmin | fix(nomenclature): ensure tree scrolls inside panel and fits FHD viewport
+7dc4160 | 2026-05-20 20:00:02 +0900 | Maksim Kuzmin | fix(nomenclature): correct plural form for category API path
 ```
 
 ### Warehouse_web
@@ -318,12 +245,12 @@ a3fb5e3 | 2026-05-15 18:29:35 +0900 | Maksim Kuzmin | first commit
 - Path: `Warehouse_web`
 - Current branch: `dev`
 - Upstream: `origin/dev`
-- Ahead/behind: `1 / 0`
+- Ahead/behind: `0 / 0`
 - Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 40 / 12`
-- HEAD: `e257852`
-- HEAD subject: feat: mount OperationsSPAView at /operations/, move SSR fallback to /operations/ssr/, add POST/PATCH nomenclature mutation endpoints, fix SPA template base href and asset prefix
-- HEAD author/date: `Maksim Kuzmin / 2026-05-19 21:21:55 +0900`
+- Staged / unstaged / untracked: `0 / 15 / 1`
+- HEAD: `70a8f5e`
+- HEAD subject: fix: add missing imports for review_items views
+- HEAD author/date: `makc / 2026-05-21 09:17:59 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
@@ -332,10 +259,8 @@ a3fb5e3 | 2026-05-15 18:29:35 +0900 | Maksim Kuzmin | first commit
 
 #### Local branches
 
-- `backup/main-before-reset-2026-04-20`
 - `dev` ← current
 - `main`
-- `prod`
 
 #### Remote branches
 
@@ -360,57 +285,32 @@ a3fb5e3 | 2026-05-15 18:29:35 +0900 | Maksim Kuzmin | first commit
 #### Working tree status
 
 ```text
- M AI_CONTEXT.md
- M AI_ENTRY_POINTS.md
- M API_MAP.md
- M ARCHITECTURE.md
- M DOMAIN_MODEL.md
- M INDEX.md
- M MEMORY.md
- M PROJECT_BRAIN.md
- M README.md
- M SYSTEM_MAP.md
- M apps/balances/views.py
- M apps/catalog/admin.py
- M apps/catalog/browse_views.py
- M apps/catalog/models.py
- M apps/client/tests.py
- M apps/client/views.py
- M apps/common/mixins.py
- M apps/common/tests.py
- M apps/documents/views.py
- M apps/operations/tests.py
+ M Dockerfile
+ M apps/bff_api/catalog_views.py
+ M apps/bff_api/tests.py
+ M apps/bff_api/urls.py
+ M apps/catalog_cache/services.py
+ M apps/catalog_cache/tests.py
  M apps/sync_client/auth_api.py
+ M apps/sync_client/auth_integration.py
+ M apps/sync_client/catalog_api.py
  M apps/sync_client/client.py
- M apps/sync_client/operations_api.py
- M apps/sync_client/root_admin_client.py
  M apps/sync_client/session_auth.py
- M apps/sync_client/tests.py
- M apps/temporary_items/tests.py
+ M apps/sync_client/test_auth_boundary.py
+ M apps/sync_client/token_resolver.py
+ M apps/users/simple_sync_signals.py
  M apps/users/tests.py
- M config/settings/base.py
- M docs/api_only_views.md
- M docs/catalog_api_methods.md
- M docs/operations_balances_endpoints.md
- M "docs/reports/2026-03-18_\320\260\321\203\320\264\320\270\321\202_\320\270\320\275\321\202\320\265\320\263\321\200\320\260\321\206\320\270\320\270_django_api.md"
- M docs/reports/2026-03-19_django_safe_refactor_phase1.md
- M docs/syncserver_auth_integration.md
- M static/css/app.css
- M templates/base.html
- M templates/client/dashboard.html
- M templates/includes/brand.html
- M templates/includes/navbar.html
-... 12 more
+?? warehouse
 ```
 
 #### Recent commits
 
 ```text
-e257852 | 2026-05-19 21:21:55 +0900 | Maksim Kuzmin | feat: mount OperationsSPAView at /operations/, move SSR fallback to /operations/ssr/, add POST/PATCH nomenclature mutation endpoints, fix SPA template base href and asset prefix
-d4912d1 | 2026-05-12 15:20:30 +0900 | Maksim Kuzmin | fix: temporary items pagination and bulk delete
-4924deb | 2026-05-12 14:53:38 +0900 | Maksim Kuzmin | Remove generated repository map
-5ade221 | 2026-05-12 14:46:27 +0900 | Maksim Kuzmin | Ignore generated repository maps
-6297fbe | 2026-05-07 13:50:12 +0900 | Maksim Kuzmin | fix: remove all visibility restrictions for storekeeper role
+70a8f5e | 2026-05-21 09:17:59 +0900 | makc | fix: add missing imports for review_items views
+b797603 | 2026-05-21 08:56:33 +0900 | Maksim Kuzmin | to devstand migrate
+3f3d7c4 | 2026-05-20 21:53:50 +0900 | Maksim Kuzmin | fix(balances): compact filters, scrollable table, sortable headers for FHD
+2a29aef | 2026-05-20 21:11:22 +0900 | Maksim Kuzmin | refactor(menu): align sidebar with Functional and WorkLogik.md VIII/4
+ab52ec3 | 2026-05-19 23:17:09 +0900 | Maksim Kuzmin | Warehouse_web: auth boundary hardening (TZ-1), brand/role/dashboard UX (TZ-D), operations delete BFF, token resolver, context processors
 ```
 
 ### WarehouseAIWorkstation
@@ -418,12 +318,12 @@ d4912d1 | 2026-05-12 15:20:30 +0900 | Maksim Kuzmin | fix: temporary items pagin
 - Path: `WarehouseAIWorkstation`
 - Current branch: `main`
 - Upstream: `origin/main`
-- Ahead/behind: `1 / 0`
-- Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 0 / 1`
-- HEAD: `04daeae`
-- HEAD subject: Bootstrap ready
-- HEAD author/date: `Maksim Kuzmin / 2026-05-02 10:40:42 +0900`
+- Ahead/behind: `0 / 0`
+- Dirty: `no`
+- Staged / unstaged / untracked: `0 / 0 / 0`
+- HEAD: `981edf7`
+- HEAD subject: stage5
+- HEAD author/date: `Maksim Kuzmin / 2026-04-12 22:54:27 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
@@ -442,66 +342,17 @@ d4912d1 | 2026-05-12 15:20:30 +0900 | Maksim Kuzmin | fix: temporary items pagin
 #### Working tree status
 
 ```text
-?? docs/MIGRATION_AIWORKSTATION_TO_CORE_ANALYSIS.md
+clean
 ```
 
 #### Recent commits
 
 ```text
-04daeae | 2026-05-02 10:40:42 +0900 | Maksim Kuzmin | Bootstrap ready
 981edf7 | 2026-04-12 22:54:27 +0900 | Maksim Kuzmin | stage5
 f414330 | 2026-04-12 22:53:15 +0900 | Maksim Kuzmin | fix(stage5): close Directory workspace runtime defects and add smoke gate\n\n- Add missing theme resources (BrushTextSecondary, BrushError, BrushWarning, BrushSuccess)\n- Fix XAML command bindings to match actual ViewModel command names (NewItemCommand, SaveSelectedCommand, etc.)\n- Remove unsafe Task.Run initialization; move to Loaded event handler on UI thread\n- Complete detail panels with all business fields (Description, Code, SortOrder, IsActive)\n- Render AI flags as read-only (TextBlock with muted styling, not editable TextBox)\n- Normalize contract matrix auth format to X-User-Token (role: ...)\n- Add WPF smoke tests for Row ViewModel round-trips and flag formatting\n- Add Presentation reference to UnitTests project (net8.0-windows)\n\nBuild: 0 warnings, 0 errors. Tests: 73 passed.
 2ed7442 | 2026-04-11 23:17:28 +0900 | Maksim Kuzmin | Harden bootstrap login flow and add stage 4 spec
 27a9ede | 2026-04-11 22:50:11 +0900 | Maksim Kuzmin | fix(stage3): close remaining gaps — root setup visibility, logout flow, user management UI
-```
-
-### WarehouseMobile
-
-- Path: `WarehouseMobile`
-- Current branch: `master`
-- Upstream: `-`
-- Ahead/behind: `0 / 0`
-- Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 0 / 13`
-- HEAD: `e516d56`
-- HEAD subject: First
-- HEAD author/date: `Maksim Kuzmin / 2026-04-28 17:01:32 +0900`
-- Tags at HEAD: `-`
-
-#### Remotes
-
-- `(none)`
-
-#### Local branches
-
-- `master` ← current
-
-#### Remote branches
-
-- `(none)`
-
-#### Working tree status
-
-```text
-?? .idea/.name
-?? .idea/AndroidProjectSystem.xml
-?? .idea/codeStyles/
-?? .idea/compiler.xml
-?? .idea/deploymentTargetSelector.xml
-?? .idea/gradle.xml
-?? .idea/markdown.xml
-?? .idea/misc.xml
-?? .idea/runConfigurations.xml
-?? .idea/vcs.xml
-?? AGENTS.md
-?? WHMobile_TZ.md
-?? docs/
-```
-
-#### Recent commits
-
-```text
-e516d56 | 2026-04-28 17:01:32 +0900 | Maksim Kuzmin | First
+fbd1bf7 | 2026-04-11 22:34:37 +0900 | Maksim Kuzmin | fix: align bootstrap sync client with real server contract + live smoke verified
 ```
 
 ## Notes for agents

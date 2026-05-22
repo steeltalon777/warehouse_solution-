@@ -41,6 +41,10 @@ GIT_STATE.md
 .playwright-mcp/
 docs/archive/
 
+# Local operator-only scripts and backups
+start_opencode_web.sh
+Makefile.bak.*
+
 
 # Local generated/state files
 db.sqlite3

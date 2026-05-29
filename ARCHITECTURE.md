@@ -45,6 +45,23 @@ Desktop or Android UI
     -> SyncServer API/sync protocol
 ```
 
+## Internal Transport Direction
+
+Warehouse 3.0 keeps Django -> SyncServer communication on the canonical `/api/v1` HTTP/JSON contract.
+
+The approved path is to harden the existing `Warehouse_web/apps/sync_client/` layer:
+
+- reuse HTTP connections through a persistent HTTPX transport;
+- keep SyncServer token/header construction per request;
+- add request tracing, metrics, explicit timeouts, and safe error mapping;
+- aggregate BFF reads where this reduces screen round trips without moving domain rules into Django;
+- cache read-heavy lookup data only as technical BFF acceleration;
+- consider Unix domain socket transport only as a measured optional experiment.
+
+Do not replace this boundary with direct Python imports, shared database access, stdio IPC, gRPC, or a Rust online backend rewrite without a new ADR.
+
+See `docs/adr/0011-django-syncserver-internal-transport-hardening.md` and `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md`.
+
 ## Data Ownership
 
 - `SyncServer` owns users, sites, devices, access scopes, catalog, operations, balances, documents, recipients, and sync events.
@@ -106,6 +123,7 @@ Key current decisions:
 
 - SyncServer is the authoritative backend.
 - Warehouse_web goes through SyncServer API.
+- Django -> SyncServer transport stays HTTP/JSON `/api/v1` for Warehouse 3.0 and is hardened in `apps/sync_client`.
 - Backend writes use service and UnitOfWork layers.
 - Inventory is operation-driven.
 - Token auth and site-scoped access stay server-enforced.

@@ -17,6 +17,8 @@
 - Оставить Django текущим браузерным клиентом и хостом пользовательских сессий.
 - Держать каталог и доменные данные завязанными на SyncServer.
 - Создавать BFF endpoint'ы для Angular без раскрытия SyncServer-токенов.
+- Для Warehouse 3.0 укреплять внутренний транспорт Django -> SyncServer по `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md`: persistent HTTPX transport, BFF-агрегация, безопасный кеш, метрики и опциональный измеряемый Unix socket.
+- Не переносить домен SyncServer в Django и не заменять `/api/v1` на stdio/gRPC/direct imports/Rust backend без отдельного ADR.
 
 ## Этап 4: Angular-оболочка номенклатуры
 

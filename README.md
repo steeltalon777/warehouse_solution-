@@ -36,6 +36,12 @@ Future offline desktop/mobile
 
 `SyncServer` owns warehouse domain data and business rules. Django owns web technical state only: auth, sessions, user binding, cache, and BFF state. Angular never receives SyncServer tokens and never calls SyncServer directly from the browser.
 
+## Warehouse 3.0 Transport Direction
+
+The Django -> SyncServer boundary stays on the canonical `/api/v1` HTTP/JSON API. For Warehouse 3.0 the approved path is transport hardening, not a domain rewrite: improve `Warehouse_web/apps/sync_client/` connection reuse, timeouts, metrics, BFF aggregation, and safe read caching. Unix domain sockets may be tested later as an optional measured optimization.
+
+Do not move SyncServer domain logic into Django, give Django direct warehouse DB access, replace the boundary with stdio/gRPC/direct imports, or rewrite the online backend in Rust without a new ADR.
+
 ## Project Structure
 
 ```text
@@ -87,3 +93,5 @@ plans/                  Working plans
 - [AI_ENTRY_POINTS.md](AI_ENTRY_POINTS.md) - source entry points
 - [API_MAP.md](API_MAP.md) - SyncServer endpoint map
 - [SOLUTION_ROADMAP.md](SOLUTION_ROADMAP.md) - priority roadmap
+- [docs/adr/0011-django-syncserver-internal-transport-hardening.md](docs/adr/0011-django-syncserver-internal-transport-hardening.md) - Warehouse 3.0 internal transport decision
+- [docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md](docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md) - executable transport hardening specification

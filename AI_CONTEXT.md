@@ -10,6 +10,7 @@ This file defines how AI agents should reason about this workspace.
 - `Warehouse_client_core` is the planned Rust offline-first runtime for future desktop and mobile clients.
 - `WarehouseDesktop` and `WarehouseMobile` should be rebuilt around `Warehouse_client_core`.
 - `WarehouseAIWorkstation` is paused unless explicitly requested.
+- Warehouse 3.0 keeps Django -> SyncServer on `/api/v1` HTTP/JSON and hardens `Warehouse_web/apps/sync_client/` instead of replacing the boundary.
 
 ## Non-Negotiable Rules
 
@@ -17,6 +18,7 @@ This file defines how AI agents should reason about this workspace.
 - Do not let clients connect directly to the SyncServer database.
 - Do not expose SyncServer user/device tokens to browser JavaScript.
 - Do not add Django local ORM models for catalog/domain entities.
+- Do not replace Django -> SyncServer `/api/v1` communication with direct imports, shared database access, stdio IPC, gRPC, or a Rust online backend rewrite unless a new ADR explicitly approves it.
 - Do not implement offline sync separately in WPF or Android once the core exists.
 - Do not edit generated outputs such as `bin/`, `obj/`, `.gradle/`, `node_modules/`, or generated repo maps.
 - Do not read or print secrets from `.env`, token files, or `.opencode` guard files.
@@ -49,3 +51,5 @@ This file defines how AI agents should reason about this workspace.
 4. Make the smallest correct change.
 5. Run the narrowest relevant verification.
 6. Update active docs when roles, entry points, or verification commands change.
+
+For internal transport work, start from `docs/adr/0011-django-syncserver-internal-transport-hardening.md` and `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md`.

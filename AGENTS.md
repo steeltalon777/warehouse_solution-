@@ -51,6 +51,7 @@ This workspace contains one authoritative backend, one active web client, one hi
 - Django catalog screens and APIs must use `Warehouse_web/apps/sync_client/` and services, not local catalog ORM entities.
 - Angular must call Django BFF endpoints. It must not receive SyncServer tokens or call SyncServer directly from the browser.
 - Frontend SPA architecture is governed by `Warehouse_frontend/docs/ARCHITECTURE_FRONTEND_SPA.md`: Django shell is permanent, Angular renders only the content area, business URLs open migrated Angular screens, replaced SSR routes move under `/ssr/`, and browser data access goes through Django BFF.
+- Django -> SyncServer internal transport for Warehouse 3.0 is governed by `docs/adr/0011-django-syncserver-internal-transport-hardening.md` and `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md`: keep `/api/v1` HTTP/JSON as the canonical contract, harden `Warehouse_web/apps/sync_client/`, add BFF aggregation/cache/metrics where useful, and do not replace it with direct imports, shared DB access, stdio, gRPC, or a Rust online backend without a new ADR.
 - Future offline clients must use `Warehouse_client_core` for local storage, outbox, sync, DTO mapping, and conflict handling.
 
 ## Project Priorities

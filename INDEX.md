@@ -20,7 +20,9 @@
 | Django CLI | `Warehouse_web/manage.py` |
 | Django URLs | `Warehouse_web/config/urls.py` |
 | Django SyncServer client | `Warehouse_web/apps/sync_client/` |
+| Django -> SyncServer transport hardening | `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md` |
 | Django catalog/BFF work | `Warehouse_web/apps/catalog/` |
+| Django BFF endpoints | `Warehouse_web/apps/bff_api/` |
 | Angular shell | `Warehouse_frontend/` |
 | Offline core plan | `Warehouse_client_core/docs/Core_plan` |
 | Desktop future client | `WarehouseDesktop/` |
@@ -49,11 +51,14 @@
 - `API_MAP.md` - SyncServer API inventory.
 - `SOLUTION_ROADMAP.md` - implementation priorities.
 - `REPOSITORY_MAP.md` - project map.
+- `docs/adr/0011-django-syncserver-internal-transport-hardening.md` - internal transport architecture decision.
+- `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md` - internal transport implementation specification.
 
 ## Rules To Remember
 
 - SyncServer owns warehouse truth.
 - Django is the active web client and BFF.
+- Django -> SyncServer stays on `/api/v1` HTTP/JSON for Warehouse 3.0; harden `apps/sync_client` before considering alternate transports.
 - Angular must run through Django.
 - Future offline clients must share `Warehouse_client_core`.
 - AI workstation is out of routine scope.

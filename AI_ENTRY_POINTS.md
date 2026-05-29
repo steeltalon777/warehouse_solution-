@@ -6,6 +6,8 @@
 - `ARCHITECTURE.md` - current architecture and ownership.
 - `INDEX.md` - navigation and verification commands.
 - `SOLUTION_ROADMAP.md` - priority roadmap.
+- `docs/adr/0011-django-syncserver-internal-transport-hardening.md` - Warehouse 3.0 Django -> SyncServer transport decision.
+- `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md` - implementation specification for transport hardening.
 
 ## SyncServer
 
@@ -26,7 +28,9 @@
 - `Warehouse_web/manage.py` - Django CLI.
 - `Warehouse_web/config/urls.py` - URL routing.
 - `Warehouse_web/apps/sync_client/` - SyncServer HTTP wrappers.
+- `Warehouse_web/apps/sync_client/client.py` - canonical low-level Django -> SyncServer transport entry point.
 - `Warehouse_web/apps/catalog/` - catalog UI and BFF work.
+- `Warehouse_web/apps/bff_api/` - browser-facing BFF endpoints for Angular and Django-hosted screens.
 - `Warehouse_web/apps/users/` - Django auth and SyncServer user binding.
 - `Warehouse_web/apps/operations/` - operations UI.
 - `Warehouse_web/templates/` - server-rendered templates.

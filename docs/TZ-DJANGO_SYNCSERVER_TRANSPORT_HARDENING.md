@@ -2,17 +2,17 @@
 
 ## Checklist Table Of Contents
 
-- [ ] 0. Context and architecture invariants confirmed
-- [ ] 1. Baseline measurements collected
-- [ ] 2. Persistent HTTP transport implemented in `Warehouse_web/apps/sync_client/`
-- [ ] 3. BFF screen-level aggregation reviewed and implemented where useful
-- [ ] 4. Safe cache policy implemented for read-heavy data
-- [ ] 5. Timeout, retry, and error mapping policy hardened
-- [ ] 6. Request tracing and transport metrics added
-- [ ] 7. Optional Unix domain socket experiment measured
-- [ ] 8. Verification ladder completed
-- [ ] 9. Rollout notes and agent docs updated
-- [ ] 10. Final acceptance review completed
+- [x] 0. Context and architecture invariants confirmed
+- [x] 1. Baseline measurements collected
+- [x] 2. Persistent HTTP transport implemented in `Warehouse_web/apps/sync_client/`
+- [ ] 3. BFF screen-level aggregation reviewed and implemented where useful *(deferred — future work)*
+- [x] 4. Safe cache policy implemented for read-heavy data
+- [x] 5. Timeout, retry, and error mapping policy hardened
+- [x] 6. Request tracing and transport metrics added
+- [ ] 7. Optional Unix domain socket experiment measured *(deferred — future work)*
+- [x] 8. Verification ladder completed
+- [x] 9. Rollout notes and agent docs updated
+- [x] 10. Final acceptance review completed
 
 ## 0. Purpose
 

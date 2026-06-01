@@ -80,7 +80,9 @@ This workspace contains one authoritative backend, one active web client, one hi
 
 ## Test Stand Configuration (Linux / Docker)
 
-The test stand runs in Docker from the workspace root `/home/makc/AI_sandbox/warehouse_solution`. Agents must probe stand availability before any real-stand test step.
+**Default state: dev-стенд запущен.** Агенты исходят из того, что стенд работает, и обращаются к нему без лишних проверок. Пробуют health-check только если запросы к стенду падают.
+
+Стенд работает в Docker из корня `/home/makc/AI_sandbox/warehouse_solution`.
 
 | Service | Address | Health Check | Container |
 |---|---|---|---|
@@ -89,24 +91,41 @@ The test stand runs in Docker from the workspace root `/home/makc/AI_sandbox/war
 | PostgreSQL | `localhost:5432` | `pg_isready -h localhost -p 5432 -t 3` | `warehouse_postgres` (`postgres:15-alpine`) |
 | Angular (Warehouse_frontend) | `http://localhost:4200` | `GET /` | `warehouse_angular` |
 
-### Stand Management
+### Make-команды для управления стендом
 
-- Preferred start command: `make up` from the workspace root.
-- Alternative start command: `docker compose up -d` from the workspace root.
-- Status check: `make status` or `docker compose ps`.
-- `make dev` tails logs; use a PTY/background session if continuous logs are required.
-- Legacy VM database tunnel is obsolete.
+Агенты имеют полное право использовать эти команды из `/home/makc/AI_sandbox/warehouse_solution`:
+
+| Команда | Назначение |
+|---|---|
+| `make up` | Запустить все сервисы в фоне (сборка + старт) |
+| `make down` | Остановить все сервисы |
+| `make restart` | Перезапустить стенд (`down` → `up`) |
+| `make build` | Пересобрать все образы с нуля (без кэша) |
+| `make build-sync` | Пересобрать только SyncServer |
+| `make build-web` | Пересобрать только Warehouse_web |
+| `make build-angular` | Пересобрать только Angular-фронтенд |
+| `make status` | Статус контейнеров + проверка эндпоинтов |
+| `make logs` | Логи всех сервисов (Ctrl+C для выхода) |
+| `make logs-sync` | Логи только SyncServer |
+| `make logs-web` | Логи только Warehouse_web |
+| `make migrate` | Применить все миграции |
+| `make dev` | Запустить + миграции + показать логи (интерактивный) |
+| `make init` | Первоначальная инициализация (первый запуск) |
+| `make clean` | Очистить всё (контейнеры + volumes + образы) |
+| `make ps` | Статус контейнеров (кратко) |
 
 ### Stand Availability Protocol
 
-**When an agent needs a real test stand for smoke/integration/UI tests:**
+**Когда агенту нужен рабочий стенд для smoke/интеграционных/UI-тестов:**
 
-1. Agent probes `http://localhost:8000/api/v1/health`, `http://localhost:8001/healthz/`, and `pg_isready -h localhost -p 5432 -t 3`. For Angular/UI tests, also probe `http://localhost:4200/`.
-2. If **stand is running** → proceed with tests.
-3. If **stand is NOT running** → agent tries `make up` from `/home/makc/AI_sandbox/warehouse_solution`.
-4. If Makefile is unavailable or fails, agent may try `docker compose up -d` from the same directory.
-5. If Docker/compose cannot start the stand, agent reports: «Стенд не обнаружен. Запусти `make up` или `docker compose up -d` из `/home/makc/AI_sandbox/warehouse_solution/`.»
-6. If stand cannot be brought up, agent leaves the relevant checklist item unchecked with the blocker note: «стенд недоступен».
+1. **По умолчанию стенд запущен.** Агент не проверяет health-check перед каждым обращением — только если запрос возвращает ошибку подключения.
+2. Если запрос к стенду упал → агент проверяет `http://localhost:8000/api/v1/health`, `http://localhost:8001/healthz/` и `pg_isready -h localhost -p 5432 -t 3`.
+3. Если **стенд работает** → продолжить тесты.
+4. Если **стенд НЕ работает** → агент запускает `make up` из `/home/makc/AI_sandbox/warehouse_solution`.
+5. Если `make up` недоступен или падает → агент пробует `docker compose up -d` из той же директории.
+6. Если стенд запустился, но тест падает по таймауту/ошибке → агент может попробовать `make restart` (полный перезапуск) или `make build-sync` / `make build-web` / `make build` (ребилд с нуля), особенно если были изменения в Dockerfile, зависимостях или конфигурации.
+7. Если Docker/compose не может поднять стенд → агент сообщает: «Стенд не обнаружен. Запусти `make up` или `docker compose up -d` из `/home/makc/AI_sandbox/warehouse_solution/`.»
+8. Если стенд не удаётся поднять ни одним способом → агент оставляет чек-лист незакрытым с пометкой: «стенд недоступен».
 
 ### Stand Environment Variables (names only, never values)
 

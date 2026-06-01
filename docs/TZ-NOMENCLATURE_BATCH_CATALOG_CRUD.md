@@ -556,6 +556,7 @@ Angular:
 
 - Change buffer stores create/update/deactivate for all three entity types.
 - Local category/item/unit projection updates tree/forms/selects without HTTP.
+- Newly staged categories and units are immediately available in parent/category/unit selectors before apply.
 - Batch payload maps local IDs/references correctly.
 - Apply success clears buffer; apply failure preserves buffer.
 
@@ -565,7 +566,7 @@ Angular component tests for:
 
 - action buttons emit create category/item/unit events;
 - category create/edit form validation;
-- item create/edit form requires name, unit, category;
+- item create/edit form requires name, unit, category, while SKU stays optional;
 - unit create/edit form requires name and symbol;
 - pending changes bar disables apply while saving.
 

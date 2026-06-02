@@ -3,6 +3,7 @@
 Полная карта API SyncServer для клиентских команд.
 
 > **Frozen:** single snapshot, 2026-05-18. Derives from `SyncServer/main.py`, `app/api/routes_*.py`, actual route code.
+> **Updated 2026-06-01:** Added IssueObject API (`/issue-objects/*`), replaced Recipient API. Issued assets now use `issue_object_id` instead of `recipient_id`.
 
 ---
 
@@ -23,7 +24,7 @@ SyncServer uses exactly two transport headers for authentication. No optional au
 
 | Header | Format | Meaning | Required for |
 |---|---|---|---|
-| `X-User-Token` | `<uuid>` | User identity and authorization context | `/auth/*`, `/admin/*`, `/catalog/*`, `/catalog/admin/*`, `/operations/*`, `/balances/*`, `/temporary-items/*`, `/documents/*`, `/recipients/*`, `/assets/*`, `/reports/*`, `/bootstrap/sync` |
+| `X-User-Token` | `<uuid>` | User identity and authorization context | `/auth/*`, `/admin/*`, `/catalog/*`, `/catalog/admin/*`, `/operations/*`, `/balances/*`, `/temporary-items/*`, `/documents/*`, `/issue-objects/*`, `/assets/*`, `/reports/*`, `/bootstrap/sync` |
 | `X-Device-Token` | `<uuid>` | Device identity and sync context | `/ping`, `/push`, `/pull` |
 
 Common request header: `Content-Type: application/json`.
@@ -272,16 +273,21 @@ Notes:
 
 ---
 
-## /api/v1/recipients — Recipients API
+## /api/v1/issue-objects — Issue Objects API (replaces Recipients)
+
+*Replaces previous `/api/v1/recipients/*` endpoints. Recipient model removed.*
 
 | Method | Path | Auth | Request | Response |
 |---|---|---|---|---|
-| `GET` | `/recipients` | `X-User-Token` | query: `search`, `recipient_type`, `include_inactive`, `include_deleted`, `page`, `page_size` | `{items, total_count, page, page_size}` |
-| `POST` | `/recipients` | `X-User-Token` | `{display_name, recipient_type, personnel_no?}` | `RecipientResponse` |
-| `POST` | `/recipients/merge` | `X-User-Token` | `{source_id, target_id}` | `RecipientResponse` |
-| `GET` | `/recipients/{recipient_id}` | `X-User-Token` | — | `RecipientResponse` |
-| `PATCH` | `/recipients/{recipient_id}` | `X-User-Token` | partial recipient | `RecipientResponse` |
-| `DELETE` | `/recipients/{recipient_id}` | `X-User-Token` | — | 204 |
+| `GET` | `/issue-objects` | `X-User-Token` | query: `search`, `object_type`, `include_inactive`, `include_deleted`, `page`, `page_size` | `{items, total_count, page, page_size}` |
+| `POST` | `/issue-objects` | `X-User-Token` | `{display_name, object_type, code?}` | `IssueObjectResponse` |
+| `POST` | `/issue-objects/merge` | `X-User-Token` | `{source_id, target_id}` | `IssueObjectResponse` |
+| `GET` | `/issue-objects/{issue_object_id}` | `X-User-Token` | — | `IssueObjectResponse` |
+| `PATCH` | `/issue-objects/{issue_object_id}` | `X-User-Token` | partial | `IssueObjectResponse` |
+| `DELETE` | `/issue-objects/{issue_object_id}` | `X-User-Token` | — | 204 |
+| `GET` | `/issue-objects/{issue_object_id}/assets` | `X-User-Token` | query: `item_id`, `search`, `page`, `page_size` | `{items, total_count, page, page_size}` |
+
+`object_type` enum: `person`, `base`, `vehicle`, `department`, `contractor`, `other_object`, `system_repo`.
 
 Notes:
 - Write roles: `chief_storekeeper`, `storekeeper`.
@@ -297,7 +303,7 @@ Notes:
 | `GET` | `/lost-assets` | `X-User-Token` | query: `site_id`, `source_site_id`, `operation_id`, `item_id`, `search`, `updated_after`, `updated_before`, `qty_from`, `qty_to`, `page`, `page_size` | `{items, total_count, page, page_size}` |
 | `GET` | `/lost-assets/{operation_line_id}` | `X-User-Token` | — | `LostAssetRow` |
 | `POST` | `/lost-assets/{operation_line_id}/resolve` | `X-User-Token` | `{action, qty, note?, responsible_recipient_id?}` | `{...}` (varies by action) |
-| `GET` | `/issued-assets` | `X-User-Token` | query: `recipient_id`, `item_id`, `search`, `page`, `page_size` | `{items, total_count, page, page_size}` |
+| `GET` | `/issued-assets` | `X-User-Token` | query: `issue_object_id`, `item_id`, `search`, `page`, `page_size` | `{items, total_count, page, page_size}` |
 
 Notes:
 - Read requires `OperationsPolicy.require_assets_read_access`.

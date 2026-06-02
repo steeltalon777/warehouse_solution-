@@ -113,6 +113,7 @@ This workspace contains one authoritative backend, one active web client, one hi
 | `make init` | Первоначальная инициализация (первый запуск) |
 | `make clean` | Очистить всё (контейнеры + volumes + образы) |
 | `make ps` | Статус контейнеров (кратко) |
+| `make reset-django-admin` | Сбросить Django superuser до admin/admin123 |
 
 ### Stand Availability Protocol
 
@@ -126,6 +127,21 @@ This workspace contains one authoritative backend, one active web client, one hi
 6. Если стенд запустился, но тест падает по таймауту/ошибке → агент может попробовать `make restart` (полный перезапуск) или `make build-sync` / `make build-web` / `make build` (ребилд с нуля), особенно если были изменения в Dockerfile, зависимостях или конфигурации.
 7. Если Docker/compose не может поднять стенд → агент сообщает: «Стенд не обнаружен. Запусти `make up` или `docker compose up -d` из `/home/makc/AI_sandbox/warehouse_solution/`.»
 8. Если стенд не удаётся поднять ни одним способом → агент оставляет чек-лист незакрытым с пометкой: «стенд недоступен».
+
+### Default credentials (dev-стенд)
+
+**Django superuser (Warehouse_web `http://localhost:8001/admin/`):**
+
+| Поле | Значение |
+|---|---|
+| Логин | `admin` |
+| Пароль | `admin123` |
+
+При проблемах со входом — сбросить до значений по умолчанию:
+
+```
+make reset-django-admin
+```
 
 ### Stand Environment Variables (names only, never values)
 

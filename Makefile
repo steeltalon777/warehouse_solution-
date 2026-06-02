@@ -204,3 +204,9 @@ restore-db: ## Восстановить PostgreSQL из дампа (make restore
 	fi
 	@cat $(FILE) | docker compose exec -T postgres psql -U warehouse_user warehouse
 	@echo "$(GREEN)✅ База восстановлена из $(FILE)$(NC)"
+
+
+# ----- Django Admin -----
+
+reset-django-admin: ## Сбросить Django superuser до admin/admin123
+	@docker compose exec warehouse_web python manage.py shell -c "from django.contrib.auth.models import User; u, _ = User.objects.get_or_create(username='admin'); u.set_password('admin123'); u.is_superuser = True; u.is_staff = True; u.is_active = True; u.email = 'admin@warehouse.local'; u.save(); print('Django superuser admin reset to default')"

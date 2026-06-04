@@ -16,7 +16,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-warehouse_user}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-warehouse_user} -d ${POSTGRES_DB:-warehouse}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -32,6 +32,8 @@ services:
       - .env
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql://warehouse_user:warehouse_pass@postgres:5432/warehouse}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      LOG_FORMAT: ${LOG_FORMAT:-console}
     volumes:
       - ./SyncServer:/app
     depends_on:
@@ -63,6 +65,8 @@ services:
       SYNC_SERVER_URL: ${SYNC_SERVER_URL:-http://syncserver:8000/api/v1}
       FRONTEND_MODE: ${FRONTEND_MODE:-dev}
       FRONTEND_DEV_SERVER_URL: ${FRONTEND_DEV_SERVER_URL:-http://angular:4200}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      LOG_FORMAT: ${LOG_FORMAT:-console}
     volumes:
       - ./Warehouse_web:/app
     depends_on:

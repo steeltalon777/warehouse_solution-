@@ -116,6 +116,12 @@ rotate-tokens-root: ## Ротировать только токен root пол�
 rotate-tokens-device: ## Ротировать только токен Django устройства
 	docker compose exec syncserver python scripts/rotate_tokens.py --django-device
 
+convert-temp-items: ## Конвертировать активные временные ТМЦ в постоянные
+	docker compose exec syncserver python scripts/batch_convert_temporary_items.py
+
+convert-temp-items-dry: ## Dry-run конвертации временных ТМЦ
+	docker compose exec syncserver python scripts/batch_convert_temporary_items.py --dry-run
+
 # ----- Статус -----
 
 status: ## Показать статус контейнеров и проверить эндпоинты

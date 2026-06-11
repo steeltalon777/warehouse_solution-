@@ -1,0 +1,105 @@
+- generic [active] [ref=e1]:
+  - link "К основному" [ref=e2] [cursor=pointer]:
+    - /url: "#content-start"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - link "Администрирование Django" [ref=e7] [cursor=pointer]:
+        - /url: /admin/
+      - generic [ref=e8]:
+        - text: Добро пожаловать,
+        - strong [ref=e9]: admin
+        - text: .
+        - link "Открыть сайт" [ref=e10] [cursor=pointer]:
+          - /url: /
+        - text: /
+        - link "Изменить пароль" [ref=e11] [cursor=pointer]:
+          - /url: /admin/password_change/
+        - text: /
+        - button "Выйти" [ref=e13] [cursor=pointer]
+        - 'button "Переключить тему (текущая: выбрана автоматически)" [ref=e14] [cursor=pointer]':
+          - generic [ref=e15]: "Переключить тему (текущая: выбрана автоматически)"
+          - img [ref=e16]
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - heading "Администрирование сайта" [level=1] [ref=e21]
+        - generic [ref=e22]:
+          - table "Users" [ref=e24]:
+            - caption [ref=e25]:
+              - link "Users" [ref=e26] [cursor=pointer]:
+                - /url: /admin/users/
+            - rowgroup [ref=e27]:
+              - row "Имя модели Добавить Просмотреть или редактировать" [ref=e28]:
+                - columnheader "Имя модели" [ref=e29]
+                - columnheader "Добавить" [ref=e30]
+                - columnheader "Просмотреть или редактировать" [ref=e31]
+            - rowgroup [ref=e32]:
+              - row "Sites Добавить Изменить" [ref=e33]:
+                - rowheader "Sites" [ref=e34]:
+                  - link "Sites" [ref=e35] [cursor=pointer]:
+                    - /url: /admin/users/site/
+                - cell "Добавить" [ref=e36]:
+                  - link "Добавить" [ref=e37] [cursor=pointer]:
+                    - /url: /admin/users/site/add/
+                - cell "Изменить" [ref=e38]:
+                  - link "Изменить" [ref=e39] [cursor=pointer]:
+                    - /url: /admin/users/site/
+              - row "Sync user bindings Добавить Изменить" [ref=e40]:
+                - rowheader "Sync user bindings" [ref=e41]:
+                  - link "Sync user bindings" [ref=e42] [cursor=pointer]:
+                    - /url: /admin/users/syncuserbinding/
+                - cell "Добавить" [ref=e43]:
+                  - link "Добавить" [ref=e44] [cursor=pointer]:
+                    - /url: /admin/users/syncuserbinding/add/
+                - cell "Изменить" [ref=e45]:
+                  - link "Изменить" [ref=e46] [cursor=pointer]:
+                    - /url: /admin/users/syncuserbinding/
+              - row "Устройства SyncServer Добавить Изменить" [ref=e47]:
+                - rowheader "Устройства SyncServer" [ref=e48]:
+                  - link "Устройства SyncServer" [ref=e49] [cursor=pointer]:
+                    - /url: /admin/users/syncdevicebinding/
+                - cell "Добавить" [ref=e50]:
+                  - link "Добавить" [ref=e51] [cursor=pointer]:
+                    - /url: /admin/users/syncdevicebinding/add/
+                - cell "Изменить" [ref=e52]:
+                  - link "Изменить" [ref=e53] [cursor=pointer]:
+                    - /url: /admin/users/syncdevicebinding/
+          - table "Пользователи и группы" [ref=e55]:
+            - caption [ref=e56]:
+              - link "Пользователи и группы" [ref=e57] [cursor=pointer]:
+                - /url: /admin/auth/
+            - rowgroup [ref=e58]:
+              - row "Имя модели Добавить Просмотреть или редактировать" [ref=e59]:
+                - columnheader "Имя модели" [ref=e60]
+                - columnheader "Добавить" [ref=e61]
+                - columnheader "Просмотреть или редактировать" [ref=e62]
+            - rowgroup [ref=e63]:
+              - row "Пользователи Добавить Изменить" [ref=e64]:
+                - rowheader "Пользователи" [ref=e65]:
+                  - link "Пользователи" [ref=e66] [cursor=pointer]:
+                    - /url: /admin/auth/user/
+                - cell "Добавить" [ref=e67]:
+                  - link "Добавить" [ref=e68] [cursor=pointer]:
+                    - /url: /admin/auth/user/add/
+                - cell "Изменить" [ref=e69]:
+                  - link "Изменить" [ref=e70] [cursor=pointer]:
+                    - /url: /admin/auth/user/
+        - generic [ref=e72]:
+          - heading "Последние действия" [level=2] [ref=e73]
+          - heading "Мои действия" [level=3] [ref=e74]
+          - list [ref=e75]:
+            - listitem [ref=e76]:
+              - generic [ref=e77]: "Создано:"
+              - link "Site 2" [ref=e78] [cursor=pointer]:
+                - /url: /admin/users/site/3/change/
+              - text: Site
+            - listitem [ref=e79]:
+              - generic [ref=e80]: "Создано:"
+              - link "Site 1" [ref=e81] [cursor=pointer]:
+                - /url: /admin/users/site/2/change/
+              - text: Site
+            - listitem [ref=e82]:
+              - generic [ref=e83]: "Создано:"
+              - link "Base" [ref=e84] [cursor=pointer]:
+                - /url: /admin/users/site/1/change/
+              - text: Site
+    - contentinfo

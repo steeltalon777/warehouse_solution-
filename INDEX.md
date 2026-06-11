@@ -51,8 +51,26 @@
 - `API_MAP.md` - SyncServer API inventory.
 - `SOLUTION_ROADMAP.md` - implementation priorities.
 - `REPOSITORY_MAP.md` - project map.
-- `docs/adr/0011-django-syncserver-internal-transport-hardening.md` - internal transport architecture decision.
-- `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md` - internal transport implementation specification.
+- `Functional and WorkLogik.md` - canonical functional requirements.
+
+### Key ADRs
+
+- `docs/adr/0011-django-syncserver-internal-transport-hardening.md` - Warehouse 3.0 transport decision.
+- `docs/adr/0012-deprecate-temporary-items-review-flow.md` - Temporary items → review flow deprecation.
+
+### Active Technical Assignments
+
+- `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md` - internal transport hardening.
+- `docs/TZ-NOMENCLATURE_BATCH_CATALOG_CRUD.md` - batch catalog CRUD.
+- `docs/TZ-B_OPERATIONS_DELETE_CONTRACT.md` - operations delete contract.
+- `docs/TZ-FRONTEND_OPERATIONS_CREATE_MODAL_REWORK.md` - create modal rework.
+- `docs/TZ-OPERATIONS_LIST_TABLE_DISPLAY_REWORK.md` - operations table rework.
+- `docs/TZ-SPA_OPERATIONS_ACCEPTANCE_AND_LOST_ASSETS.md` - SPA acceptance + lost assets.
+- `docs/TZ-CATALOG_CREATED_BY_UPDATED_BY.md` - catalog audit fields (not started).
+- `docs/TZ-ISSUED_ASSETS_REPOSITORY_OBJECTS.md` - superseded by the two TZs below.
+- `docs/TZ-ISSUED_REPOSITORY_BACKEND_CONTRACT.md` - SyncServer + BFF contract for issue-object categories, tree, and register math.
+- `docs/TZ-ISSUED_REPOSITORY_FRONTEND_WORKSPACE.md` - 40/60 repository workspace, sidebar entry, operation modal prefill.
+- `docs/TZ-DOCUMENT_PDF_RENDERING_AND_UI.md` - PDF rendering.
 
 ## Rules To Remember
 

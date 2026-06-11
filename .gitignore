@@ -46,6 +46,10 @@ start_opencode_web.sh
 Makefile.bak.*
 
 
+# Debug artifacts / smoke-test screenshots
+issued-assets-*.txt
+operations-table-smoke.png
+
 # Local generated/state files
 db.sqlite3
 *.sqlite3

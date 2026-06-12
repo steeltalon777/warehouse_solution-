@@ -2,7 +2,8 @@
 
 ## Execution Checklist
 
-- [ ] 0. Преддеплойная верификация на dev (D1-D6 решены)
+- [x] 0. Преддеплойная верификация на dev (D1-D6 решены) — повторно подтверждено 2026-06-12, см. Evidence ниже
+- [ ] 0a. Release freeze: закоммитить и запушить все deploy-owned изменения из `dev`, исключить локальные артефакты/секреты
 - [ ] 1. Бэкап продовой БД
 - [ ] 2. Git pull dev → main на проде
 - [ ] 3. Пересборка Docker-образов
@@ -23,15 +24,79 @@
 
 ---
 
+## 0a. Release freeze перед ручным деплоем
+
+**Статус на 2026-06-12:** dev-стенд проходит финальные проверки, но деплой разрешён только после фиксации release-кандидата в git.
+
+Перед шагом 1 пользователь вручную подтверждает, что:
+
+- root workspace находится на ветке `dev`;
+- `SyncServer`, `Warehouse_web`, `Warehouse_frontend` находятся на ветке `dev`;
+- deploy-owned изменения закоммичены и запушены в `dev` во всех вложенных репозиториях;
+- на проде `git pull origin dev` подтянет именно проверенный release-кандидат;
+- не попадают в коммит/деплой локальные секреты и артефакты:
+  - `.env`;
+  - `Warehouse_web/media/documents/pdf/*.pdf`;
+  - локальные Playwright/smoke snapshots вроде `*-snapshot.md`, `*-smoke*.png`, `login-form.md`, `search-electronics.md`.
+
+Рекомендуемая локальная проверка перед push:
+
+```bash
+git status --short
+git -C SyncServer status --short
+git -C Warehouse_web status --short
+git -C Warehouse_frontend status --short
+git -C SyncServer log --oneline -3
+git -C Warehouse_web log --oneline -3
+git -C Warehouse_frontend log --oneline -3
+```
+
+**Нельзя начинать прод-деплой**, если нужные изменения есть только локально на dev-стенде и не доступны прод-серверу через `git pull origin dev`.
+
+---
+
 ## 0. Преддеплойная верификация (dev-стенд)
 
 Убедиться, что на dev-стенде:
-- [ ] 4 failing Django-теста починены
-- [ ] SyncServer test suite проходит
-- [ ] Ошибки балансов исправлены
-- [ ] Functional and WorkLogik.md актуализирован
-- [ ] PostgreSQL 16 совместимость проверена
-- [ ] Dev-образы пересобраны, smoke пройден
+- [x] 4 failing Django-теста починены — `docker compose exec -T warehouse_web python manage.py test`, 296 tests OK, 2026-06-12
+- [x] SyncServer test suite проходит — `docker compose exec -T syncserver python -m pytest`, 386 passed / 2 skipped / 5 deselected / 7 xfailed, 2026-06-12
+- [x] Ошибки балансов исправлены — регрессия покрыта полным SyncServer suite и stand smoke, 2026-06-12
+- [x] Functional and WorkLogik.md актуализирован — проверены разделы II, IV, VI, VII, VIII; текущие операции/каталог соответствуют целевым правилам
+- [x] PostgreSQL совместимость dev-стенда проверена — текущий стенд `postgres:15-alpine`, `alembic current` = `8e9a044a0fcf (head)`; для прода PostgreSQL 16 оставить отдельный ручной контроль после бэкапа
+- [x] Dev-образы/стенд smoke пройдены — `make status`, health endpoints, HTTP smoke и Playwright smoke, 2026-06-12
+
+### Evidence 2026-06-12
+
+| Check | Command / Tool | Result | Evidence |
+|---|---|---|---|
+| Git branch gate | `git branch --show-current`; nested `git -C ... branch --show-current` | pass with notes | root, `SyncServer`, `Warehouse_web`, `Warehouse_frontend`, `Warehouse_client_core` on `dev`; `WarehouseAIWorkstation` on `main` but paused/out of deploy scope |
+| Dirty tree gate | `git status --short`; nested statuses | blocked until release commit | local dirty/untracked files exist; deploy must wait until intended changes are committed/pushed and local `.env`/artifacts excluded |
+| SyncServer tests | `docker compose exec -T syncserver python -m pytest` | pass | 386 passed, 2 skipped, 5 deselected, 7 xfailed, 8 warnings in 221.73s |
+| Django tests | `docker compose exec -T warehouse_web python manage.py test` | pass | 296 tests OK |
+| Angular build | `CI=true NG_CLI_ANALYTICS=false npm run build` | pass with warnings | bundle generated; only existing style budget warnings on several component SCSS files |
+| Alembic head | `docker compose exec -T syncserver python -m alembic current` | pass | `8e9a044a0fcf (head) (mergepoint)` |
+| Stand status | `make status`; `docker compose ps` | pass | postgres healthy; syncserver/web/angular up; SyncServer HTTP 200, detailed 200, Angular 200; web `/healthz/` OK |
+| HTTP smoke | `curl -fsS -L` for `/operations/`, `/nomenclature/`, `/issued-assets/`, `/admin/login/?next=/admin/` | pass | pages returned successfully on dev stand |
+| UI smoke | Playwright login `admin/admin123`, open `/operations/` | pass | operations table rendered in Django shell; BFF request observed: `/bff/api/v1/operations?page=1&page_size=20&exclude_adjustments=true` => 200 |
+| Recent logs | `docker compose logs --tail=120 warehouse_web syncserver | rg -i "traceback|exception|syncserver request failed|error"` | pass | no matching recent errors |
+
+### Current release notes / late fixes included in dev verification
+
+- `SyncServer`: operations list supports `exclude_adjustments`, while explicit `type=ADJUSTMENT` still works.
+- `Warehouse_web`: BFF forwards `exclude_adjustments` to SyncServer.
+- `Warehouse_frontend`: operations table hides service adjustments by default unless a type filter is selected; comment rendering falls back from `comment` to `notes`; table has internal scroll wrapper and tightened comment/date columns.
+- Catalog readonly Angular alias work is present in dev history (`Warehouse_web`/`Warehouse_frontend`) and smoke-tested through navigation/sidebar availability.
+
+### Release blocker before production
+
+На момент проверки есть незакоммиченные изменения:
+
+- root: `.env` modified; `docs/TZ-PROD_DEPLOY_WAREHOUSE_3.0.md` modified; untracked local smoke snapshots/artifacts; untracked `docs/TZ-CATALOG_READONLY_ANGULAR_ALIAS.md`;
+- `SyncServer`: `app/repos/operations_repo.py`, `tests/test_operations_acceptance_and_issue_api.py`;
+- `Warehouse_web`: `apps/bff_api/operations_views.py`, `apps/bff_api/tests.py`, untracked generated PDFs under `media/documents/pdf/`;
+- `Warehouse_frontend`: operations model/service/filter/table files.
+
+**Действие:** до прод-деплоя закоммитить только intended release changes в соответствующих репозиториях и не коммитить `.env`, PDF и локальные smoke artifacts.
 
 ---
 
@@ -56,13 +121,23 @@ ls -lh ~/backups/
 ```bash
 cd ~/SyncServer
 git checkout main
+git status --short
 git pull origin dev
 # Ожидается fast-forward
 
 cd ~/Warehouse_web
 git checkout main
+git status --short
+git pull origin dev
+
+# Если Angular живёт отдельным репозиторием/директорией на проде:
+cd ~/Warehouse_frontend
+git checkout main
+git status --short
 git pull origin dev
 ```
+
+Перед pull убедиться, что на проде нет локальных незакоммиченных изменений. Если `git status --short` не пустой — остановить деплой и разобрать вручную.
 
 ---
 
@@ -74,7 +149,13 @@ docker compose build --no-cache
 
 cd ~/Warehouse_web
 docker compose build --no-cache
+
+# Если Angular деплоится отдельным сервисом/образом:
+cd ~/Warehouse_frontend
+docker compose build --no-cache
 ```
+
+Если продовая конфигурация собирает Angular внутри `Warehouse_web`, отдельный build `Warehouse_frontend` не нужен; достаточно убедиться, что свежий bundle попал в Django staticfiles на шаге 7.
 
 ---
 
@@ -156,6 +237,10 @@ curl -sk https://horizonstorage.ru/api/v1/health
 
 docker ps
 # Все 5 контейнеров up
+
+# Проверить отсутствие явных ошибок после старта
+docker logs warehouse_web --tail 120 | grep -Ei "traceback|exception|SyncServer request failed|error" || true
+docker logs syncserver --tail 120 | grep -Ei "traceback|exception|error" || true
 ```
 
 ---
@@ -210,8 +295,13 @@ docker logs warehouse_web --tail 20 | grep -c "SyncServer request failed"
 # 5. Smoke через браузер
 # https://horizonstorage.ru/operations/
 # https://horizonstorage.ru/nomenclature/
+# https://horizonstorage.ru/catalog/
 # https://horizonstorage.ru/issued-assets/
 # https://horizonstorage.ru/admin/
+
+# 6. Operations BFF default filter после late fix
+# В браузерной Network-вкладке для /operations/ должен быть запрос:
+# /bff/api/v1/operations?...&exclude_adjustments=true -> 200
 ```
 
 ## Rollback

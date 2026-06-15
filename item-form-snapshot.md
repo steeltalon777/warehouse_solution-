@@ -1,0 +1,405 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - link "ООО АС \"Горизонт\" ООО АС \"Горизонт\"" [ref=e4] [cursor=pointer]:
+      - /url: /client/
+      - img "ООО АС \"Горизонт\"" [ref=e5]
+      - generic [ref=e6]: ООО АС "Горизонт"
+    - generic [ref=e7]:
+      - generic [ref=e8]: admin
+      - generic [ref=e9]: Root
+      - button "Выход" [ref=e11] [cursor=pointer]
+  - generic [ref=e12]:
+    - complementary [ref=e13]:
+      - link "Главная" [ref=e14] [cursor=pointer]:
+        - /url: /client/
+      - generic [ref=e15]:
+        - generic [ref=e16]: Остатки и операции
+        - generic [ref=e17]:
+          - link "Остатки" [ref=e18] [cursor=pointer]:
+            - /url: /balances/
+          - link "Операции" [ref=e19] [cursor=pointer]:
+            - /url: /operations/
+          - link "Операции к приёмке" [ref=e20] [cursor=pointer]:
+            - /url: /operations/pending-acceptance
+          - link "Репозиторий непринятого" [ref=e21] [cursor=pointer]:
+            - /url: /operations/lost-assets
+          - link "Репозиторий выдачи" [ref=e22] [cursor=pointer]:
+            - /url: /issued-assets/
+      - generic [ref=e23]:
+        - generic [ref=e24]: Справочники
+        - generic [ref=e25]:
+          - link "Каталог" [ref=e26] [cursor=pointer]:
+            - /url: /catalog/
+          - link "Номенклатура" [ref=e27] [cursor=pointer]:
+            - /url: /nomenclature/
+          - group [ref=e28]:
+            - generic "SSR клиент ▸" [ref=e29] [cursor=pointer]
+    - main [ref=e30]:
+      - generic [ref=e34]:
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - heading "Номенклатура" [level=1] [ref=e38]
+            - paragraph [ref=e39]: Категории, ТМЦ, SKU, единицы измерения и ключевые слова. Изменения копятся локально и применяются батчем.
+          - generic [ref=e40]:
+            - button "Экспорт" [ref=e41] [cursor=pointer]
+            - button "Применить все" [disabled] [ref=e42]
+        - generic [ref=e43]:
+          - generic [ref=e44]:
+            - generic [ref=e45]:
+              - button "Категории и ТМЦ" [ref=e46] [cursor=pointer]
+              - button "Единицы измерения" [ref=e47] [cursor=pointer]
+            - generic [ref=e50]:
+              - img
+              - textbox "Название, SKU, ключевые слова" [ref=e51]
+            - generic [ref=e53]:
+              - button "+ Категория" [ref=e54] [cursor=pointer]
+              - button "+ ТМЦ" [active] [ref=e55] [cursor=pointer]
+              - button "Раскрыть всё" [ref=e56] [cursor=pointer]
+            - generic [ref=e59]:
+              - generic [ref=e60]:
+                - generic [ref=e61]:
+                  - heading "Категории и ТМЦ" [level=2] [ref=e62]
+                  - paragraph [ref=e63]: Дерево с inline-редактированием
+                - generic [ref=e64]: 1126 элементов
+              - generic [ref=e65]:
+                - generic [ref=e68] [cursor=pointer]:
+                  - button [ref=e69]:
+                    - img [ref=e70]
+                  - generic [ref=e73]: Канцелярские товары
+                - generic [ref=e76] [cursor=pointer]:
+                  - button [ref=e77]:
+                    - img [ref=e78]
+                  - generic [ref=e81]: Продовольствие
+                - generic [ref=e84] [cursor=pointer]:
+                  - button [ref=e85]:
+                    - img [ref=e86]
+                  - generic [ref=e89]: Сварочное оборудование
+                - generic [ref=e92] [cursor=pointer]:
+                  - button [ref=e93]:
+                    - img [ref=e94]
+                  - generic [ref=e97]: Спецтехника
+                - generic [ref=e100] [cursor=pointer]:
+                  - button [ref=e101]:
+                    - img [ref=e102]
+                  - generic [ref=e105]: Средства защиты
+                - generic [ref=e110] [cursor=pointer]:
+                  - generic [ref=e111]: Очки защитные
+                  - generic [ref=e112]: "SKU: 20813"
+                - generic [ref=e117] [cursor=pointer]:
+                  - generic [ref=e118]: Щиток сварщика с откидным стеклом
+                  - generic [ref=e119]: "SKU: 63823"
+                - generic [ref=e124] [cursor=pointer]:
+                  - generic [ref=e125]: Респиратор ЗМ 8122 с клапаном
+                  - generic [ref=e126]: "SKU: 29479"
+                - generic [ref=e129] [cursor=pointer]:
+                  - button [ref=e130]:
+                    - img [ref=e131]
+                  - generic [ref=e134]: Хозяйственные товары
+                - generic [ref=e139] [cursor=pointer]:
+                  - generic [ref=e140]: Таз пл.30л овальный
+                  - generic [ref=e141]: "SKU: 33325"
+                - generic [ref=e146] [cursor=pointer]:
+                  - generic [ref=e147]: Лейка 12л
+                  - generic [ref=e148]: "SKU: пластмас."
+                - generic [ref=e153] [cursor=pointer]:
+                  - generic [ref=e154]: Лоток " Механик"
+                  - generic [ref=e155]: "SKU: 3125 (360)"
+                - generic [ref=e158] [cursor=pointer]:
+                  - button [ref=e159]:
+                    - img [ref=e160]
+                  - generic [ref=e163]: Автозапчасти
+                - generic [ref=e168] [cursor=pointer]:
+                  - generic [ref=e169]: Насос гидравлический
+                  - generic [ref=e170]: "SKU: nsg"
+                - generic [ref=e176] [cursor=pointer]: Сапун белаз
+                - generic [ref=e181] [cursor=pointer]:
+                  - generic [ref=e182]: Главный тормозной кран
+                  - generic [ref=e183]: "SKU: Белаз"
+                - generic [ref=e188] [cursor=pointer]:
+                  - generic [ref=e189]: Регулятор давления КамАЗ, МАЗ, ЗИЛ, КрАЗ, БелАЗ, ГАЗ, Автобус БенАвтоКомплект
+                  - generic [ref=e190]: "SKU: 100-3512010/БАК10350"
+                - generic [ref=e195] [cursor=pointer]:
+                  - generic [ref=e196]: Палец штанги
+                  - generic [ref=e197]: "SKU: 7523-2919078"
+                - generic [ref=e202] [cursor=pointer]:
+                  - generic [ref=e203]: Фара противотуманная F2000 правая,левая Шакман
+                  - generic [ref=e204]: "SKU: 81.25101.6338"
+                - generic [ref=e209] [cursor=pointer]:
+                  - generic [ref=e210]: Фара противотуманная F2000 правая,левая Шакман
+                  - generic [ref=e211]: "SKU: 81.25101.6338/DZ9100726050"
+                - generic [ref=e216] [cursor=pointer]:
+                  - generic [ref=e217]: Механизм коромысел МТЗ (240-1007100-Б1)
+                  - generic [ref=e218]: "SKU: 1228"
+                - generic [ref=e223] [cursor=pointer]:
+                  - generic [ref=e224]: Опора шкворня под подшипник (7203/30203) 4уса
+                  - generic [ref=e225]: "SKU: 3160-230401"
+                - generic [ref=e230] [cursor=pointer]:
+                  - generic [ref=e231]: Коробка раздаточная УАЗ 469 с/о (прямозубая)
+                  - generic [ref=e232]: "SKU: 3151-20-1800018"
+                - generic [ref=e237] [cursor=pointer]:
+                  - generic [ref=e238]: Шкиф коленчатого вала с демпфером (кондиционер)
+                  - generic [ref=e239]: "SKU: 21908 (406.1005050-60)"
+                - generic [ref=e245] [cursor=pointer]: Трос 2.15 метра LW300
+                - generic [ref=e251] [cursor=pointer]: Дворник CK8720
+                - generic [ref=e257] [cursor=pointer]: Клапан тормозной 4-х контурный X3000 (без характеристики)
+                - generic [ref=e263] [cursor=pointer]: Насос-дозатор BZZ-1000/550-5186-G/10202831
+                - generic [ref=e268] [cursor=pointer]: Без категории
+                - generic [ref=e274] [cursor=pointer]: Бокс КМПН1/4 с дверцей
+                - generic [ref=e280] [cursor=pointer]: Воздуходув аккумуляторныйGreenworks
+                - generic [ref=e286] [cursor=pointer]: Дрель ударная ДУ-15/850
+                - generic [ref=e292] [cursor=pointer]: Дрель-шуроповерт аккумуляторный ДА-20-2ЛК-Б
+                - generic [ref=e298] [cursor=pointer]: Клей Столяр ПВА 750г
+                - generic [ref=e304] [cursor=pointer]: Кувалда7000гр. кованная головка
+                - generic [ref=e310] [cursor=pointer]: Лампочки
+                - generic [ref=e316] [cursor=pointer]: Линейка1000*25мм 15-6-100
+                - generic [ref=e322] [cursor=pointer]: Молоток 600гр.
+                - generic [ref=e328] [cursor=pointer]: Набор метчиков и плшек М2-М18,110Штука
+                - generic [ref=e334] [cursor=pointer]: Набор сверл по металлу .1-13мм
+                - generic [ref=e340] [cursor=pointer]: Набор фрез по дереву 6Штука. 1т
+                - generic [ref=e346] [cursor=pointer]: Пила цепная аккумуляторная Greenworks
+                - generic [ref=e352] [cursor=pointer]: Резак газа кислородный
+                - generic [ref=e358] [cursor=pointer]: Резак сварщика
+                - generic [ref=e364] [cursor=pointer]: Св. аппарат для плазменной резки
+                - generic [ref=e370] [cursor=pointer]: Сопло XL 60-80-100
+                - generic [ref=e376] [cursor=pointer]: Стамеска долото 18мм
+                - generic [ref=e382] [cursor=pointer]: Стамеска долото16мм
+                - generic [ref=e388] [cursor=pointer]: Строп цепной HITCH4CЦ-4,25т.
+                - generic [ref=e394] [cursor=pointer]: Струбцина F-образная 120*1500мм
+                - generic [ref=e400] [cursor=pointer]: Труба гофраПНД d20с зондом(100м)
+                - generic [ref=e406] [cursor=pointer]: Углошлифовальная машина УШМ-125/900
+                - generic [ref=e412] [cursor=pointer]: Фрезерная машина ФМ-1900Э
+                - generic [ref=e418] [cursor=pointer]: Шина»0»N(6*9) 10отверстий
+                - generic [ref=e424] [cursor=pointer]: Штукауцер сменный 2ДЗ-15.030-1
+                - generic [ref=e430] [cursor=pointer]: Электрод XL 60-80-100
+                - generic [ref=e435] [cursor=pointer]:
+                  - generic [ref=e436]: коронка эксковатор 300-420 новый
+                  - generic [ref=e437]: "SKU: 7Т3402RC"
+                - generic [ref=e442] [cursor=pointer]:
+                  - generic [ref=e443]: коронка эксковатор Doosan 530-420 старый
+                  - generic [ref=e444]: "SKU: 2713-1236"
+                - generic [ref=e449] [cursor=pointer]:
+                  - generic [ref=e450]: угловая защита Doosan 420-300
+                  - generic [ref=e451]: "SKU: HSI175-140"
+                - generic [ref=e456] [cursor=pointer]:
+                  - generic [ref=e457]: Угловая защита Doosan 530
+                  - generic [ref=e458]: "SKU: HS230-196"
+                - generic [ref=e463] [cursor=pointer]:
+                  - generic [ref=e464]: Защита десны Doosan
+                  - generic [ref=e465]: "SKU: Р6024-200"
+                - generic [ref=e470] [cursor=pointer]:
+                  - generic [ref=e471]: Коронка экскаватор SANY
+                  - generic [ref=e472]: "SKU: 14397242/00032RS"
+                - generic [ref=e477] [cursor=pointer]:
+                  - generic [ref=e478]: Коронка Komatsu D355A
+                  - generic [ref=e479]: "SKU: NBLF-195-7821331FL"
+                - generic [ref=e484] [cursor=pointer]:
+                  - generic [ref=e485]: Нож угловой левый Komatsu D355A
+                  - generic [ref=e486]: "SKU: 195-71-11173"
+                - generic [ref=e491] [cursor=pointer]:
+                  - generic [ref=e492]: Нож угловой правый Komatsu D355A
+                  - generic [ref=e493]: "SKU: 195-71-11183"
+                - generic [ref=e498] [cursor=pointer]:
+                  - generic [ref=e499]: Нож режущий Komatsu D355А
+                  - generic [ref=e500]: "SKU: 195-71-11654"
+                - generic [ref=e505] [cursor=pointer]:
+                  - generic [ref=e506]: Нож угловой левый Komatsu D275A
+                  - generic [ref=e507]: "SKU: 17М71-21940"
+                - generic [ref=e512] [cursor=pointer]:
+                  - generic [ref=e513]: Ножи боковые Komatsu D275A
+                  - generic [ref=e514]: "SKU: 17М-72-21160"
+                - generic [ref=e519] [cursor=pointer]:
+                  - generic [ref=e520]: Нож угловой левый Четра Т35
+                  - generic [ref=e521]: "SKU: 3501-93-22"
+                - generic [ref=e526] [cursor=pointer]:
+                  - generic [ref=e527]: Нож угловой правый Четра Т35
+                  - generic [ref=e528]: "SKU: 3501-93-22-01"
+                - generic [ref=e533] [cursor=pointer]:
+                  - generic [ref=e534]: Нож средний Четра Т35
+                  - generic [ref=e535]: "SKU: 3501-9325"
+                - generic [ref=e540] [cursor=pointer]:
+                  - generic [ref=e541]: Коронка Люгонг 862Н №6
+                  - generic [ref=e542]: "SKU: 72А2985"
+                - generic [ref=e547] [cursor=pointer]:
+                  - generic [ref=e548]: Коронка Тес 600
+                  - generic [ref=e549]: "SKU: 2713-1219RS"
+                - generic [ref=e554] [cursor=pointer]:
+                  - generic [ref=e555]: Нож угловой правый Шантуй SD22
+                  - generic [ref=e556]: "SKU: 150-70-21346"
+                - generic [ref=e561] [cursor=pointer]:
+                  - generic [ref=e562]: Нож угловой левый Шантуй SD22
+                  - generic [ref=e563]: "SKU: 150-70-21356"
+                - generic [ref=e568] [cursor=pointer]:
+                  - generic [ref=e569]: Нож центральный Шантуй SD22
+                  - generic [ref=e570]: "SKU: 154-70-11314"
+                - generic [ref=e575] [cursor=pointer]:
+                  - generic [ref=e576]: Нож боковой Шантуй SD22
+                  - generic [ref=e577]: "SKU: 154-81-11191"
+                - generic [ref=e582] [cursor=pointer]:
+                  - generic [ref=e583]: Фильтр топливный грубой очистки Люгонг 855N/862Н
+                  - generic [ref=e584]: "SKU: 53С076"
+                - generic [ref=e589] [cursor=pointer]:
+                  - generic [ref=e590]: Фильтр топливный тонкой очистки Люгонг 862Н
+                  - generic [ref=e591]: "SKU: SP133011 аналог ST20812"
+                - generic [ref=e597] [cursor=pointer]: Воронки
+                - generic [ref=e603] [cursor=pointer]: ДЭС200кв
+                - generic [ref=e609] [cursor=pointer]: Алкотест Динго 200
+                - generic [ref=e615] [cursor=pointer]: Банер
+                - generic [ref=e621] [cursor=pointer]: Башмак б/у
+                - generic [ref=e627] [cursor=pointer]: Газ универсал.
+                - generic [ref=e633] [cursor=pointer]: Держатель
+                - generic [ref=e639] [cursor=pointer]: Пистолет для подкачки шин
+                - generic [ref=e645] [cursor=pointer]: Цепь
+                - generic [ref=e651] [cursor=pointer]: Цепь 75S 18*1.6
+                - generic [ref=e656] [cursor=pointer]:
+                  - generic [ref=e657]: Фильтр масляный
+                  - generic [ref=e658]: "SKU: ST10804 Четра Т35"
+                - generic [ref=e663] [cursor=pointer]:
+                  - generic [ref=e664]: Шайба РВ Т20,Т35
+                  - generic [ref=e665]: "SKU: 01643-22460"
+                - generic [ref=e670] [cursor=pointer]:
+                  - generic [ref=e671]: Толкатель
+                  - generic [ref=e672]: "SKU: 7511-1007180"
+                - generic [ref=e677] [cursor=pointer]:
+                  - generic [ref=e678]: Вкладыш шатунный Ном
+                  - generic [ref=e679]: "SKU: 240-1000104 Н"
+                - generic [ref=e684] [cursor=pointer]:
+                  - generic [ref=e685]: Рукав пожарный напорный РПК(В)-100-0,8-М-УХЛ1
+                  - generic [ref=e686]: "SKU: 51979"
+                - generic [ref=e691] [cursor=pointer]:
+                  - generic [ref=e692]: Распылитель 026.1112110 АЗПИ (33.1112110-240 ЯЗДА) ЯМЗ-236,238
+                  - generic [ref=e693]: "SKU: 3110"
+                - generic [ref=e698] [cursor=pointer]:
+                  - generic [ref=e699]: Азот жидкий ,литр
+                  - generic [ref=e700]: "SKU: 02"
+                - generic [ref=e705] [cursor=pointer]:
+                  - generic [ref=e706]: Радиатор вод.охл.УАЗ З-х ряд.(алюм.) инжектор 31608,3741
+                  - generic [ref=e707]: "SKU: 31608-1301010"
+                - generic [ref=e713] [cursor=pointer]: Палец 540-3003073 Белаз
+                - generic [ref=e718] [cursor=pointer]:
+                  - generic [ref=e719]: Передача главная 540-2402010 (на ГМП 3+1) Белаз
+                  - generic [ref=e720]: "SKU: 2289"
+                - generic [ref=e725] [cursor=pointer]:
+                  - generic [ref=e726]: Ролик 540-3501106 Белаз
+                  - generic [ref=e727]: "SKU: 2936"
+                - generic [ref=e732] [cursor=pointer]:
+                  - generic [ref=e733]: Ось ролика 540-3501107 Белаз
+                  - generic [ref=e734]: "SKU: 2199"
+                - generic [ref=e739] [cursor=pointer]:
+                  - generic [ref=e740]: Шкворень в сборе Белаз 540-2919429-30
+                  - generic [ref=e741]: "SKU: 4103"
+                - generic [ref=e746] [cursor=pointer]:
+                  - generic [ref=e747]: Водило 540-2405024-10 в сборе Белаз
+                  - generic [ref=e748]: "SKU: 843"
+                - generic [ref=e753] [cursor=pointer]:
+                  - generic [ref=e754]: Шестерня коронная с кожухом 540-2405013 Белаз
+                  - generic [ref=e755]: "SKU: 4000"
+                - generic [ref=e760] [cursor=pointer]:
+                  - generic [ref=e761]: Прижим переднего колеса 525-3101050 Белаз
+                  - generic [ref=e762]: "SKU: 0371"
+                - generic [ref=e767] [cursor=pointer]:
+                  - generic [ref=e768]: Вал промежуточный 540-2208012-02 Белаз
+                  - generic [ref=e769]: "SKU: 713"
+                - generic [ref=e774] [cursor=pointer]:
+                  - generic [ref=e775]: Кулак поворотный правый 540-3001014-50 Белаз
+                  - generic [ref=e776]: "SKU: 1893"
+                - generic [ref=e781] [cursor=pointer]:
+                  - generic [ref=e782]: Фильтр воздушный KLP2036 LONKING
+                  - generic [ref=e783]: "SKU: 2036"
+                - generic [ref=e788] [cursor=pointer]:
+                  - generic [ref=e789]: Фильтр топливный Mir cx0710B/CXB540 (MF0710B 1117060-29DB) FC5708-3/FC5716 SFF8422
+                  - generic [ref=e790]: "SKU: 0711"
+                - generic [ref=e795] [cursor=pointer]:
+                  - generic [ref=e796]: Фильтр топливный M16 F2 CX0711 (A3000-1105030) FAW евро 2
+                  - generic [ref=e797]: "SKU: A3000-1105030"
+                - generic [ref=e802] [cursor=pointer]:
+                  - generic [ref=e803]: Фильтр топливный Stal ST20811/FF5052/ST20706/ST20501
+                  - generic [ref=e804]: "SKU: ST20811"
+                - generic [ref=e809] [cursor=pointer]:
+                  - generic [ref=e810]: Фильтр масляный Yuchai JX1011
+                  - generic [ref=e811]: "SKU: JX1011"
+                - generic [ref=e814] [cursor=pointer]:
+                  - button [ref=e815]:
+                    - img [ref=e816]
+                  - generic [ref=e819]: Инструмент
+                - generic [ref=e824] [cursor=pointer]:
+                  - generic [ref=e825]: Ключ баллоный крест 17*19*21*1/2
+                  - generic [ref=e826]: "SKU: 3650"
+                - generic [ref=e831] [cursor=pointer]:
+                  - generic [ref=e832]: Монтировка грузовая прямая 850мм
+                  - generic [ref=e833]: "SKU: 1157"
+                - generic [ref=e838] [cursor=pointer]:
+                  - generic [ref=e839]: Домкрат гидравлический 20т
+                  - generic [ref=e840]: "SKU: 2020"
+                - generic [ref=e845] [cursor=pointer]:
+                  - generic [ref=e846]: Домкрат гидравлический 16т
+                  - generic [ref=e847]: "SKU: 2016"
+                - generic [ref=e852] [cursor=pointer]: Провиант
+                - generic [ref=e858] [cursor=pointer]: Картофель
+                - generic [ref=e861] [cursor=pointer]:
+                  - button [ref=e862]:
+                    - img [ref=e863]
+                  - generic [ref=e866]: Расходные материалы
+                - generic [ref=e871] [cursor=pointer]:
+                  - generic [ref=e872]: Веник
+                  - generic [ref=e873]: "SKU: 40810"
+                - generic [ref=e876] [cursor=pointer]:
+                  - button [ref=e877]:
+                    - img [ref=e878]
+                  - generic [ref=e881]: Сантехника и отопление
+                - generic [ref=e884] [cursor=pointer]:
+                  - button [ref=e885]:
+                    - img [ref=e886]
+                  - generic [ref=e889]: Строительные материалы
+                - generic [ref=e894] [cursor=pointer]:
+                  - generic [ref=e895]: Грунтовка акриловая 10кг
+                  - generic [ref=e896]: "SKU: 02654"
+                - generic [ref=e901] [cursor=pointer]:
+                  - generic [ref=e902]: Временная Пленка армиров. св/ст 200г./кв.м., 2м*25п.м.
+                  - generic [ref=e903]: "SKU: 38960"
+                - generic [ref=e906] [cursor=pointer]:
+                  - button [ref=e907]:
+                    - img [ref=e908]
+                  - generic [ref=e911]: Электротехника
+                - generic [ref=e917] [cursor=pointer]: Стиральная машина полуавтомат 10кг
+                - generic [ref=e923] [cursor=pointer]: Вилка 024переносная3Р+РЕ 2А
+            - generic [ref=e925]:
+              - generic [ref=e926]: "Изменений: 0"
+              - generic [ref=e927]:
+                - button "Сбросить" [disabled] [ref=e928]
+                - button "Применить" [disabled] [ref=e929]
+          - generic [ref=e939]:
+            - generic [ref=e940]:
+              - generic [ref=e941]: создание ТМЦ
+              - heading "Новый элемент" [level=3] [ref=e942]
+            - generic [ref=e945]:
+              - generic [ref=e946]:
+                - generic [ref=e947]:
+                  - generic [ref=e948]: Название *
+                  - textbox "Введите название" [ref=e949]
+                - generic [ref=e950]:
+                  - generic [ref=e951]: SKU
+                  - textbox "Артикул" [ref=e952]
+                - generic [ref=e953]:
+                  - generic [ref=e954]: Единица измерения *
+                  - textbox "Введите единицу измерения" [ref=e957]
+                - generic [ref=e958]:
+                  - generic [ref=e959]: Категория
+                  - textbox "Без категории" [ref=e962]
+                - generic [ref=e963]:
+                  - generic [ref=e964]: Ключевые слова
+                  - textbox "Введите тег и нажмите Enter" [ref=e966]
+                  - generic [ref=e967]: "До 20 тегов, 1-50 символов: буквы, цифры, дефис и пробел."
+                - generic [ref=e968]:
+                  - generic [ref=e969]: Описание
+                  - textbox "Описание ТМЦ..." [ref=e970]
+              - generic [ref=e971]:
+                - generic [ref=e972]:
+                  - generic [ref=e973]: Активность
+                  - generic [ref=e974]: Активные ТМЦ доступны в операциях и поиске.
+                - generic [ref=e975] [cursor=pointer]:
+                  - checkbox [checked]
+              - generic [ref=e978]:
+                - button "Деактивировать" [ref=e979] [cursor=pointer]
+                - button "Удалить" [ref=e980] [cursor=pointer]
+                - button "Сбросить" [ref=e982] [cursor=pointer]
+                - button "Добавить в изменения" [disabled] [ref=e983]

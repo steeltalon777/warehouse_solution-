@@ -1,0 +1,105 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - link "ООО АС \"Горизонт\" ООО АС \"Горизонт\"" [ref=e4] [cursor=pointer]:
+      - /url: /client/
+      - img "ООО АС \"Горизонт\"" [ref=e5]
+      - generic [ref=e6]: ООО АС "Горизонт"
+    - generic [ref=e7]:
+      - generic [ref=e8]: admin
+      - generic [ref=e9]: Root
+      - button "Выход" [ref=e11] [cursor=pointer]
+  - generic [ref=e12]:
+    - complementary [ref=e13]:
+      - link "Главная" [ref=e14] [cursor=pointer]:
+        - /url: /client/
+      - generic [ref=e15]:
+        - generic [ref=e16]: Остатки и операции
+        - generic [ref=e17]:
+          - link "Остатки" [ref=e18] [cursor=pointer]:
+            - /url: /balances/
+          - link "Операции" [ref=e19] [cursor=pointer]:
+            - /url: /operations/
+          - link "Операции к приёмке" [ref=e20] [cursor=pointer]:
+            - /url: /operations/pending-acceptance
+          - link "Репозиторий непринятого" [ref=e21] [cursor=pointer]:
+            - /url: /operations/lost-assets
+          - link "Репозиторий выдачи" [ref=e22] [cursor=pointer]:
+            - /url: /issued-assets/
+      - generic [ref=e23]:
+        - generic [ref=e24]: Справочники
+        - generic [ref=e25]:
+          - link "Каталог" [ref=e26] [cursor=pointer]:
+            - /url: /catalog/
+          - link "Номенклатура" [ref=e27] [cursor=pointer]:
+            - /url: /nomenclature/
+          - group [ref=e28]:
+            - generic "SSR клиент ▸" [ref=e29] [cursor=pointer]
+    - main [ref=e30]:
+      - generic [ref=e34]:
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - heading "Номенклатура" [level=1] [ref=e38]
+            - paragraph [ref=e39]: Категории, ТМЦ, SKU, единицы измерения и ключевые слова. Изменения копятся локально и применяются батчем.
+          - generic [ref=e40]:
+            - button "Экспорт" [ref=e41] [cursor=pointer]
+            - button "Применить все" [disabled] [ref=e42]
+        - generic [ref=e43]:
+          - generic [ref=e44]:
+            - generic [ref=e45]:
+              - button "Категории и ТМЦ" [ref=e46] [cursor=pointer]
+              - button "Единицы измерения" [ref=e47] [cursor=pointer]
+            - generic [ref=e50]:
+              - img
+              - textbox "Название, SKU, ключевые слова" [ref=e51]
+            - button "+ Ед. изм." [active] [ref=e54] [cursor=pointer]
+            - generic [ref=e57]:
+              - generic [ref=e58]:
+                - generic [ref=e59]:
+                  - heading "Единицы измерения" [level=2] [ref=e60]
+                  - paragraph [ref=e61]: Список единиц измерения
+                - generic [ref=e62]: 13 элементов
+              - generic [ref=e63]:
+                - generic [ref=e69] [cursor=pointer]: Метр (м)
+                - generic [ref=e75] [cursor=pointer]: Упаковка (уп)
+                - generic [ref=e81] [cursor=pointer]: Литр (л)
+                - generic [ref=e87] [cursor=pointer]: Килограмм (кг)
+                - generic [ref=e93] [cursor=pointer]: Бочка (боч)
+                - generic [ref=e99] [cursor=pointer]: Пара (пар)
+                - generic [ref=e105] [cursor=pointer]: Рулон (рул)
+                - generic [ref=e111] [cursor=pointer]: Коробка (кор)
+                - generic [ref=e117] [cursor=pointer]: Комплект (компл)
+                - generic [ref=e123] [cursor=pointer]: Лист (лист)
+                - generic [ref=e129] [cursor=pointer]: Ведро (ведро)
+                - generic [ref=e135] [cursor=pointer]: Тонна (т)
+                - generic [ref=e141] [cursor=pointer]: Штука (шт)
+            - generic [ref=e143]:
+              - generic [ref=e144]: "Изменений: 0"
+              - generic [ref=e145]:
+                - button "Сбросить" [disabled] [ref=e146]
+                - button "Применить" [disabled] [ref=e147]
+          - generic [ref=e157]:
+            - generic [ref=e158]:
+              - generic [ref=e159]: создание ед. изм.
+              - heading "Новый элемент" [level=3] [ref=e160]
+            - generic [ref=e163]:
+              - generic [ref=e164]:
+                - generic [ref=e165]:
+                  - generic [ref=e166]: Название *
+                  - textbox "Введите название единицы измерения" [ref=e167]
+                - generic [ref=e168]:
+                  - generic [ref=e169]: Символ *
+                  - textbox "шт, кг, м" [ref=e170]
+                - generic [ref=e171]:
+                  - generic [ref=e172]: Сортировка
+                  - spinbutton [ref=e173]: "0"
+              - generic [ref=e174]:
+                - generic [ref=e175]:
+                  - generic [ref=e176]: Активность
+                  - generic [ref=e177]: Неактивные единицы скрыты из выбора.
+                - generic [ref=e178] [cursor=pointer]:
+                  - checkbox [checked]
+              - generic [ref=e181]:
+                - button "Деактивировать" [ref=e182] [cursor=pointer]
+                - button "Удалить" [ref=e183] [cursor=pointer]
+                - button "Сбросить" [ref=e185] [cursor=pointer]
+                - button "Добавить в изменения" [disabled] [ref=e186]

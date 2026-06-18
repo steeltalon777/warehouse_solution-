@@ -1,6 +1,6 @@
 # Git State
 
-Generated at: `2026-05-22T14:35`
+Generated at: `2026-06-18T13:51`
 Root: `/home/makc/AI_sandbox/warehouse_solution`
 Fetch before scan: `no`
 
@@ -8,80 +8,13 @@ Fetch before scan: `no`
 
 | Repo | Branch | Upstream | Ahead | Behind | Dirty | HEAD | Last commit |
 |---|---|---|---:|---:|---|---|---|
-| `warehouse_solution` | `dev` | `origin/dev` | 0 | 0 | YES | `7bd1c21` | chore: setup dev environment — Makefile, docker-compose, .env, quickstart.sh |
-| `SyncServer` | `dev` | `origin/dev` | 0 | 0 | YES | `f5936b2` | to devstand migrate |
-| `Warehouse_client_core` | `dev` | `origin/dev` | 0 | 0 | no | `306a593` | to devstand migrate |
-| `Warehouse_frontend` | `dev` | `origin/dev` | 0 | 0 | YES | `22ddbf8` | fix: resolve TS build errors in new Angular components |
-| `Warehouse_web` | `dev` | `origin/dev` | 0 | 0 | YES | `70a8f5e` | fix: add missing imports for review_items views |
-| `WarehouseAIWorkstation` | `main` | `origin/main` | 0 | 0 | no | `981edf7` | stage5 |
+| `SyncServer` | `dev` | `origin/dev` | 0 | 0 | YES | `889f40b` | feat: add CLI audit query script (query_audit.py) |
+| `Warehouse_client_core` | `dev` | `origin/dev` | 0 | 0 | no | `436d370` | review: accepted TZ-CORE_CATCH_UP_TO_ONLINE_CLIENT — archive completed TZ |
+| `Warehouse_frontend` | `dev` | `origin/dev` | 0 | 0 | YES | `60a875e` | V3.1: angular — add line numbers (# col) and total quantity to operation create modal |
+| `Warehouse_web` | `dev` | `origin/dev` | 0 | 0 | YES | `0d21415` | feat: password self-service page with profile view, navbar link, admin clean_password |
+| `WarehouseAIWorkstation` | `dev` | `-` | 0 | 0 | no | `981edf7` | stage5 |
 
 ## Details
-
-### warehouse_solution
-
-- Path: `.`
-- Current branch: `dev`
-- Upstream: `origin/dev`
-- Ahead/behind: `0 / 0`
-- Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 19 / 5`
-- HEAD: `7bd1c21`
-- HEAD subject: chore: setup dev environment — Makefile, docker-compose, .env, quickstart.sh
-- HEAD author/date: `makc / 2026-05-21 09:17:59 +0900`
-- Tags at HEAD: `-`
-
-#### Remotes
-
-- `origin`: `git@github.com:steeltalon777/warehouse_solution-.git`
-
-#### Local branches
-
-- `dev` ← current
-- `main`
-
-#### Remote branches
-
-- `origin/dev`
-- `origin/main`
-
-#### Working tree status
-
-```text
- M .gitignore
- M AGENTS.md
- D Domain_model.md
- M "Functional and WorkLogik.md"
- M GIT_STATE.md
- M MEMORY.md
- M Makefile
- D PLAN_UI_TEST.md
- M "Role Matrix.md"
- D TODOlist.md
- D UI_test_reports.md
- M docs/AGENT_TZ_WORKFLOW.md
- D docs/AUDIT_FUNCTIONAL_SPEC_2026-05-19.md
- D docs/AUDIT_IV_TEMPORARY_ITEMS_2026-05-19.md
- D docs/OPENCODE_AGENT_MODES.md
- D docs/PLAN_PRE_ANGULAR_FUNCTIONAL_GAPS_2026-05-19.md
- M docs/TZ-B_OPERATIONS_DELETE_CONTRACT.md
- D plans/general_roadmap.md
- D plans/temporary_items_delete_implementation.md
-?? Makefile.bak.2026-05-20_14-11-26
-?? docker-compose.override.yml
-?? docs/TZ-NOMENCLATURE_BATCH_CATALOG_CRUD.md
-?? docs/TZ-OPERATIONS_CREATE_MODAL_CACHED_SEARCH.md
-?? start_opencode_web.sh
-```
-
-#### Recent commits
-
-```text
-7bd1c21 | 2026-05-21 09:17:59 +0900 | makc | chore: setup dev environment — Makefile, docker-compose, .env, quickstart.sh
-9cc34b2 | 2026-05-20 10:22:03 +0900 | Maksim Kuzmin | add ubuntu setup script
-b15db14 | 2026-05-19 23:27:26 +0900 | Maksim Kuzmin | Root: AGENTS.md update, Functional and WorkLogik.md, pre-Angular plan, ADRs 0006-0010, audit reports, GIT_STATE update
-030f138 | 2026-05-12 15:33:02 +0900 | Maksim Kuzmin | chore: add GIT_STATE.md to gitignore
-66fa41f | 2026-05-12 14:55:43 +0900 | Maksim Kuzmin | Update repository state after release branch sync
-```
 
 ### SyncServer
 
@@ -90,10 +23,10 @@ b15db14 | 2026-05-19 23:27:26 +0900 | Maksim Kuzmin | Root: AGENTS.md update, Fu
 - Upstream: `origin/dev`
 - Ahead/behind: `0 / 0`
 - Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 4 / 3`
-- HEAD: `f5936b2`
-- HEAD subject: to devstand migrate
-- HEAD author/date: `Maksim Kuzmin / 2026-05-21 08:57:11 +0900`
+- Staged / unstaged / untracked: `0 / 6 / 0`
+- HEAD: `889f40b`
+- HEAD subject: feat: add CLI audit query script (query_audit.py)
+- HEAD author/date: `makc / 2026-06-18 13:46:59 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
@@ -125,23 +58,22 @@ b15db14 | 2026-05-19 23:27:26 +0900 | Maksim Kuzmin | Root: AGENTS.md update, Fu
 #### Working tree status
 
 ```text
- M Dockerfile
- M app/api/routes_catalog_admin.py
- M app/schemas/catalog.py
- M app/services/catalog_admin_service.py
-?? .venv/
-?? test.db
-?? tests/test_catalog_batch.py
+ M docs/API_REFERENCE.md
+ M tests/test_lost_assets_api.py
+ M tests/test_operations_issue_semantics.py
+ M tests/test_operations_service_delete.py
+ M tests/test_operations_service_inventory_subject_write_path.py
+ M tests/test_reports_read_model.py
 ```
 
 #### Recent commits
 
 ```text
-f5936b2 | 2026-05-21 08:57:11 +0900 | Maksim Kuzmin | to devstand migrate
-f1d5049 | 2026-05-20 20:00:03 +0900 | Maksim Kuzmin | fix(catalog): filter soft-deleted categories from tree
-6d2f2cc | 2026-05-19 23:14:05 +0900 | Maksim Kuzmin | SyncServer: bootstrap + root-token recovery + DELETE cancelled operations + catalog freeze for lost assets
-74327ab | 2026-05-12 14:25:12 +0900 | Maksim Kuzmin | Clean generated artifacts and temporary files
-8aa9d0c | 2026-04-25 10:13:24 +0900 | Maksim Kuzmin | препатч 2.0
+889f40b | 2026-06-18 13:46:59 +0900 | makc | feat: add CLI audit query script (query_audit.py)
+df325e5 | 2026-06-18 12:16:39 +0900 | makc | fix(SyncServer): migration 0018 — make item_id nullable in issued_asset_balances and balances
+0a24899 | 2026-06-16 15:20:29 +0900 | makc | V3.1: sync — remove read scope, add observer create draft, add CREATE_DRAFT_ROLES
+a97f5db | 2026-06-16 14:51:41 +0900 | makc | review: accepted TZs V3.1 — logging (A) + audit journal (V)
+ea13de7 | 2026-06-16 10:59:33 +0900 | makc | 3.0.1: SyncServer logging + stale-balance regression
 ```
 
 ### Warehouse_client_core
@@ -152,9 +84,9 @@ f1d5049 | 2026-05-20 20:00:03 +0900 | Maksim Kuzmin | fix(catalog): filter soft-
 - Ahead/behind: `0 / 0`
 - Dirty: `no`
 - Staged / unstaged / untracked: `0 / 0 / 0`
-- HEAD: `306a593`
-- HEAD subject: to devstand migrate
-- HEAD author/date: `Maksim Kuzmin / 2026-05-21 08:57:51 +0900`
+- HEAD: `436d370`
+- HEAD subject: review: accepted TZ-CORE_CATCH_UP_TO_ONLINE_CLIENT — archive completed TZ
+- HEAD author/date: `makc / 2026-06-05 15:17:24 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
@@ -180,9 +112,11 @@ clean
 #### Recent commits
 
 ```text
-306a593 | 2026-05-21 08:57:51 +0900 | Maksim Kuzmin | to devstand migrate
-6276862 | 2026-05-18 11:20:49 +0900 | Maksim Kuzmin | bootstrap rust offline core workspace
-9eebff0 | 2026-05-16 21:16:00 +0900 | Maksim Kuzmin | first commit
+436d370 | 2026-06-05 15:17:24 +0900 | makc | review: accepted TZ-CORE_CATCH_UP_TO_ONLINE_CLIENT — archive completed TZ
+61e4901 | 2026-06-05 13:40:27 +0900 | makc | docs: update archived TZ checklist — mark Levels 10-12 done
+90c56d6 | 2026-06-05 13:40:09 +0900 | makc | docs: mark TZ CORE CATCH UP checklist complete — all 17/18 items verified
+97e11fc | 2026-06-04 13:39:29 +0900 | makc | fix(core): add catalog audit fields persistence (migration v8 + snapshot_writer)
+54a6836 | 2026-06-04 13:35:41 +0900 | makc | feat(core): add documents_create_for_operation POST method
 ```
 
 ### Warehouse_frontend
@@ -192,10 +126,10 @@ clean
 - Upstream: `origin/dev`
 - Ahead/behind: `0 / 0`
 - Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 12 / 1`
-- HEAD: `22ddbf8`
-- HEAD subject: fix: resolve TS build errors in new Angular components
-- HEAD author/date: `makc / 2026-05-21 09:17:59 +0900`
+- Staged / unstaged / untracked: `0 / 0 / 1`
+- HEAD: `60a875e`
+- HEAD subject: V3.1: angular — add line numbers (# col) and total quantity to operation create modal
+- HEAD author/date: `makc / 2026-06-18 10:40:02 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
@@ -215,29 +149,17 @@ clean
 #### Working tree status
 
 ```text
- M package-lock.json
- M src/app/core/models/nomenclature.models.ts
- M src/app/core/models/operations.models.ts
- M src/app/core/services/catalog-search.service.ts
- M src/app/core/services/nomenclature.service.ts
- M src/app/features/nomenclature/action-buttons/action-buttons.ts
- M src/app/features/nomenclature/category-edit-form/category-edit-form.ts
- M src/app/features/nomenclature/item-edit-form/item-edit-form.ts
- M src/app/features/nomenclature/nomenclature-page/nomenclature-page.ts
- M src/app/features/nomenclature/right-panel/right-panel.ts
- M src/app/features/operations/components/item-cache-search/item-cache-search.component.ts
- M src/app/features/operations/components/operation-create-modal/operation-create-modal.component.ts
-?? src/app/features/nomenclature/unit-edit-form/
+?? test-results-old/
 ```
 
 #### Recent commits
 
 ```text
-22ddbf8 | 2026-05-21 09:17:59 +0900 | makc | fix: resolve TS build errors in new Angular components
-5ca526b | 2026-05-21 08:58:33 +0900 | Maksim Kuzmin | to devstand migrate
-be92fce | 2026-05-20 22:18:56 +0900 | Maksim Kuzmin | fix(operations): compact filters, scrollable table, sortable headers for FHD
-6c937eb | 2026-05-20 21:07:16 +0900 | Maksim Kuzmin | fix(nomenclature): ensure tree scrolls inside panel and fits FHD viewport
-7dc4160 | 2026-05-20 20:00:02 +0900 | Maksim Kuzmin | fix(nomenclature): correct plural form for category API path
+60a875e | 2026-06-18 10:40:02 +0900 | makc | V3.1: angular — add line numbers (# col) and total quantity to operation create modal
+5b602dc | 2026-06-16 15:20:31 +0900 | makc | V3.1: angular — add catalog write guard, update observer can edit draft, canWriteCatalog from role
+27befc2 | 2026-06-16 14:51:44 +0900 | makc | review: accepted TZ-V3.1_LOGGING — Angular error infrastructure
+7ad29fb | 2026-06-16 10:59:24 +0900 | makc | 3.0.1: Angular UI quick fixes
+e7b05fe | 2026-06-12 13:33:23 +0900 | makc | fix(operations): exclude adjustments by default, tighten table layout, fallback comment from notes
 ```
 
 ### Warehouse_web
@@ -247,10 +169,10 @@ be92fce | 2026-05-20 22:18:56 +0900 | Maksim Kuzmin | fix(operations): compact f
 - Upstream: `origin/dev`
 - Ahead/behind: `0 / 0`
 - Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 15 / 1`
-- HEAD: `70a8f5e`
-- HEAD subject: fix: add missing imports for review_items views
-- HEAD author/date: `makc / 2026-05-21 09:17:59 +0900`
+- Staged / unstaged / untracked: `0 / 3 / 2`
+- HEAD: `0d21415`
+- HEAD subject: feat: password self-service page with profile view, navbar link, admin clean_password
+- HEAD author/date: `makc / 2026-06-18 11:31:19 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
@@ -285,39 +207,28 @@ be92fce | 2026-05-20 22:18:56 +0900 | Maksim Kuzmin | fix(operations): compact f
 #### Working tree status
 
 ```text
- M Dockerfile
- M apps/bff_api/catalog_views.py
- M apps/bff_api/tests.py
- M apps/bff_api/urls.py
- M apps/catalog_cache/services.py
- M apps/catalog_cache/tests.py
- M apps/sync_client/auth_api.py
- M apps/sync_client/auth_integration.py
- M apps/sync_client/catalog_api.py
- M apps/sync_client/client.py
- M apps/sync_client/session_auth.py
- M apps/sync_client/test_auth_boundary.py
- M apps/sync_client/token_resolver.py
- M apps/users/simple_sync_signals.py
- M apps/users/tests.py
-?? warehouse
+ M static/css/app.css
+ M templates/base.html
+ M templates/registration/login.html
+?? media/documents/pdf/nakladnaya_2_1453_110626.pdf
+?? media/documents/pdf/nakladnaya_4_0820_040626.pdf
 ```
 
 #### Recent commits
 
 ```text
-70a8f5e | 2026-05-21 09:17:59 +0900 | makc | fix: add missing imports for review_items views
-b797603 | 2026-05-21 08:56:33 +0900 | Maksim Kuzmin | to devstand migrate
-3f3d7c4 | 2026-05-20 21:53:50 +0900 | Maksim Kuzmin | fix(balances): compact filters, scrollable table, sortable headers for FHD
-2a29aef | 2026-05-20 21:11:22 +0900 | Maksim Kuzmin | refactor(menu): align sidebar with Functional and WorkLogik.md VIII/4
-ab52ec3 | 2026-05-19 23:17:09 +0900 | Maksim Kuzmin | Warehouse_web: auth boundary hardening (TZ-1), brand/role/dashboard UX (TZ-D), operations delete BFF, token resolver, context processors
+0d21415 | 2026-06-18 11:31:19 +0900 | makc | feat: password self-service page with profile view, navbar link, admin clean_password
+2425148 | 2026-06-17 13:25:20 +0900 | makc | V3.1: django — unblock observer in legacy SSR views (dashboard, balances, operations, catalog)
+96145ed | 2026-06-16 15:20:30 +0900 | makc | V3.1: django — remove storekeeper forced balance site filter
+25fa643 | 2026-06-16 14:51:43 +0900 | makc | review: accepted TZs V3.1 — logging (A) + audit journal (V)
+143bb29 | 2026-06-16 10:59:29 +0900 | makc | 3.0.1: Django SyncServer users import
 ```
 
 ### WarehouseAIWorkstation
 
 - Path: `WarehouseAIWorkstation`
-- Current branch: `main`
-- Upstream: `origin/main`
+- Current branch: `dev`
+- Upstream: `-`
 - Ahead/behind: `0 / 0`
 - Dirty: `no`
 - Staged / unstaged / untracked: `0 / 0 / 0`
@@ -332,7 +243,8 @@ ab52ec3 | 2026-05-19 23:17:09 +0900 | Maksim Kuzmin | Warehouse_web: auth bounda
 
 #### Local branches
 
-- `main` ← current
+- `dev` ← current
+- `main`
 
 #### Remote branches
 

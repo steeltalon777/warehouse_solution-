@@ -48,7 +48,7 @@
 - [x] 10. User scenario tests complete
 - [x] 11. Regression checks complete
 - [x] 12. Documentation updated
-- [ ] 13. Final acceptance review complete (ожидает QA-верификатора)
+- [x] 13. Final acceptance review complete (QA accepted; release/deploy readiness checked separately)
 
 ## Check Rules
 

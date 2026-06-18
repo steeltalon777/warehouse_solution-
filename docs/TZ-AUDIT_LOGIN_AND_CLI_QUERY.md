@@ -395,9 +395,9 @@ Docker: SyncServer :8000, Django :8001, PostgreSQL :5432
 
 #### 1. Проверка CLI-скрипта
 ```bash
-# Запросить аудит по root-токену (последние 5 записей)
-docker exec warehouse_syncserver python scripts/query_audit.py \
-  --token $ROOT_TOKEN \
+# Запросить аудит по username (последние 5 записей)
+docker compose exec syncserver python scripts/query_audit.py \
+  --username <username> \
   --limit 5 \
   --console
 

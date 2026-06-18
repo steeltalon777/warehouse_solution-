@@ -46,6 +46,12 @@ start_opencode_web.sh
 Makefile.bak.*
 
 
+# Generated test artifacts, snapshots, screenshots
+temp/
+*-snapshot.md
+*-smoke*.png
+*.png
+
 # Debug artifacts / smoke-test screenshots
 issued-assets-*.txt
 operations-table-smoke.png

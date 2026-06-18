@@ -155,6 +155,18 @@ make reset-django-admin
 
 ---
 
+## Deployment Rules
+
+Полные правила деплоя, роли веток, pre-deploy review, workflow, Angular-стратегия и rollback — в `docs/DEPLOYMENT.md`.
+
+Кратко:
+- Решение о деплое принимает пользователь.
+- Агент выполняет pre-deploy review по запросу.
+- Ветки: `dev` (разработка), `main` (релиз/прод), `prod` (фолбек).
+- Деплой — строго по команде пользователя.
+- SSH-доступ к VPS агент запрашивает у пользователя, не хранит.
+
+
 ## TZ And Task Tracking Rules
 
 - Architect-authored TZ files must start with a checklist table of contents.

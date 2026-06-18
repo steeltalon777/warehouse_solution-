@@ -1,4 +1,8 @@
-# TZ: Деплой Warehouse 3.0 на прод (horizonstorage.ru)
+# ARCHIVED — TZ: Деплой Warehouse 3.0 на прод (horizonstorage.ru)
+
+> **Статус: архив (2026-06-18).** Это было конкретное ТЗ на первый деплой Warehouse 3.0.
+> Актуальные правила деплоя: [`docs/DEPLOYMENT.md`](DEPLOYMENT.md).
+> Исторические evidence и шаги сохранены для справки.
 
 ## Execution Checklist
 

@@ -1,44 +1,60 @@
 # Дорожная карта решения
-# фйл заполняется на русском языке
-## Этап 1: Контракты агентов и документации
 
-- Поддерживать корневой файл `AGENTS.md` и проектные файлы `AGENTS.md`.
-- Держать активную документацию в соответствии с текущими ролями проектов.
-- Не хранить сгенерированные карты в исходном коде, если это явно не требуется.
+> Последнее обновление: 2026-06-18 (v3.1 planning)
 
-## Этап 2: Стабильность backend-контракта
+## ✅ Этап 1: Контракты агентов и документации (выполнено)
 
-- Расширять тесты endpoint'ов SyncServer на основе `API_MAP.md`.
-- Добавить проверку OpenAPI snapshot или diff-контракта.
-- Держать миграции явными и проверять их на безопасной базе данных.
+- Корневой `AGENTS.md` + проектные `AGENTS.md` во всех активных проектах.
+- Активная документация в соответствии с текущими ролями проектов.
+- `docs/DEPLOYMENT.md` — правила деплоя.
+- Сгенерированные артефакты в `temp/`, не в git.
 
-## Этап 3: Django как активный web-клиент и BFF
+## ✅ Этап 2: Стабильность backend-контракта (выполнено)
 
-- Оставить Django текущим браузерным клиентом и хостом пользовательских сессий.
-- Держать каталог и доменные данные завязанными на SyncServer.
-- Создавать BFF endpoint'ы для Angular без раскрытия SyncServer-токенов.
-- Для Warehouse 3.0 укреплять внутренний транспорт Django -> SyncServer по `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md`: persistent HTTPX transport, BFF-агрегация, безопасный кеш, метрики и опциональный измеряемый Unix socket.
-- Не переносить домен SyncServer в Django и не заменять `/api/v1` на stdio/gRPC/direct imports/Rust backend без отдельного ADR.
+- SyncServer: 410 тестов, 0 failed, 2 skipped, 7 xfailed.
+- Миграции Alembic до 0018, явные и проверенные.
+- ADR'ы: 0011 (transport), 0013 (migration hardening), 0014 (read visibility).
+- API-контракты в `API_REFERENCE.md`.
 
-## Этап 4: Angular-оболочка номенклатуры
+## ✅ Этап 3: Django как активный web-клиент и BFF (выполнено)
 
-- Преобразовать `Warehouse_frontend` в Angular workspace.
-- Хостить Angular через маршруты Django.
-- Начать с сценариев чтения номенклатуры, затем перейти к CRUD, затем к расширенным действиям.
-- Проверять через Django-тесты, а также сборку и тесты frontend'а.
+- Django BFF: `/bff/api/v1/*` проксирует все доменные endpoint'ы.
+- Транспорт: persistent HTTPX, retry, error mapping, токены не раскрываются.
+- Каталог: локальные ORM-модели удалены, всё через `apps/sync_client/`.
+- Аудит: login/logout события из Django в SyncServer.
 
-## Этап 5: Warehouse Client Core
+## ✅ Этап 4: Angular SPA shell (выполнено)
 
-- Финализировать Rust ADR по core: SQLite crate, FFI-стратегия, границы DTO, покрытие sync-протокола.
-- Создать Rust workspace и CLI-инструмент для smoke-проверок.
-- Добавить локальную схему, outbox, sync, обработку конфликтов и facade API.
+- Angular workspace в `Warehouse_frontend/`.
+- SPA-экраны: номенклатура, операции, выданное имущество, временные ТМЦ.
+- Хостинг через Django: `FRONTEND_MODE=build`, Angular-статика в `Warehouse_web/angular_static/`.
+- Django shell (topbar, sidebar, login) постоянный, Angular — в content area.
 
-## Этап 6: Пересборка offline-клиентов
+## 🚧 Этап 5: Warehouse Client Core (v3.1 — в работе)
+
+- [x] Rust workspace создан (`crates/warehouse_core`, `warehouse_ffi`, `warehouse_cli`).
+- [ ] Sync-протокол: sequence-based (CouchDB-style) — `sync_state` таблица, pull/push API.
+- [ ] Локальная SQLite-схема: catalog, operations, balances.
+- [ ] DTO-маппинг: SyncServer JSON ↔ Rust-структуры.
+- [ ] CLI smoke-test: pull/push через `warehouse-cli`.
+- [ ] Outbox-паттерн для локальных изменений.
+- См. `.agent/SCOPE-v3.1.md`.
+
+### v3.1: Sync Log (SyncServer)
+- Таблица `sync_state` (device_id, last_seq, last_sync_at, status).
+- `sequence_number` в основных таблицах — монотонный счётчик изменений.
+- API: `POST /sync/push`, `POST /sync/pull`.
+
+### v3.1: Device Management (Django Admin)
+- CRUD устройств + статус (online/offline, last_seen, health).
+- Синхронизация устройств с SyncServer.
+
+## ⏳ Этап 6: Пересборка offline-клиентов (после v3.1)
 
 - Пересобрать UI `WarehouseDesktop` вокруг `Warehouse_client_core`.
 - Пересобрать UI `WarehouseMobile` вокруг `Warehouse_client_core`.
-- Держать платформенно-специфичные части вне core: UI, secure storage, scanner/camera и scheduling.
+- Платформенно-специфичные части вне core: UI, secure storage, scanner/camera, scheduling.
 
 ## На паузе
 
-- `WarehouseAIWorkstation` остаётся на паузе до явного возобновления.
+- `WarehouseAIWorkstation` — до явного возобновления.

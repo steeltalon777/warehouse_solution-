@@ -1,7 +1,7 @@
 # Makefile для управления dev-стендом Warehouse Solution
 # Одна команда для старта:  make dev
 
-.PHONY: help up down build logs ps shell clean migrate status dev init setup bootstrap-root bootstrap-root-migrate rotate-tokens rotate-tokens-root rotate-tokens-device
+.PHONY: help up down build logs ps shell clean migrate status dev init setup bootstrap-root bootstrap-root-migrate rotate-tokens rotate-tokens-root rotate-tokens-device test-e2e test-e2e-report test-e2e-headed test-e2e-ui
 
 # Цвета для вывода
 GREEN := \033[0;32m
@@ -216,3 +216,39 @@ restore-db: ## Восстановить PostgreSQL из дампа (make restore
 
 reset-django-admin: ## Сбросить Django superuser до admin/admin123
 	@docker compose exec warehouse_web python manage.py shell -c "from django.contrib.auth.models import User; u, _ = User.objects.get_or_create(username='admin'); u.set_password('admin123'); u.is_superuser = True; u.is_staff = True; u.is_active = True; u.email = 'admin@warehouse.local'; u.save(); print('Django superuser admin reset to default')"
+
+# ----- E2E тесты (Playwright) -----
+
+test-e2e: ## Запустить Playwright E2E-тесты в Docker
+	@echo "$(YELLOW)🧪 Запуск Playwright E2E-тестов...$(NC)"
+	@echo "$(YELLOW)⏳ Ожидание готовности стенда...$(NC)"
+	@for i in 1 2 3 4 5 6 7 8 9 10; do \
+		curl -s --max-time 5 http://localhost:8001/healthz/ > /dev/null 2>&1 && break; \
+		echo "  Waiting for Warehouse_web..."; \
+		sleep 3; \
+	done
+	@for i in 1 2 3 4 5; do \
+		curl -s --max-time 5 http://localhost:8000/api/v1/health > /dev/null 2>&1 && break; \
+		echo "  Waiting for SyncServer..."; \
+		sleep 3; \
+	done
+	@echo "$(GREEN)✅ Стенд готов, запуск тестов...$(NC)"
+	@docker compose run --rm \
+		-e CI=true \
+		-e E2E_BASE_URL=http://warehouse_web:8001 \
+		-e E2E_SYNC_HEALTH_URL=http://syncserver:8000/api/v1/health \
+		playwright \
+		npx playwright test --config=e2e/playwright.config.ts
+	@echo "$(GREEN)✅ E2E тесты завершены$(NC)"
+
+test-e2e-report: ## Открыть HTML-отчёт Playwright
+	@echo "$(YELLOW)📊 Открытие Playwright отчёта...$(NC)"
+	@xdg-open Warehouse_frontend/playwright-report/index.html 2>/dev/null || \
+		echo "Отчёт: Warehouse_frontend/playwright-report/index.html"
+
+test-e2e-headed: ## Запустить Playwright в headed-режиме (только локально)
+	@echo "$(YELLOW)🧪 Запуск Playwright в headed-режиме...$(NC)"
+	@cd Warehouse_frontend && E2E_BASE_URL=http://localhost:8001 npx playwright test --config=e2e/playwright.config.ts --headed
+
+test-e2e-ui: ## Запустить Playwright UI mode (только локально)
+	@cd Warehouse_frontend && E2E_BASE_URL=http://localhost:8001 npx playwright test --config=e2e/playwright.config.ts --ui

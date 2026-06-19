@@ -76,6 +76,12 @@ services:
         condition: service_started
     working_dir: /app
     command: python manage.py runserver 0.0.0.0:8001
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f --max-time 5 http://localhost:8001/healthz/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
 
   angular:
     build: ./Warehouse_frontend
@@ -96,5 +102,33 @@ services:
         condition: service_started
     command: sh -c "npm install --prefer-offline --no-audit --no-fund && npm start -- --host 0.0.0.0 --port 4200"
 
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.60.0-jammy
+    container_name: warehouse_playwright
+    working_dir: /app
+    volumes:
+      - ./Warehouse_frontend:/app
+      - /app/node_modules
+      - playwright_report:/app/playwright-report
+      - playwright_test_results:/app/test-results
+    environment:
+      - CI=${CI:-true}
+      - E2E_BASE_URL=http://warehouse_web:8001
+      - E2E_SYNC_HEALTH_URL=http://syncserver:8000/api/v1/health
+      - E2E_USERNAME_ROOT=${E2E_USERNAME_ROOT:-admin}
+      - E2E_PASSWORD_ROOT=${E2E_PASSWORD_ROOT:-admin123}
+      - E2E_USERNAME_SPA=${E2E_USERNAME_SPA:-test_spa_user}
+      - E2E_PASSWORD_SPA=${E2E_PASSWORD_SPA:-test_spa_password}
+    depends_on:
+      warehouse_web:
+        condition: service_healthy
+      syncserver:
+        condition: service_started
+    command: echo "Playwright image ready. Use 'make test-e2e' to run tests."
+    networks:
+      - default
+
 volumes:
   postgres_data:
+  playwright_report:
+  playwright_test_results:

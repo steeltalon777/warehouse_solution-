@@ -67,6 +67,21 @@ make status
 # Все эндпоинты отвечают, Postgres healthy
 ```
 
+### 6. Angular Build Freshness (pre-deploy gate)
+
+Убедиться, что Angular-билд в `Warehouse_web/angular_static/` **актуальный** и соответствует dev-стенду:
+
+```bash
+# На dev-стенде
+stat -c '%Y' Warehouse_frontend/dist/warehouse-frontend/browser/index.html
+# Должен быть сегодняшней датой
+
+# В Warehouse_web (должен совпадать)
+stat -c '%Y' Warehouse_web/angular_static/index.html
+```
+
+Если даты не совпадают или билд старый — повторить `npm run build` и скопировать заново.
+
 ---
 
 ## Production Deploy Workflow
@@ -97,7 +112,16 @@ git add angular_static/
 git commit -m "chore(deploy): update Angular static build for production"
 ```
 
-Пользователь пушит коммит в `origin/dev`.
+**Проверить перед push:**
+```bash
+# Убедиться, что билд свежий (дата сегодняшняя)
+ls -la angular_static/index.html
+# Сравнить с dev-стендом — НЕ должно быть старого билда с прошлого деплоя
+stat -c '%Y' angular_static/index.html
+```
+
+**⚠️ Критично:** Без этого шага на проде останется старый Angular-билд, даже если Django-код новый.
+Дефолтный `FRONTEND_BUILD_DIR=/app/angular_static` в образе — без volume-маунтов на VPS.
 
 ### Шаг 3: Сохранить фолбек на VPS
 

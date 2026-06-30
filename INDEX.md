@@ -71,6 +71,8 @@
 - `docs/TZ-ISSUED_REPOSITORY_BACKEND_CONTRACT.md` - SyncServer + BFF contract for issue-object categories, tree, and register math.
 - `docs/TZ-ISSUED_REPOSITORY_FRONTEND_WORKSPACE.md` - 40/60 repository workspace, sidebar entry, operation modal prefill.
 - `docs/TZ-DOCUMENT_PDF_RENDERING_AND_UI.md` - PDF rendering.
+- `docs/TZ-V3.1F_ADMIN_PANEL_HARDENING.md` - admin panel hardening (password bug, multi-site, device parity, reset flow).
+- `docs/TZ-V3.1G_OPERATIONS_UX_HARDENING.md` - operations UX hardening (submit errors, field-level propagation, PDF verification).
 
 ## Rules To Remember
 

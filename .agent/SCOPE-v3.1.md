@@ -1,82 +1,121 @@
-# Scope: Warehouse Solution v3.1
+# Scope: Quartermaster v3.1 — Branding & Offline Readiness
 
-**Date:** 2026-06-18
+**Date:** 2026-06-19
 **Decision Makers:** makc
+**Review:** ChatGPT (parallel architecture review), Architect (audit + stress-test)
 
-## Problem
+## Goal
 
-После стабилизации онлайн-клиента (v3.0) необходимо заложить foundation для офлайн-клиентов. 
-Склады находятся в зоне неустойчивой связи — кладовщики должны работать без интернета, 
-создавать операции и синхронизироваться при появлении связи. 
-SyncServer должен отслеживать состояние синхронизации каждого клиента.
+> Превратить «Склад» в продукт **«Quartermaster»**, стабилизировать серверный контракт офлайн-синхронизации, подтвердить совместимость Rust client core с SyncServer и подготовить WPF к миграции без включения полной миграции в релиз 3.1.
 
-Параллельно: доработать админку Django для полноценного управления устройствами (CRUD + статус).
+v3.1 — **НЕ релиз офлайн-клиентов.** Это подготовка к ним: offline-ready server + Rust core gate + WPF FFI spike.
+
+---
+
+## Status
+
+| Компонент | Статус |
+|-----------|--------|
+| 3.1A Branding: Quartermaster | ✅ ADR-0015, README/docs обновлены |
+| 3.1B SyncServer: sync_state + device status | ✅ sync_state table, `GET /sync/status/{device_id}`, ping/pull/push updates, migration 0019 |
+| 3.1C Rust Core: payload_hash + compatibility | ✅ payload_hash canonical JSON+SHA-256, write_operations documented, stand smoke passes |
+| 3.1D WPF: Layer 0 FFI spike | 🚧 |
+| 3.1E Documentation | 🚧 ADR созданы, Stage 5 в работе |
+
+sync_state, device status (online/offline/health), и payload_hash (canonical JSON + SHA-256) — реализованы и протестированы.
+
+---
 
 ## In Scope
 
-### 1. Sync Log & Protocol (SyncServer)
-- Таблица `sync_state` (device_id, last_sequence_number, last_sync_at, status)
-- Sequence-based sync: каждый mutation в SyncServer получает монотонный sequence number
-- API: `POST /api/v1/sync/push` — клиент отправляет локальные изменения
-- API: `POST /api/v1/sync/pull` — клиент запрашивает изменения после своего sequence
-- Outbox на клиенте: локальные изменения копятся и отправляются пачкой
+### 3.1A — Branding: Quartermaster ✅
 
-### 2. Device Management (Django Admin)
-- CRUD устройств в Django admin (code, name, site, тип: online/offline)
-- Статус устройства: online/offline, last_seen, last_sync, health
-- Синхронизация устройств с SyncServer (создание/обновление)
-- Отображение токена устройства для копирования в offline-клиент
+- ✅ Продуктовое имя: **Quartermaster** (складской фреймворк/WMS).
+- ✅ Внутренние имена репозиториев, пакетов, сервисов, БД — **без изменений**.
+- ✅ Организации кастомизируют заголовки и логотипы самостоятельно — продукт даёт имя и identity, а не жёсткий брендбук.
+- ✅ Что обновить:
+  - ✅ `README.md` (корень workspace) — название, описание проекта
+  - ✅ `SOLUTION_ROADMAP.md` — упоминание Quartermaster
+  - ✅ `Functional and WorkLogik.md` — мета-описание
+  - ✅ `docs/INDEX.md`, `docs/ARCHITECTURE.md` — если существуют
+  - ✅ Проектные README: `SyncServer/`, `Warehouse_web/`, `Warehouse_frontend/`, `Warehouse_client_core/`, `WarehouseWorkstation/`
+- ✅ **ADR-0015:** Product name and branding
 
-### 3. Warehouse Client Core (Rust)
-- Локальная SQLite-схема: catalog, operations (drafts), balances snapshot
-- Sync client: pull (sequence-based) + push (outbox)
-- DTO-маппинг: SyncServer JSON ↔ локальные Rust-структуры
-- CLI для smoke-проверок sync
+### 3.1B — SyncServer: Offline Contract & Status ✅
 
-### 4. Roadmap & Docs Update
-- `SOLUTION_ROADMAP.md` — отметить выполненные этапы, добавить 3.1
-- `Functional and WorkLogik.md` — актуализировать статусы
+- ✅ **`sync_state` таблица:** device_id, last_sequence_number, last_sync_at, status, last_error
+- ✅ **Эндпоинт:** `GET /api/v1/sync/status/{device_id}` → behind_by, online/offline derivation
+- ✅ **Обновление в ping/pull/push:** last_sync_at, last_sequence_number
+- ✅ **Device.last_seen_at:** убедиться, что обновляется в sync-эндпоинтах (identity_service уже делает — проверить)
+- ✅ **Таксономия ответов:** accepted, duplicate, rejected, conflict, validation_error, auth_error (частично уже есть — дополнить)
+- ✅ **Миграция:** `0019_add_sync_state`
+- ✅ **ADR-0016:** Offline sync architecture
 
-## Out Of Scope
+### 3.1C — Rust Core: Compatibility Gate ✅
 
-- Desktop UI (WPF/Avalonia) — решается после v3.1
-- Mobile UI (Android) — решается после v3.1
-- Полный conflict resolution UI — фокус на протоколе, не на интерфейсе
-- Отчёты по логам синхронизации — возможно позже, не блокирует v3.1
-- Real-time push-уведомления
-- WarehouseAIWorkstation
+- ✅ **payload_hash:** совместимость с SyncServer (canonical JSON + SHA-256)
+- ✅ **Stand smoke test:** Core ↔ SyncServer (bootstrap → push → pull) — последний незакрытый decision gate из MIGRATION_ANALYSIS
+- **Release DLL:** сборка `warehouse_ffi.dll` / `.so` для целевых платформ
+- ✅ **CLI acceptance:** `warehouse-cli sync full` проходит на Docker-стенде
+
+### 3.1D — WPF: Layer 0 FFI Spike (tech preview)
+
+- **Только Layer 0:** C# `CoreHandle` SafeHandle wrapper, `CoreErrorDto`, загрузка DLL
+- **Smoke test:** `core_version()`, `core_open()`, `core_close()` — WPF может вызвать Rust core
+- **Документ:** `WPF_RUST_CORE_MIGRATION_PLAN.md` (или обновить существующий `MIGRATION_AIWORKSTATION_TO_CORE_ANALYSIS.md`)
+- **НЕ входит:** Layers 1-7 (Bootstrap, Auth, Directory, Operations, Balances, Documents, Sync, Cleanup) → 3.2
+- **ADR-0017:** WPF migration via Rust core
+
+### 3.1E — Documentation 🚧 (Stage 5 в работе)
+
+- 🚧 `SOLUTION_ROADMAP.md` — этап 5 выполнен, v3.1
+- 🚧 `Functional and WorkLogik.md` — разделы IX.11, X
+- ✅ `README.md` (корень) — Quartermaster
+- ✅ Проектные README — упоминание продукта
+- ✅ `docs/INDEX.md`, `docs/ARCHITECTURE.md` — актуализация
+- ✅ ADR-0015, ADR-0016, ADR-0017
+
+---
+
+## Out Of Scope (→ 3.2, 3.3, 3.4)
+
+| Что | Когда |
+|-----|-------|
+| WPF Layers 1-7 (полная миграция на Rust core) | 3.2 |
+| Android-клиент | 3.3 |
+| Desktop UI (новый) | 3.2 |
+| Mobile UI (новый) | 3.3 |
+| Полный conflict resolution (merge) | 3.4 |
+| Печать, QR/штрихкоды, сканы | 3.4 |
+| Real-time push-уведомления | — |
+| WarehouseAIWorkstation (AI-функционал) | На паузе |
+| Переименование репозиториев/пакетов/БД | Никогда |
+
+---
+
+## Версионная дорожка
+
+```
+v3.0  — онлайн-клиент (SyncServer + Django + Angular)
+v3.1  — Quartermaster + offline-ready server + Rust core gate + WPF FFI spike
+v3.2  — WPF migration to Rust core (Layers 1-7)
+v3.3  — Android client (Kotlin/UniFFI)
+v3.4  — advanced offline UX, conflicts, QR/scans, printing
+```
+
+---
 
 ## Success Criteria
 
-1. SyncServer: sequence-based sync работает, offline-клиент получает изменения после своего last_seq
-2. SyncServer: клиент может запушить локально созданную операцию, она применяется
-3. Django admin: CRUD устройств работает, статус отображается
-4. Rust core: SQLite-схема создаётся, pull/push через CLI smoke-test проходит
+1. Продукт называется Quartermaster во всей документации и README
+2. SyncServer: `sync_state` таблица, `GET /sync/status/{device_id}`, таксономия ответов
+3. Rust core: `payload_hash` совместим, stand smoke проходит, release DLL собирается
+4. WPF: C# FFI wrapper загружает DLL, вызывает `core_version()` / `core_open()` / `core_close()`
+5. 3 новых ADR, документация актуализирована
+6. Регрессия: существующие тесты (SyncServer 410+, WPF 117, Rust ~90) проходят
 
-## Assumptions
-
-| Assumption | Status | Validation |
-|---|---|---|
-| Sequence number — единый глобальный счётчик на все таблицы | Reasonable | Прототип покажет, нужен ли per-table sequence |
-| SQLite в Rust покрывает catalog + operations + balances без проблем | Reasonable | Схема < 20 таблиц, SQLite справляется |
-| Конфликты (два клиента изменили одно и то же) — last-write-wins в v3.1 | Reasonable | Спроектировать так, чтобы позже добавить merge |
-| SyncServer и так хранит все данные — sync_state это лёгкая таблица | Validated | Все CRUD уже есть, нужен только sequence + sync_state |
-
-## Selected Approach
-
-**Sequence-based sync (CouchDB-style):**
-- Каждый INSERT/UPDATE/DELETE в SyncServer получает глобальный `sequence_number`
-- Клиент хранит `last_sequence_number` — последний seq, который он получил
-- Pull: `GET /sync/pull?since={seq}` → JSON с изменениями + новый seq
-- Push: `POST /sync/push` → JSON с локальными изменениями → сервер валидирует и применяет
-- Конфликты: last-write-wins (позже добавим merge)
-
-## First Slice
-
-1. **SyncServer:** `sync_state` таблица + `sequence_number` в основных таблицах + pull API (только чтение)
-2. **Django admin:** CRUD устройств
-3. **Rust core:** SQLite-схема + pull-клиент + CLI smoke (`warehouse-cli sync pull`)
+---
 
 ## Next Step
 
-Создать TZ в Architect mode после утверждения scope.
+Создать TZ в Architect mode: `docs/TZ-V3.1_QWARTERMAISTER.md`

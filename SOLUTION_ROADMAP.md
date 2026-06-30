@@ -1,60 +1,101 @@
-# Дорожная карта решения
+# Дорожная карта — Quartermaster
 
-> Последнее обновление: 2026-06-18 (v3.1 planning)
+> Последнее обновление: 2026-06-22
 
-## ✅ Этап 1: Контракты агентов и документации (выполнено)
+## Стратегическая линия
 
-- Корневой `AGENTS.md` + проектные `AGENTS.md` во всех активных проектах.
-- Активная документация в соответствии с текущими ролями проектов.
-- `docs/DEPLOYMENT.md` — правила деплоя.
-- Сгенерированные артефакты в `temp/`, не в git.
+```
+3.x — Product Foundation      «Мы перестаём быть кучей кода и становимся системой»
+4.x — Operational Platform    «Платформа учёта имущества и операций для организации»
+5.x — Multi-Organization      «Self-hosted framework: несколько организаций, общий движок»
+```
 
-## ✅ Этап 2: Стабильность backend-контракта (выполнено)
+Система выросла из «надо бы склад, чтобы ТМЦ не терялись» в зачаток производственного self-hosted framework'а для учёта, операций и снабжения. Ниже — пройденный путь и план.
 
-- SyncServer: 410 тестов, 0 failed, 2 skipped, 7 xfailed.
-- Миграции Alembic до 0018, явные и проверенные.
-- ADR'ы: 0011 (transport), 0013 (migration hardening), 0014 (read visibility).
-- API-контракты в `API_REFERENCE.md`.
+---
 
-## ✅ Этап 3: Django как активный web-клиент и BFF (выполнено)
+## ✅ 3.x — Product Foundation
 
-- Django BFF: `/bff/api/v1/*` проксирует все доменные endpoint'ы.
-- Транспорт: persistent HTTPX, retry, error mapping, токены не раскрываются.
-- Каталог: локальные ORM-модели удалены, всё через `apps/sync_client/`.
-- Аудит: login/logout события из Django в SyncServer.
+### v3.0 — Онлайн-клиент (выполнено)
 
-## ✅ Этап 4: Angular SPA shell (выполнено)
+| Этап | Статус |
+|------|--------|
+| Контракты агентов и документации | ✅ |
+| Стабильность backend-контракта (SyncServer 410+ тестов) | ✅ |
+| Django как активный web-клиент и BFF | ✅ |
+| Angular SPA shell | ✅ |
+| Warehouse Client Core — Rust foundation | ✅ |
 
-- Angular workspace в `Warehouse_frontend/`.
-- SPA-экраны: номенклатура, операции, выданное имущество, временные ТМЦ.
-- Хостинг через Django: `FRONTEND_MODE=build`, Angular-статика в `Warehouse_web/angular_static/`.
-- Django shell (topbar, sidebar, login) постоянный, Angular — в content area.
+### 🚧 v3.1 — Foundation Release (в работе, sync/device core готов)
 
-## 🚧 Этап 5: Warehouse Client Core (v3.1 — в работе)
+> **Quartermaster 3.1: Foundation Release**
+> Брендинг, AI-friendly документация, ADR, карта API, подготовка offline-contract, выравнивание каталога/номенклатуры, hardening админки и operations UX.
 
-- [x] Rust workspace создан (`crates/warehouse_core`, `warehouse_ffi`, `warehouse_cli`).
-- [ ] Sync-протокол: sequence-based (CouchDB-style) — `sync_state` таблица, pull/push API.
-- [ ] Локальная SQLite-схема: catalog, operations, balances.
-- [ ] DTO-маппинг: SyncServer JSON ↔ Rust-структуры.
-- [ ] CLI smoke-test: pull/push через `warehouse-cli`.
-- [ ] Outbox-паттерн для локальных изменений.
-- См. `.agent/SCOPE-v3.1.md`.
+| Блок | Статус |
+|------|--------|
+| 3.1A Branding: Quartermaster | ✅ |
+| 3.1B SyncServer: sync_state + offline contract | ✅ sync_state table, GET /sync/status/{device_id}, ping/pull/push updates |
+| 3.1C Rust core: compatibility gate | ✅ payload_hash (canonical JSON+SHA-256), stand smoke pass |
+| 3.1D WPF: Layer 0 FFI spike | [ ] |
+| 3.1E Documentation: ADR-0015/0016/0017 | ✅ ADR созданы, docs Stage 5 в работе |
+| 3.1F Admin Panel Hardening: password fix, multi-site, device parity, reset flow | [ ] TZ создан |
+| 3.1G Operations UX Hardening: submit error tracebacks, inline-SKU validation | [ ] |
+| 3.1H Waybill PDF Fixes: metadata sync, multi-page rendering, on-demand PDF | [ ] TZ создан |
+| 3.1I Operation Lines Sorting: default sort by lineNumber in modal | ✅ выполнено |
 
-### v3.1: Sync Log (SyncServer)
-- Таблица `sync_state` (device_id, last_seq, last_sync_at, status).
-- `sequence_number` в основных таблицах — монотонный счётчик изменений.
-- API: `POST /sync/push`, `POST /sync/pull`.
+### v3.2 — Desktop client migration
 
-### v3.1: Device Management (Django Admin)
-- CRUD устройств + статус (online/offline, last_seen, health).
-- Синхронизация устройств с SyncServer.
+- WPF Layers 1-7: Bootstrap → Auth → Directory → Operations → Balances → Documents → Sync → Cleanup
+- Полный переход WarehouseWorkstation на Rust core через FFI
 
-## ⏳ Этап 6: Пересборка offline-клиентов (после v3.1)
+### v3.3 — Android client
 
-- Пересобрать UI `WarehouseDesktop` вокруг `Warehouse_client_core`.
-- Пересобрать UI `WarehouseMobile` вокруг `Warehouse_client_core`.
-- Платформенно-специфичные части вне core: UI, secure storage, scanner/camera, scheduling.
+- Kotlin/UniFFI обвязка вокруг `Warehouse_client_core`
+- Экран входа + каталог + draft-операции
+
+### v3.4 — Advanced offline UX
+
+- Полный conflict resolution (merge)
+- Печать, QR/штрихкоды, сканы, вложения
+
+---
+
+## 🔮 4.x — Operational Platform
+
+> **Quartermaster 4.0: Field Operations Release**
+> Клиенты, offline-first desktop/mobile, AI-интеграция, заявки, workflow, уведомления, черновики, очереди, ассистент кладовщика/снабженца, интеграция с документами. Операционная система имущества для организации.
+
+| Компонент | Статус |
+|-----------|--------|
+| Desktop offline client (WPF → Rust core) | Планируется |
+| Mobile offline client (Android) | Планируется |
+| AI-интеграция (ассистент, рекомендации) | WarehouseWorkstation AI на паузе |
+| Заявки / workflow | Планируется |
+| Уведомления | Планируется |
+| Ассистент кладовщика/снабженца | Планируется |
+
+---
+
+## 🔮 5.x — Multi-Organization Platform
+
+> **Quartermaster 5.0: Multi-Organization Platform**
+> Несколько организаций, изоляция tenant'ов, общий движок, разные контуры доступа, разные базы/схемы или tenant_id, подключаемые клиенты, разные политики синхронизации, разные администраторы организаций.
+
+| Компонент | Статус |
+|-----------|--------|
+| Мультиорганизация (tenant isolation) | Планируется |
+| Marketplace-модули | Планируется |
+| Подключаемые клиенты | Планируется |
+| Разные политики синхронизации | Планируется |
+
+---
 
 ## На паузе
 
-- `WarehouseAIWorkstation` — до явного возобновления.
+- `WarehouseAIWorkstation/` — AI-функционал (чат, governance, бюджет токенов) до явного возобновления
+
+---
+
+## История
+
+Проект начался в феврале 2026 с «надо бы склад, чтобы ТМЦ не терялись в болотах и Excel не был богом бухгалтерии». За 4 месяца вырос в платформу учёта имущества и операций: SyncServer (источник истины), Django (web-клиент/BFF), Angular (SPA), Rust core (offline-first runtime), WPF AI Workstation. Почти WMS, местами задевает ERP-контур, местами начинает походить на маленький Nextcloud для производственной организации.

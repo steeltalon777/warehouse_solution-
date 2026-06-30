@@ -148,7 +148,7 @@ IX/  Основные правила запуска и эксплуатации 
         2. джанго стартует в контейнере на том же ВПС что и синксервер в той же докерсети
         3. Angular стартует контейнером и архитектурно должен хоститься Django
         4. при первичном запуске или перезапуске запускается скрипт SyncServer/scripts/bootstrap_root.py, который окромя того что инициализирует базу синксервера ещё и должен дать токены рут пользователя и джанго девайса
-        5. выданные токены заносятся в джанге ЕНВ 
+        5. выданные токены заносятся в джанге ЕНВ
         6. все запросы от джанго к синксерверу проходят таким заголовком:
             x-device-token используется джанговский
             x-user-token используется того пользователя который залогинен
@@ -156,18 +156,34 @@ IX/  Основные правила запуска и эксплуатации 
         8 в синксервере пользователи синхронно с джанго регистрируются но там только их токены и полномочия (из ключевого)
         9. для обновления токена рута и джанго девайса используется скрипт SyncServer/scripts/rotate_tokens.py
          10 для обновления токенов остальных пользователей используется форма джангоадминки в карточке пользователя, там же этот токен можно скопировать для использования в десктоп или мобильных клиентов.
-        11. UPD 18.06.2026: управление устройствами — CRUD + статус (online/offline, last_seen, health) в Django admin. Статус: на стадии продумывания (v3.1).
+        11. UPD 18.06.2026: управление устройствами — CRUD + статус (online/offline, last_seen, health) в Django admin.
+            Статус: выполнено (v3.1).
+            Сделано: per-device `sync_state` таблица в SyncServer (ADR-0016, миграция 0019);
+            ping/pull/push автоматически обновляют `last_sequence_number`, `last_sync_at`,
+            `status` и `last_error`; endpoint `GET /api/v1/sync/status/{device_id}` с
+            авторизацией (own device / root); Django admin отображает online/offline badge,
+            last_seen_at и health_status; BFF эндпоинты `/refresh-status` и `/status`.
+            Admin CRUD UI для устройств — v3.1F (отдельный TZ).
 
 
-X/ Офлайн-клиенты и синхронизация # на стадии продумывания (v3.1)
-    1. Протокол синхронизации: sequence-based (CouchDB-style)
-        1.1 Каждое изменение в SyncServer получает монотонный sequence_number
-        1.2 Клиент хранит last_sequence_number — последний полученный seq
-        1.3 Pull: GET /api/v1/sync/pull?since={seq} → изменения после seq
-        1.4 Push: POST /api/v1/sync/push → локальные изменения клиента
-    2. Локальное хранилище: SQLite в Warehouse_client_core (Rust)
-        2.1 Схема: catalog, operations (drafts), balances snapshot
-        2.2 Outbox: локальные изменения копятся и отправляются пачкой при появлении связи
-    3. Конфликты: last-write-wins в первой версии, с возможностью добавления merge позже
-    4. Устройства: регистрация, статус синхронизации, health-check
-    5. Клиенты: WarehouseDesktop + WarehouseMobile вокруг Warehouse_client_core
+X/ Офлайн-клиенты и синхронизация # частично выполнено (v3.1); sync_state, device status, payload_hash — выполнено
+    1. Протокол синхронизации: sequence-based (CouchDB-style) # частично выполнено
+        1.1 Каждое изменение в SyncServer получает монотонный sequence_number — выполнено
+        1.2 Клиент хранит last_sequence_number — последний полученный seq — выполнено
+        1.3 Pull: POST /api/v1/pull (server_seq_upto, next_since_seq) — выполнено
+        1.4 Push: POST /api/v1/push (accepted, duplicates, rejected) — выполнено
+    2. Локальное хранилище: SQLite в Warehouse_client_core (Rust) # частично выполнено
+        2.1 Схема: catalog, operations (drafts), balances snapshot — выполнено
+        2.2 Outbox: локальные изменения копятся и отправляются пачкой при появлении связи — выполнено
+        2.3 `payload_hash` совместим с SyncServer (SHA-256, канонический JSON, кириллица) — выполнено
+    3. Конфликты: last-write-wins в первой версии, с возможностью добавления merge позже # частично выполнено
+        3.1 Таксономия ответов push: accepted / duplicate / uuid_collision / rejected / validation_error / auth_error (ADR-0016) — выполнено
+        3.2 Merge-логика и UI — на стадии продумывания (v3.4)
+    4. Устройства: регистрация, статус синхронизации, health-check # sync_state и device status выполнены (v3.1); admin CRUD UI — v3.1F
+        4.1 sync_state: last_sequence_number, last_sync_at, status, last_error — выполнено
+        4.2 GET /api/v1/sync/status/{device_id} — выполнено
+        4.3 Django admin device CRUD — на стадии продумывания (v3.1F)
+    5. Клиенты: WarehouseDesktop + WarehouseMobile вокруг Warehouse_client_core # не выполнено
+        5.1 WarehouseDesktop (WPF) → миграция на core отложена в v3.2 (ADR-0017, gate 5 пройден в v3.1C)
+        5.2 WarehouseMobile (Android) → v3.3
+    6. UPD 18.06.2026: продуктовое имя «Quartermaster» (ADR-0015) — выполнено для UI/документации; технические имена (SyncServer, Warehouse_web, Warehouse_client_core) сохранены.

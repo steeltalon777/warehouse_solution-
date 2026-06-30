@@ -1,18 +1,21 @@
-# Warehouse Solution
+# Quartermaster
 
-`Warehouse Solution` is a coordination workspace for the warehouse management system. Runtime code lives in project directories; the root keeps cross-project documentation, ADRs, agent guidance, and project maps.
+**Система складского и имущественного учёта.** Складской фреймворк/WMS: онлайн-клиент, офлайн-терминалы, синхронизация, AI-воркстейшн.
+
+Технические имена репозиториев, пакетов, сервисов и БД сохраняются без изменений. Quartermaster — пользовательское продуктовое имя.
+
+Runtime code lives in project directories; the root keeps cross-project documentation, ADRs, agent guidance, and project maps.
 
 ## Current Product Shape
 
 | Project | Role | Status |
 |---|---|---|
-| `SyncServer/` | Authoritative FastAPI backend and source of truth | Active, highest backend priority |
-| `Warehouse_web/` | Active Django web client, session host, admin UI, BFF | Active web client |
-| `Warehouse_frontend/` | Angular shell hosted by Django | High priority |
-| `Warehouse_client_core/` | Planned Rust offline-first runtime | Architecture/planning |
-| `WarehouseDesktop/` | Future offline desktop client over `Warehouse_client_core` | Rebuild later |
-| `WarehouseMobile/` | Future offline Android client over `Warehouse_client_core` | Rebuild later |
-| `WarehouseAIWorkstation/` | AI workstation | Paused unless explicitly resumed |
+| `SyncServer/` | Authoritative FastAPI backend, source of truth, sync hub | Active |
+| `Warehouse_web/` | Django web client, session host, admin UI, BFF | Active |
+| `Warehouse_frontend/` | Angular shell hosted by Django | Active |
+| `Warehouse_client_core/` | Rust offline-first runtime (SQLite, sync engine, outbox, FFI) | Active (v3.1) |
+| `WarehouseWorkstation/` | WPF desktop AI workstation, target for Rust core migration | Active (v3.1 Layer 0, full migration → 3.2) |
+| `WarehouseMobile/` | Future Android client over `Warehouse_client_core` (Kotlin/UniFFI) | Planned (v3.3) |
 
 ## Core Architecture
 

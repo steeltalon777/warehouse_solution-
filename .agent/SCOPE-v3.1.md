@@ -20,9 +20,9 @@ v3.1 — **НЕ релиз офлайн-клиентов.** Это подгот�
 | 3.1B SyncServer: sync_state + device status | ✅ sync_state table, `GET /sync/status/{device_id}`, ping/pull/push updates, migration 0019 |
 | 3.1C Rust Core: payload_hash + compatibility | ✅ payload_hash canonical JSON+SHA-256, write_operations documented, stand smoke passes |
 | 3.1D WPF: Layer 0 FFI spike | 🚧 |
-| 3.1E Documentation | 🚧 ADR созданы, Stage 5 в работе |
+| 3.1E Documentation | ✅ ADR созданы, Stage 5 выполнено |
 
-sync_state, device status (online/offline/health), и payload_hash (canonical JSON + SHA-256) — реализованы и протестированы.
+sync_state, device status (online/offline/health), и payload_hash (canonical JSON + SHA-256) — реализованы и протестированы. Docs Stage 5 — выполнено.
 
 ---
 
@@ -66,10 +66,10 @@ sync_state, device status (online/offline/health), и payload_hash (canonical JS
 - **НЕ входит:** Layers 1-7 (Bootstrap, Auth, Directory, Operations, Balances, Documents, Sync, Cleanup) → 3.2
 - **ADR-0017:** WPF migration via Rust core
 
-### 3.1E — Documentation 🚧 (Stage 5 в работе)
+### 3.1E — Documentation ✅ (Stage 5 выполнено)
 
-- 🚧 `SOLUTION_ROADMAP.md` — этап 5 выполнен, v3.1
-- 🚧 `Functional and WorkLogik.md` — разделы IX.11, X
+- ✅ `SOLUTION_ROADMAP.md` — этап 5 выполнен, v3.1
+- ✅ `Functional and WorkLogik.md` — разделы IX.11, X
 - ✅ `README.md` (корень) — Quartermaster
 - ✅ Проектные README — упоминание продукта
 - ✅ `docs/INDEX.md`, `docs/ARCHITECTURE.md` — актуализация

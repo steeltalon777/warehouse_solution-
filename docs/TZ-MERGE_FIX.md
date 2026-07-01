@@ -7,12 +7,12 @@
 
 ## Execution Checklist
 
-- [ ] 0. Context verified
-- [ ] 1. Architecture boundaries confirmed
-- [ ] 2. Unit A: Reload data + clear selection after merge (nomenclature-page.ts)
-- [ ] 3. Unit B: Fix allCategories input in merge-category-modal (nomenclature-page.ts template)
-- [ ] 4. Unit C: Add success toast after merge (merge-item-modal.ts, merge-category-modal.ts)
-- [ ] 5. Unit tests (Angular build)
+- [x] 0. Context verified
+- [x] 1. Architecture boundaries confirmed
+- [x] 2. Unit A: Reload data + clear selection after merge (nomenclature-page.ts)
+- [x] 3. Unit B: Fix allCategories input in merge-category-modal (nomenclature-page.ts template)
+- [x] 4. Unit C: Add success toast after merge (merge-item-modal.ts, merge-category-modal.ts)
+- [x] 5. Unit tests (Angular build)
 - [ ] 6. Stand smoke tests (real merge through Angular UI)
 - [ ] 7. Regression checks (Django SSR merge, no breakage)
 - [ ] 8. Documentation updated

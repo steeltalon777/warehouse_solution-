@@ -13,16 +13,16 @@
 
 ## Execution Checklist
 
-- [ ] 0. Context verified — аудит кода выполнен, пробелы идентифицированы
-- [ ] 1. Stage 1: SyncServer — sync_state + hardening
-- [ ] 2. Stage 1 tests: unit + integration
-- [ ] 3. Stage 2: Django — device runtime status
-- [ ] 4. Stage 2 tests: unit + stand smoke
-- [ ] 5. Stage 3: Warehouse_client_core — fix gaps
-- [ ] 6. Stage 3 tests: cargo test + cargo clippy
-- [ ] 7. Stage 4: Integration — E2E sync flow
-- [ ] 8. Stage 5: Documentation update
-- [ ] 9. Regression checks: SyncServer 410 tests, Django tests
+- [x] 0. Context verified — аудит кода выполнен, пробелы идентифицированы
+- [x] 1. Stage 1: SyncServer — sync_state + hardening
+- [x] 2. Stage 1 tests: unit + integration
+- [x] 3. Stage 2: Django — device runtime status
+- [x] 4. Stage 2 tests: unit + stand smoke
+- [x] 5. Stage 3: Warehouse_client_core — fix gaps
+- [x] 6. Stage 3 tests: cargo test + cargo clippy
+- [x] 7. Stage 4: Integration — E2E sync flow
+- [x] 8. Stage 5: Documentation update
+- [x] 9. Regression checks: SyncServer 410 tests, Django tests
 - [ ] 10. Final acceptance review
 
 ---

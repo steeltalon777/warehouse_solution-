@@ -67,21 +67,26 @@
 
 ## Execution Checklist
 
-- [ ] 0. Context verified
-- [ ] 1. Architecture boundaries confirmed
-- [ ] 2. Implementation stage 1A complete: Django routes, SPA host, sidebar, legacy catalog SSR path
-- [ ] 3. Implementation stage 1B complete: Angular readonly/editable modes in one nomenclature screen
-- [ ] 4. Implementation stage 1C complete: BFF and legacy mutation permission hardening
-- [ ] 5. Implementation stage 2 complete: integration, route matrix/doc updates, conflict review
-- [ ] 6. Static checks complete
-- [ ] 7. Unit/component tests complete
-- [ ] 8. Integration tests with real dependencies complete
-- [ ] 9. Stand smoke tests complete
+- [x] 0. Context verified
+- [x] 1. Architecture boundaries confirmed
+- [x] 2. Implementation stage 1A complete: Django routes, SPA host, sidebar, legacy catalog SSR path
+- [x] 3. Implementation stage 1B complete: Angular readonly/editable modes in one nomenclature screen
+- [x] 4. Implementation stage 1C complete: BFF and legacy mutation permission hardening
+- [x] 5. Implementation stage 2 complete: integration, route matrix/doc updates, conflict review
+- [x] 6. Static checks complete
+- [x] 7. Unit/component tests complete
+- [x] 8. Integration tests with real dependencies complete
+- [x] 9. Stand smoke tests complete
 - [ ] 10. UI automation tests complete
 - [ ] 11. User scenario tests complete
 - [ ] 12. Regression checks complete
-- [ ] 13. Documentation updated
+- [x] 13. Documentation updated
 - [ ] 14. Final acceptance review complete
+
+### Executor blocker notes
+
+- UI automation and user scenarios remain partially blocked on the real stand because the prepared non-manager browser fixture (`observer` / `observer123`) is unavailable there; root/manual browser smoke for `/catalog/`, `/catalog/items/`, `/catalog/ssr/`, and `/nomenclature/` was completed.
+- Regression checks remain partially blocked because the full frontend unit suite still fails outside this shard in `Warehouse_frontend/src/app/core/services/operations.service.spec.ts` (`mapToRowVm returns correct flags for observer role`), while the targeted nomenclature/auth tests for this TZ passed.
 
 ## Check Rules
 

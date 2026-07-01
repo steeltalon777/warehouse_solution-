@@ -7,17 +7,17 @@
 
 ## Execution Checklist
 
-- [ ] 0. Context verified
-- [ ] 1. Stage 1: Исправить маппинг полей `toTempItemVm()` — `item_name` → `name`, `review_status` → `status`
-- [ ] 2. Stage 2: Обновить `computeActionFlags()` для review-items
-- [ ] 3. Stage 3: Таблица — кнопка «✓ Подтвердить» + переименование заголовка
-- [ ] 4. Stage 4: Модалка деталей — убрать легаси, добавить «Открыть в каталоге»
-- [ ] 5. Stage 5: Deep-link в каталог (queryParam `selectItem`) — **после merge-TZ Stage 3C**
-- [ ] 6. Stand smoke: проверить что review-items из операций отображаются
-- [ ] 7. Stand smoke: confirm с пустым payload
-- [ ] 8. Stand smoke: навигация в каталог по клику
-- [ ] 9. Regression: legacy temporary-items не сломаны
-- [ ] 10. Final acceptance review complete
+- [x] 0. Context verified ✅
+- [x] 1. Stage 1: Исправить маппинг полей `toTempItemVm()` — `item_name` → `name`, `review_status` → `status` ✅ (was already done by prior work)
+- [x] 2. Stage 2: Обновить `computeActionFlags()` для review-items ✅ (was already done)
+- [x] 3. Stage 3: Таблица — кнопка «✓ Подтвердить» + переименование заголовка ✅ (was already done; added missing `(confirm)` binding in detail modal)
+- [x] 4. Stage 4: Модалка деталей — убрать легаси, добавить «Открыть в каталоге» ✅ (was already done)
+- [x] 5. Stage 5: Deep-link в каталог (queryParam `selectItem`) — **после merge-TZ Stage 3C** ✅ (IMPLEMENTED: 4 files changed)
+- [ ] 6. Stand smoke: проверить что review-items из операций отображаются — стенд запущен, smoke не автоматизирована
+- [ ] 7. Stand smoke: confirm с пустым payload — same
+- [ ] 8. Stand smoke: навигация в каталог по клику — same
+- [ ] 9. Regression: Angular build passed ✅ — legacy temporary-items не сломаны
+- [ ] 10. Final acceptance review complete — см. отчёт ниже
 
 ---
 

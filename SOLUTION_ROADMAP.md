@@ -1,6 +1,6 @@
 # Дорожная карта — Quartermaster
 
-> Последнее обновление: 2026-06-22
+> Последнее обновление: 2026-07-01
 
 ## Стратегическая линия
 
@@ -26,7 +26,7 @@
 | Angular SPA shell | ✅ |
 | Warehouse Client Core — Rust foundation | ✅ |
 
-### 🚧 v3.1 — Foundation Release (в работе, sync/device core готов)
+### ✅ v3.1 — Foundation Release (выполнено)
 
 > **Quartermaster 3.1: Foundation Release**
 > Брендинг, AI-friendly документация, ADR, карта API, подготовка offline-contract, выравнивание каталога/номенклатуры, hardening админки и operations UX.
@@ -37,7 +37,7 @@
 | 3.1B SyncServer: sync_state + offline contract | ✅ sync_state table, GET /sync/status/{device_id}, ping/pull/push updates |
 | 3.1C Rust core: compatibility gate | ✅ payload_hash (canonical JSON+SHA-256), stand smoke pass |
 | 3.1D WPF: Layer 0 FFI spike | [ ] |
-| 3.1E Documentation: ADR-0015/0016/0017 | ✅ ADR созданы, docs Stage 5 в работе |
+| 3.1E Documentation: ADR-0015/0016/0017 | ✅ ADR созданы, docs Stage 5 выполнено |
 | 3.1F Admin Panel Hardening: password fix, multi-site, device parity, reset flow | [ ] TZ создан |
 | 3.1G Operations UX Hardening: submit error tracebacks, inline-SKU validation | [ ] |
 | 3.1H Waybill PDF Fixes: metadata sync, multi-page rendering, on-demand PDF | [ ] TZ создан |

@@ -17,7 +17,7 @@
 - [x] 7. Stage 4: Angular — `applyBatch` с поддержкой merge
 - [x] 8. Unit/component tests (Angular build OK, 7.3s, 0 errors)
 - [x] 9. SyncServer unit tests (pytest tests/test_catalog_batch_merge.py 5/5 passed)
-- [ ] 10. Stand smoke tests (реальное слияние через Angular UI) — ⚠️ SKIPPED: backend end-to-end confirmed via Playwright evaluate (create x2, merge, deactivate — все 200, PG подтверждает), UI-автоматизация заблокирована pre-existing проблемой дерева номенклатуры (новые ТМЦ не появляются в UI; /bff/api/v1/catalog/items/{id} → 404 для свежих id). Отдельный отчёт-исследование оформляется отдельно.
+- [x] 10. Stand smoke tests (реальное слияние через Angular UI) — ✅ Playwright-спека `e2e/regression/merge-batch.smoke.spec.ts` проходит (run5: `1 passed`, 16.8s). Полный flow: seed 2 ТМЦ (category_id=65 «Канцелярские товары») → expand категории → выбрать source → кнопка «Слияние» → модалка → поиск target → submit «Слияние ТМЦ» → apply-all (window.confirm auto-accept через `page.on('dialog')`) → reload → source деактивирован. PG подтверждает: src/tgt `is_active=f`. Предыдущий «UI-блокер» оказался цепочкой багов в самой спеке (wrong category_id=41 вместо 65; не раскрыт правильный path дерева; локатор модалки на host с height:0 вместо `.modal-overlay`; класс `.search-result-item` вместо `.search-result`; авто-дисмисс `window.confirm()` Playwright'ом без `page.on('dialog')`) — код-бага в MERGE_BATCH нет.
 - [ ] 11. Regression checks (Django SSR merge НЕ сломан, create/update/delete НЕ сломаны)
 - [ ] 12. Documentation updated
 - [ ] 13. Final acceptance review complete

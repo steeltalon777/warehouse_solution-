@@ -221,21 +221,38 @@ reset-django-admin: ## Сбросить Django superuser до admin/admin123
 
 test-e2e: ## Запустить Playwright E2E-тесты в Docker
 	@echo "$(YELLOW)🧪 Запуск Playwright E2E-тестов...$(NC)"
+	@docker compose up -d postgres syncserver warehouse_web angular
 	@echo "$(YELLOW)⏳ Ожидание готовности стенда...$(NC)"
-	@for i in 1 2 3 4 5 6 7 8 9 10; do \
-		curl -s --max-time 5 http://localhost:8001/healthz/ > /dev/null 2>&1 && break; \
+	@ready=0; \
+	for i in 1 2 3 4 5 6 7 8 9 10; do \
+		if curl -fsS --max-time 5 http://localhost:8001/healthz/ > /dev/null 2>&1; then \
+			ready=1; \
+			break; \
+		fi; \
 		echo "  Waiting for Warehouse_web..."; \
 		sleep 3; \
-	done
-	@for i in 1 2 3 4 5; do \
-		curl -s --max-time 5 http://localhost:8000/api/v1/health > /dev/null 2>&1 && break; \
+	done; \
+	if [ $$ready -ne 1 ]; then \
+		echo "$(RED)❌ Warehouse_web did not become ready$(NC)"; \
+		exit 1; \
+	fi
+	@ready=0; \
+	for i in 1 2 3 4 5 6 7 8 9 10; do \
+		if curl -fsS --max-time 5 http://localhost:8000/api/v1/health > /dev/null 2>&1; then \
+			ready=1; \
+			break; \
+		fi; \
 		echo "  Waiting for SyncServer..."; \
 		sleep 3; \
-	done
+	done; \
+	if [ $$ready -ne 1 ]; then \
+		echo "$(RED)❌ SyncServer did not become ready$(NC)"; \
+		exit 1; \
+	fi
 	@echo "$(GREEN)✅ Стенд готов, запуск тестов...$(NC)"
 	@docker compose run --rm \
 		-e CI=true \
-		-e E2E_BASE_URL=http://warehouse_web:8001 \
+		-e E2E_BASE_URL=http://warehouse-web:8001 \
 		-e E2E_SYNC_HEALTH_URL=http://syncserver:8000/api/v1/health \
 		playwright \
 		npx playwright test --config=e2e/playwright.config.ts
@@ -243,8 +260,13 @@ test-e2e: ## Запустить Playwright E2E-тесты в Docker
 
 test-e2e-report: ## Открыть HTML-отчёт Playwright
 	@echo "$(YELLOW)📊 Открытие Playwright отчёта...$(NC)"
-	@xdg-open Warehouse_frontend/playwright-report/index.html 2>/dev/null || \
-		echo "Отчёт: Warehouse_frontend/playwright-report/index.html"
+	@if [ -f Warehouse_frontend/playwright-html-report/index.html ]; then \
+		xdg-open Warehouse_frontend/playwright-html-report/index.html 2>/dev/null || \
+			echo "Отчёт: Warehouse_frontend/playwright-html-report/index.html"; \
+	else \
+		echo "$(RED)❌ Отчёт не найден: Warehouse_frontend/playwright-html-report/index.html$(NC)"; \
+		exit 1; \
+	fi
 
 test-e2e-headed: ## Запустить Playwright в headed-режиме (только локально)
 	@echo "$(YELLOW)🧪 Запуск Playwright в headed-режиме...$(NC)"

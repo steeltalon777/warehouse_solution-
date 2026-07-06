@@ -5,6 +5,7 @@
 - `AGENTS.md` - workspace agent contract.
 - `ARCHITECTURE.md` - current architecture and ownership.
 - `INDEX.md` - navigation and verification commands.
+- `.github/workflows/e2e-tests.yml` - GitHub Actions Playwright E2E pipeline.
 - `SOLUTION_ROADMAP.md` - priority roadmap.
 - `Functional and WorkLogik.md` - canonical functional requirements.
 
@@ -16,6 +17,7 @@
 ### Active Technical Assignments
 
 - `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md` - transport hardening.
+- `docs/TZ-PLAYWRIGHT_PIPELINE_INTEGRATION.md` - Playwright pipeline integration.
 - `docs/TZ-NOMENCLATURE_BATCH_CATALOG_CRUD.md` - batch catalog CRUD.
 - `docs/TZ-SPA_OPERATIONS_ACCEPTANCE_AND_LOST_ASSETS.md` - SPA acceptance + lost assets.
 - `docs/TZ-ISSUED_REPOSITORY_BACKEND_CONTRACT.md` - SyncServer + BFF contract for the issue repository (categories, tree, register math).
@@ -55,6 +57,7 @@
 - `Warehouse_frontend/AGENTS.md` - Angular shell rules.
 - `Warehouse_frontend/docs/nomenculature_plan.md` - nomenclature Angular plan.
 - `Warehouse_frontend/package.json` - frontend scripts.
+- `Warehouse_frontend/e2e/` - Playwright specs and helpers.
 - `Warehouse_frontend/src/` - frontend source.
 
 ## Warehouse_client_core

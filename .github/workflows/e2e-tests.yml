@@ -1,0 +1,125 @@
+name: E2E Tests
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    env:
+      CI: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify Docker Compose
+        run: docker compose version
+
+      - name: Create CI env file
+        run: |
+          cat > .env <<'EOF'
+          POSTGRES_DB=warehouse
+          POSTGRES_USER=warehouse_user
+          POSTGRES_PASSWORD=warehouse_pass
+          DATABASE_URL=postgresql://warehouse_user:warehouse_pass@postgres:5432/warehouse
+          DJANGO_ENV=development
+          DJANGO_SETTINGS_MODULE=config.settings
+          SECRET_KEY=ci-not-for-production
+          DEBUG=True
+          ALLOWED_HOSTS=127.0.0.1,localhost,warehouse_web,warehouse-web
+          DB_ENGINE=django.db.backends.postgresql
+          DB_NAME=warehouse
+          DB_USER=warehouse_user
+          DB_PASSWORD=warehouse_pass
+          DB_HOST=postgres
+          DB_PORT=5432
+          SYNC_SERVER_URL=http://syncserver:8000/api/v1
+          SYNC_ROOT_USER_TOKEN=
+          SYNC_DEVICE_TOKEN=
+          FRONTEND_MODE=dev
+          FRONTEND_DEV_SERVER_URL=http://angular:4200
+          LOG_LEVEL=INFO
+          LOG_FORMAT=console
+          E2E_USERNAME_ROOT=admin
+          E2E_PASSWORD_ROOT=admin123
+          E2E_USERNAME_CHIEF_STORAGEKEEPER=chief_storagekeeper
+          E2E_PASSWORD_CHIEF_STORAGEKEEPER=089786
+          E2E_USERNAME_BUH_OBSERVER=buh_observer
+          E2E_PASSWORD_BUH_OBSERVER=089786
+          E2E_USERNAME_STOREKEEPER=aksha
+          E2E_PASSWORD_STOREKEEPER=089786
+          E2E_USERNAME_SPA=aksha
+          E2E_PASSWORD_SPA=089786
+          EOF
+
+      - name: Start database and SyncServer
+        run: docker compose up -d --build postgres syncserver
+
+      - name: Bootstrap SyncServer tokens
+        run: |
+          docker compose exec -T syncserver python -m alembic upgrade head
+          docker compose exec -T syncserver python scripts/bootstrap_root.py | tee bootstrap.log
+          ROOT_TOKEN="$(grep 'SYNC_ROOT_USER_TOKEN=' bootstrap.log | tail -n 1 | cut -d= -f2)"
+          DEVICE_TOKEN="$(grep 'SYNC_DEVICE_TOKEN=' bootstrap.log | tail -n 1 | cut -d= -f2)"
+
+          test -n "$ROOT_TOKEN"
+          test -n "$DEVICE_TOKEN"
+
+          grep -v '^SYNC_ROOT_USER_TOKEN=' .env | grep -v '^SYNC_DEVICE_TOKEN=' > .env.ci
+          mv .env.ci .env
+          {
+            printf 'SYNC_ROOT_USER_TOKEN=%s\n' "$ROOT_TOKEN"
+            printf 'SYNC_DEVICE_TOKEN=%s\n' "$DEVICE_TOKEN"
+          } >> .env
+
+      - name: Start Django, Angular, and Playwright
+        run: docker compose up -d --build warehouse_web angular playwright
+
+      - name: Prepare Django app state
+        run: |
+          docker compose exec -T warehouse_web python manage.py migrate
+          docker compose exec -T warehouse_web python manage.py shell -c "from django.contrib.auth.models import User; u, _ = User.objects.get_or_create(username='admin'); u.set_password('admin123'); u.is_superuser = True; u.is_staff = True; u.is_active = True; u.email = 'admin@warehouse.local'; u.save(); print('Django superuser admin reset to default')"
+
+      - name: Show stand status
+        run: make status
+
+      - name: Run Playwright tests
+        run: make test-e2e
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: Warehouse_frontend/playwright-html-report/
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Upload Playwright test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: Warehouse_frontend/test-results/
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Show Docker logs on failure
+        if: failure()
+        run: docker compose logs --no-color syncserver warehouse_web angular
+
+      - name: Stop containers
+        if: always()
+        run: docker compose down -v

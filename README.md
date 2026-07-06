@@ -73,7 +73,7 @@ plans/                  Working plans
 |---|---|
 | `SyncServer/` | `python -m pytest` |
 | `Warehouse_web/` | `python manage.py test` |
-| `Warehouse_frontend/` | `npm run build` once Angular scripts exist |
+| `Warehouse_frontend/` | `npm run build`; `make test-e2e` for Docker-backed Playwright E2E |
 | `Warehouse_client_core/` | `cargo fmt --all -- --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace` once Rust workspace exists |
 | `WarehouseDesktop/` | `dotnet test WarehouseDesktop.sln` when touched |
 | `WarehouseMobile/` | `gradlew.bat test` when touched |
@@ -94,6 +94,7 @@ plans/                  Working plans
 - [INDEX.md](INDEX.md) - navigation
 - [AI_CONTEXT.md](AI_CONTEXT.md) - agent rules
 - [AI_ENTRY_POINTS.md](AI_ENTRY_POINTS.md) - source entry points
+- [.github/workflows/e2e-tests.yml](.github/workflows/e2e-tests.yml) - GitHub Actions Playwright E2E pipeline
 - [API_MAP.md](API_MAP.md) - SyncServer endpoint map
 - [SOLUTION_ROADMAP.md](SOLUTION_ROADMAP.md) - priority roadmap
 - [docs/adr/0011-django-syncserver-internal-transport-hardening.md](docs/adr/0011-django-syncserver-internal-transport-hardening.md) - Warehouse 3.0 internal transport decision

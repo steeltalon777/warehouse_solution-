@@ -40,6 +40,7 @@ This file defines how AI agents should reason about this workspace.
 - Backend changes: run `python -m pytest` in `SyncServer/`.
 - Django changes: run `python manage.py test` in `Warehouse_web/`.
 - Angular changes: run `npm run build` in `Warehouse_frontend/` once Angular scripts exist.
+- Frontend browser-flow or CI-parity checks: run `make test-e2e` from the workspace root.
 - Rust core changes: run `cargo fmt`, `cargo clippy`, and `cargo test` once the workspace exists.
 - Desktop/mobile changes: run the project-specific test command from `AGENTS.md`.
 

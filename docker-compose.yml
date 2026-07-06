@@ -82,6 +82,10 @@ services:
       timeout: 5s
       retries: 6
       start_period: 15s
+    networks:
+      default:
+        aliases:
+          - warehouse-web
 
   angular:
     build: ./Warehouse_frontend
@@ -108,17 +112,21 @@ services:
     working_dir: /app
     volumes:
       - ./Warehouse_frontend:/app
-      - /app/node_modules
-      - playwright_report:/app/playwright-report
-      - playwright_test_results:/app/test-results
+      - ./Warehouse_frontend/node_modules:/app/node_modules:ro
     environment:
       - CI=${CI:-true}
-      - E2E_BASE_URL=http://warehouse_web:8001
+      - E2E_BASE_URL=http://warehouse-web:8001
       - E2E_SYNC_HEALTH_URL=http://syncserver:8000/api/v1/health
       - E2E_USERNAME_ROOT=${E2E_USERNAME_ROOT:-admin}
       - E2E_PASSWORD_ROOT=${E2E_PASSWORD_ROOT:-admin123}
-      - E2E_USERNAME_SPA=${E2E_USERNAME_SPA:-test_spa_user}
-      - E2E_PASSWORD_SPA=${E2E_PASSWORD_SPA:-test_spa_password}
+      - E2E_USERNAME_SPA=${E2E_USERNAME_SPA:-aksha}
+      - E2E_PASSWORD_SPA=${E2E_PASSWORD_SPA:-089786}
+      - E2E_USERNAME_CHIEF=${E2E_USERNAME_CHIEF:-chief_storagekeeper}
+      - E2E_PASSWORD_CHIEF=${E2E_PASSWORD_CHIEF:-089786}
+      - E2E_USERNAME_BUH_OBSERVER=${E2E_USERNAME_BUH_OBSERVER:-buh_observer}
+      - E2E_PASSWORD_BUH_OBSERVER=${E2E_PASSWORD_BUH_OBSERVER:-089786}
+      - E2E_USERNAME_STOREKEEPER=${E2E_USERNAME_STOREKEEPER:-aksha}
+      - E2E_PASSWORD_STOREKEEPER=${E2E_PASSWORD_STOREKEEPER:-089786}
     depends_on:
       warehouse_web:
         condition: service_healthy
@@ -130,5 +138,3 @@ services:
 
 volumes:
   postgres_data:
-  playwright_report:
-  playwright_test_results:

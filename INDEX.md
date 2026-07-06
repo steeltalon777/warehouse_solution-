@@ -24,6 +24,7 @@
 | Django catalog/BFF work | `Warehouse_web/apps/catalog/` |
 | Django BFF endpoints | `Warehouse_web/apps/bff_api/` |
 | Angular shell | `Warehouse_frontend/` |
+| Playwright E2E workflow | `.github/workflows/e2e-tests.yml` |
 | Offline core plan | `Warehouse_client_core/docs/Core_plan` |
 | Desktop future client | `WarehouseDesktop/` |
 | Mobile future client | `WarehouseMobile/` |
@@ -34,7 +35,7 @@
 |---|---|
 | `SyncServer/` | `python -m pytest` |
 | `Warehouse_web/` | `python manage.py test` |
-| `Warehouse_frontend/` | `npm run build` once Angular scripts exist |
+| `Warehouse_frontend/` | `npm run build`; `make test-e2e` for Docker-backed Playwright E2E |
 | `Warehouse_client_core/` | `cargo test --workspace` once Rust workspace exists |
 | `WarehouseDesktop/` | `dotnet test WarehouseDesktop.sln` when touched |
 | `WarehouseMobile/` | `gradlew.bat test` when touched |

@@ -24,6 +24,8 @@
 - `docs/TZ-ISSUED_REPOSITORY_FRONTEND_WORKSPACE.md` - 40/60 repository workspace, sidebar entry, operation modal prefill.
 - `docs/TZ-DOCUMENT_PDF_RENDERING_AND_UI.md` - PDF rendering.
 - `docs/TZ-CATALOG_CREATED_BY_UPDATED_BY.md` - catalog audit fields.
+- `docs/TZ-OPERATIONS_FORM_REWORK_AND_VALIDATION.md` - operation form rework, restore endpoint, readonly mode, SKU removal, batch error.
+- `docs/TZ-OPERATIONS_FORM_REWORK_FOLLOWUP.md` - backend tests (restore + operation_type) + e2e SKU adaptation.
 
 ## SyncServer
 

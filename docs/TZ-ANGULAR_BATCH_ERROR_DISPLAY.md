@@ -1,5 +1,8 @@
 # TZ: Отображение ошибок batch-операций каталога в Angular
 
+> **Status: DEPRECATED** — включено в [`docs/TZ-OPERATIONS_FORM_REWORK_AND_VALIDATION.md`](./TZ-OPERATIONS_FORM_REWORK_AND_VALIDATION.md) (Stage 2C).  
+> **Date:** 2026-07-08
+
 ## Execution Strategy
 
 - [ ] 🟡 Sequential execution recommended

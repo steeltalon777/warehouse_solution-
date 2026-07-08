@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-08
 **Status:** validated
-**Source TZ:** `docs/TZ-V3.1I_WAYBILL_PAGINATION_AND_SYNC_HARDENING.md` (rev. 2)
+**Source TZ:** `docs/TZ-V3.1I_WAYBILL_PAGINATION_AND_SYNC_HARDENING.md` (rev. 3)
 **Pre-fix reality:** V3.1H had H1 (auto-regen on update) but **no waybill on create**, which meant the storekeeper could not see any draft document for a freshly created operation. The first "Накладная" click returned 404 until they edited something.
 
 ## Pre-conditions
@@ -93,20 +93,17 @@ POST /bff/api/v1/documents/operations/<op_id>/waybill/open
 
 ## Негативные сценарии
 
-### N1. EXPENSE draft → нет накладной
+### N1. ADJUSTMENT draft → нет накладной (служебная операция)
 
-Создать `EXPENSE` черновик (2 строки).
-- До: `GET /api/v1/documents/operations/<op_id>/documents` → 0 docs.
-- UI «Накладная» → сообщение «для этой операции накладная будет сформирована при подтверждении».
-- При submit → генерируется `act` (рендерится в следующих TZ, пока out of scope).
+Создать `ADJUSTMENT` черновик (2 строки).
+- `GET /api/v1/documents/operations/<op_id>/documents` → 0 docs.
+- UI «Накладная» → сообщение «для этой операции накладная не предусмотрена (корректировка)».
+- При submit → создаётся финальный `act` (только root/chief).
 
-### N2. WRITE_OFF draft → нет накладной
+### N2. RECEIVE/EXPENSE/WRITE_OFF draft → есть накладная (rev. 3)
 
-Аналогично N1, но `WRITE_OFF`.
-
-### N3. RECEIVE draft → нет накладной
-
-Аналогично, но `RECEIVE`. При submit → `acceptance_certificate`.
+- `GET /api/v1/documents/operations/<id>/documents?document_type=waybill` → 1 draft.
+- При submit → draft waybill войдируется, финальный `acceptance_certificate` (RECEIVE) или `act` (EXPENSE/WRITE_OFF) создаётся с актуальным payload.
 
 ### N4. DB-ошибка в генерации waybill → operation не падает
 
@@ -120,10 +117,10 @@ POST /bff/api/v1/documents/operations/<op_id>/waybill/open
 - ✅ **A1 → I1+I2+I4:** заголовок сверху, подпись внизу, многостраничная накладная без разрывов, hard-cap.
 - ✅ **A2 → I1:** `<h1>` и `.header-lines` не отрываются от таблицы.
 - ✅ **A3 → I1:** подпись прижата к низу flex-layout'ом.
-- ✅ **A4 → I3:** накладная появляется сразу при create черновика для MOVE/ISSUE/ISSUE_RETURN.
+- ✅ **A4 → I3 (rev. 3):** накладная появляется сразу при create черновика для всех операций движения ТМЦ (MOVE/ISSUE/ISSUE_RETURN/RECEIVE/EXPENSE/WRITE_OFF). ADJUSTMENT (служебная) — без накладной.
 - ✅ **Сохранение количества:** payload строится из `operation.lines` → `payload.lines[i].quantity` соответствует черновику.
 - ✅ **Update sync:** H1 (rev. 2 helper) обновляет накладную при каждом изменении.
-- ✅ **Blocker #1 закрыт:** EXPENSE/WRITE_OFF не получают draft-документ → submit создаёт act с актуальным payload.
+- ✅ **rev. 3:** Все операции движения ТМЦ (MOVE/ISSUE/ISSUE_RETURN/RECEIVE/EXPENSE/WRITE_OFF) получают draft waybill при create/update. ADJUSTMENT (служебная) — без draft. При submit draft waybills войдируются для не-waybill финалов.
 
 ## Ожидаемые результаты (evidence)
 

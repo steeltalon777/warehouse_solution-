@@ -1,6 +1,6 @@
 # TZ: V3.1I — Waybill Pagination & Draft Sync Hardening
 
-**Date:** 2026-07-08 (rev. 2: 2026-07-08 после architect review)
+**Date:** 2026-07-08 (rev. 2: 2026-07-08 после architect review; rev. 3: 2026-07-08 — коррекция draft-карты)
 **Based on:** пользовательские жалобы от 08.07.2026 (накладная «залезает» на вторую страницу, подпись не закреплена внизу, заголовок не закреплён сверху, количество позиций рассинхронизировано с черновиком), аудит `docs/TZ-V3.1H_WAYBILL_PDF_FIXES.md` (Final acceptance не закрыт), `Functional and WorkLogik.md` §VII, `docs/reviews/architecture-review-v3.1i-waybill-pagination.md`.
 **Status:** Ready for executor (rev. 2 — все блокеры и предупреждения ревью закрыты)
 **Branch:** `dev` (только здесь)
@@ -10,6 +10,7 @@
 
 | # | Источник | Что изменено | Где в TZ |
 |---|---|---|---|
+| 🔵 rev.3 | User (post-implementation review) | **Расширение draft-карты:** `DRAFT_DOCUMENT_TYPE_BY_OPERATION` теперь включает RECEIVE/EXPENSE/WRITE_OFF (все → waybill). ADJUSTMENT остаётся вне карты как служебная операция. Обоснование: draft и final могут быть разных типов (`_find_reusable_document` фильтрует по `document_type`); I3.3 уже войдирует draft waybills при submit для не-waybill финалов. Blocker #1 (rev. 2) снимается — он основывался на ошибочной посылке «draft = final тип». | Stage I3 (I3.1), §VII, user_scenario |
 | 🔴 #1 | Review blocker | Draft-карта сужена до `{"MOVE":"waybill","ISSUE":"waybill","ISSUE_RETURN":"waybill"}` — убраны EXPENSE/WRITE_OFF/RECEIVE/ADJUSTMENT. Обоснование: draft `act` не рендерится Django + на submit при `auto_finalize=True` `_find_reusable_document` финализирует осиротевший draft in-place без пересборки payload → потеря правок черновика. | Stage I3 (I3.1, I3.2) |
 | 🟡 #2 | Review warning | H1 в `update_operation` теперь тоже идёт через `draft_document_type_for_operation(...)` с guard `if document_type:` — устранена create-vs-update дивергенция. | Stage I3 (I3.3) |
 | 🟡 #3 | Review warning | `available_height_first_page_mm` снижен с 189 до **170 mm** (учитывает extra-signatures на однолистовых MOVE/ISSUE/ISSUE_RETURN/EXPENSE/WRITE_OFF, ~37 mm под «Кладовщик + extra»); добавлен параметр `extra_signatures_count` для явной резервации; `continuation` оставлен 210 mm. | Stage I2 (I2.4) |
@@ -356,17 +357,17 @@ def paginate_waybill_lines(
 В `SyncServer/app/services/document_service.py` добавить:
 
 ```python
-# rev. 2: только типы, чей финальный документ тоже waybill.
-# EXPENSE/WRITE_OFF исключены: финальный "act" НЕ рендерится Django-рендерером
-# (services.py:110-111), и попадание draft "act" в submit привело бы к
-# _find_reusable_document finalizing-у осиротевшего draft без пересборки
-# payload → потеря правок черновика (см. architecture-review-v3.1i #1).
-# RECEIVE/ADJUSTMENT не имеют draft-документа: финальный acceptance_certificate
-# (RECEIVE) и act (ADJUSTMENT) появятся при submit.
+# rev. 3: расширено до всех операций движения ТМЦ кроме корректировки.
+# ADJUSTMENT — служебная операция (см. Functional §II.5.5 + OPERATIONS_SCREEN_SCENARIOS.md:530,1285-1286).
+# ADJUSTMENT не имеет draft-документа (служебная операция, см. §VII п.1).
+# RECEIVE получает draft waybill; финальный acceptance_certificate появится при submit.
 DRAFT_DOCUMENT_TYPE_BY_OPERATION: dict[str, DocumentType] = {
     "MOVE": "waybill",
     "ISSUE": "waybill",
     "ISSUE_RETURN": "waybill",
+    "RECEIVE": "waybill",
+    "EXPENSE": "waybill",
+    "WRITE_OFF": "waybill",
 }
 
 
@@ -381,6 +382,8 @@ def draft_document_type_for_operation(operation_type: str) -> DocumentType | Non
 3. На `submit_operation` для EXPENSE submit-карта говорит `act`; `generate_from_operation(document_type="act", auto_finalize=True)` при `status="submitted"` идёт в `_find_reusable_document("act")` (document_service.py:317–346), находит осиротевший draft `act` от create и **финализирует его in-place без пересборки payload** (lines 341–345) → финальный акт отражает состояние **на момент создания**, игнорируя все правки черновика. Плюс draft-waybill'ы от H1-апдейтов не войдируются (void фильтрует по типу) → копятся.
 4. MOVE/ISSUE/ISSUE_RETURN → их финальный документ — waybill; draft и final одного типа, переход чистый.
 5. H1 в `update_operation` (`operations_service.py:766`) уже дефолтит `document_type="waybill"` (document_service.py:150) → сужение карты согласовано с H1.
+6. **(rev. 3)** ADJUSTMENT исключён как служебная операция (Functional §II.5.5, OPERATIONS_SCREEN_SCENARIOS.md:1285-1286) — накладной не имеет по определению. Используется в temporary_items_resolution_service / review_items_service / catalog_admin_service для служебных переносов.
+7. **(rev. 3)** RECEIVE/EXPENSE/WRITE_OFF получают draft waybill: draft и final разных типов, конфликта in-place finalization нет (`_find_reusable_document` фильтрует по `document_type`). I3.3 уже войдирует draft waybills при submit для не-waybill финалов.
 
 ### Задача I3.2: Подключить helper в create + update + submit (rev. 2 — закрыт warning #2)
 
@@ -477,8 +480,9 @@ H1 в `update_operation` тоже оборачивается в savepoint (см.
 
 ### Acceptance criteria I3 (rev. 2)
 
-- [ ] **blocker #1:** `draft_document_type_for_operation("EXPENSE")` возвращает `None`; то же для `"WRITE_OFF"`, `"RECEIVE"`, `"ADJUSTMENT"`.
-- [ ] **blocker #1:** `draft_document_type_for_operation("MOVE")` возвращает `"waybill"`; то же для `"ISSUE"`, `"ISSUE_RETURN"`.
+- [ ] **rev. 3:** `draft_document_type_for_operation("ADJUSTMENT")` возвращает `None` (единственная операция без draft).
+- [ ] **rev. 3:** `draft_document_type_for_operation("RECEIVE"|"EXPENSE"|"WRITE_OFF"|"MOVE"|"ISSUE"|"ISSUE_RETURN")` возвращает `"waybill"`.
+- [ ] ~~blocker #1 (rev. 2, снят в rev. 3)~~: опасность in-place finalization неприменима, т.к. draft=waybill и final=act/acceptance_certificate — разные `document_type`, `_find_reusable_document` фильтрует по типу.
 - [ ] Создать draft MOVE — `GET /documents/operations/<id>/documents?document_type=waybill` сразу возвращает 1 документ со статусом `draft` и непустыми `payload.lines` (попадает в `get_operation_by_id` после `create_operation` + line-loop, не до).
 - [ ] Создать draft RECEIVE → 0 draft-документов (RECEIVE не в карте).
 - [ ] Создать draft EXPENSE → 0 draft-документов (EXPENSE не в карте после rev. 2).
@@ -488,6 +492,11 @@ H1 в `update_operation` тоже оборачивается в savepoint (см.
 - [ ] **warning #9:** Точка вставки проверена — после line 532, `created_by_user_id=user_id` пробрасывается (audit parity с `submit_operation`).
 - [ ] **warning #10:** submit EXPENSE → draft waybills (если были) войдированы (или явно зафиксировано «не войдируются, BFF фильтрует»).
 - [ ] `python -m pytest tests/test_documents_routes.py tests/test_operations_service_update.py` — pass.
+- [ ] **(rev. 3)** Создать draft RECEIVE — `GET /documents/operations/<id>/documents?document_type=waybill` возвращает 1 документ `draft`.
+- [ ] **(rev. 3)** Создать draft EXPENSE — аналогично RECEIVE, 1 waybill draft.
+- [ ] **(rev. 3)** Создать draft WRITE_OFF — аналогично, 1 waybill draft.
+- [ ] **(rev. 3)** Создать draft ADJUSTMENT — 0 документов (служебная операция).
+- [ ] **(rev. 3)** Submit RECEIVE/EXPENSE/WRITE_OFF — draft waybills войдированы, финальный acceptance_certificate/act создан с актуальным payload.
 
 ---
 

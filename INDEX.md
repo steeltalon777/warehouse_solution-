@@ -74,6 +74,11 @@
 - `docs/TZ-DOCUMENT_PDF_RENDERING_AND_UI.md` - PDF rendering.
 - `docs/TZ-V3.1F_ADMIN_PANEL_HARDENING.md` - admin panel hardening (password bug, multi-site, device parity, reset flow).
 - `docs/TZ-V3.1G_OPERATIONS_UX_HARDENING.md` - operations UX hardening (submit errors, field-level propagation, PDF verification).
+- [TZ-V3.1I — Waybill Pagination & Draft Sync Hardening](TZ-V3.1I_WAYBILL_PAGINATION_AND_SYNC_HARDENING.md) (rev. 2, 2026-07-08) — 4 архитектурных дефекта накладной, план из 10 этапов (CSS-flexbox, динамическая пагинация, sync черновик↔накладная).
+
+### Architecture Reviews
+
+- [Architecture review — V3.1I waybill pagination](reviews/architecture-review-v3.1i-waybill-pagination.md) (2026-07-08) — ревью TZ-V3.1I rev. 1, 1 blocker + 11 warnings + 2 notes.
 
 ## Rules To Remember
 

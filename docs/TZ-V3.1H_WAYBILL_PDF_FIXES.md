@@ -22,7 +22,7 @@
 - [x] 6. Stage H3 tests: 8 existing tests pass; stand smoke: PDF served with `x-document-pdf-cache: miss` ✅
 - [x] 7. Integration: full flow draft → edit → render → PDF served 200 OK ✅
 - [x] 8. Regression: SyncServer 449 passed, Django 350 passed, Angular build OK ✅
-- [ ] 9. Final acceptance review — ожидает пользователя
+- [x] 9. Final acceptance review — ✅ closed via TZ-V3.1I (см. `docs/TZ-V3.1I_WAYBILL_PAGINATION_AND_SYNC_HARDENING.md`, rev. 2 от 2026-07-08; все остаточные дефекты A1-A4 зафиксированы и реализуются поэтапно I1-I10)
 
 ---
 

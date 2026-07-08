@@ -86,6 +86,10 @@ See `docs/adr/0011-django-syncserver-internal-transport-hardening.md` and `docs/
 - Catalog domain ORM is removed from the Django catalog app; catalog data is SyncServer-backed.
 - Verification: `python manage.py test`.
 
+### Document rendering pipeline (rev. V3.1I)
+
+Waybill/act/acceptance_certificate metadata lives in SyncServer (`/api/v1/documents`); final binary is rendered on demand in `Warehouse_web` by `apps/documents/services.py` (Jinja2 → WeasyPrint, in-memory, Django cache TTL 1h, no PDF storage on disk). The V3.1I rev. 2 hardening keeps the layout stable across multi-page waybills: CSS uses a **flexbox `.page` container** so the header sticks to the top and the signature block pins to the bottom of every page (I1), while `paginate_waybill_lines` does a **dynamic, content-height-aware** split with an `extra_signatures_count` budget and active row hard-caps to keep WeasyPrint geometry in sync with the Python estimate (I2). See `docs/TZ-V3.1I_WAYBILL_PAGINATION_AND_SYNC_HARDENING.md`.
+
 ### Warehouse_frontend
 
 - Role: Angular shell, currently the high-priority UI direction for nomenclature.

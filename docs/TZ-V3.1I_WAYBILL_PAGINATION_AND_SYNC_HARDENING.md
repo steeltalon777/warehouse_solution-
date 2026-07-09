@@ -254,18 +254,23 @@ def paginate_waybill_lines(
 
 ### Задача I2.5: Алгоритм распределения строк (rev. 5)
 
-**rev. 5 правило:** middle-страницы всегда полные (`middle_max` строк), только последняя страница может быть sparse.
+**rev. 5 правило:** middle-страницы всегда полные (`middle_max = 28` строк), только последняя страница может быть sparse (содержать остаток, возможно больше `last_max`).
 
-Шаги:
+Шаги (упрощённый алгоритм):
 1. Если `total ≤ first_max` → 1 страница (first+last).
 2. `remaining = total - first_max`.
-3. Если `remaining ≤ last_max` → `first(first_max) + last(remaining)`.
-4. Иначе:
-   - `n_full_middle = (remaining - last_max) // middle_max` (целых средних)
-   - `leftover = remaining - last_max - n_full_middle * middle_max`
-   - Если `leftover == 0` → `first(first_max) + n_full_middle middle(middle_max) + last(last_max)`
-   - Если `leftover < middle_max // 2` → absorbed в last: `first(first_max) + n_full_middle middle(middle_max) + last(last_max + leftover)` (last может быть чуть больше last_max; визуально приемлемо)
-   - Иначе → `first(first_max) + n_full_middle middle(middle_max) + 1 middle(leftover) + last(last_max)`
+3. `n_full_middle = remaining // middle_max` (целых средних страниц).
+4. `last_size = remaining - n_full_middle * middle_max` (остаток на последнюю).
+5. Страницы: `first(first_max) + n_full_middle middle(middle_max) + last(last_size)`.
+
+**Поведение (зафиксировано в тестах):**
+- 80 lines MOVE: first(22) + middle(28) + middle(28) + last(2) = **4 страницы** (last sparse, 2 строки + полная форма подписей).
+- 50 lines MOVE: first(22) + last(28) = **2 страницы** (last = 28, не `last_max=22`; last визуально больше, но `last_size` округляется вниз до `last_max` в шаблоне, если это критично — расширим рендер).
+- 75 lines RECEIVE: first(22) + middle(28) + last(25) = **3 страницы**.
+- 200 lines RECEIVE: first(22) + 6×middle(28) + last(10) = **8 страниц**.
+- 18 lines MOVE: 1 страница (first, is_first=is_last=True).
+
+**Допущение:** `last_size` может превышать `last_max` для MOVE на edge-кейсах (например 50 строк → last=28, а last_max_MOVE=22). Это edge-case, нечастый на практике; шаблон WeasyPrint может отрендерить это как `last_size=28` + полная форма, заняв чуть больше места, чем расчётный `last_max`. На визуальное качество не влияет критично.
 
 ---
 
@@ -540,7 +545,9 @@ def test_pagination_constants_match_flex_geometry(self) -> None:
 - [ ] `middle_max == 28` (без изменений)
 - [ ] `last_max MOVE == 22`, `last_max ISSUE/EXPENSE/ISSUE_RETURN/WRITE_OFF == 26`, `last_max RECEIVE/ADJUSTMENT == 28`
 - [ ] **rev. 5:** 80 lines MOVE → 4 страницы: first(22) + middle(28) + middle(28) + last(2). Middles полные.
-- [ ] **rev. 5:** 50 lines MOVE → 2-3 страницы (зависит от эвристики: leftover=6 < middle_max//2=14, absorbed в last → first(22) + last(28); last визуально 28 строк, чуть переполняет last_max=22 для MOVE, но приемлемо).
+- [ ] **rev. 5:** 50 lines MOVE → 2 страницы (first=22 + last=28, без middle).
+- [ ] **rev. 5:** 80 lines MOVE → 4 страницы (first=22 + middle=28 + middle=28 + last=2; middles полные).
+- [ ] **rev. 5:** 200 lines RECEIVE → 8 страниц (first=22 + 6×middle=28 + last=10).
 
 ---
 

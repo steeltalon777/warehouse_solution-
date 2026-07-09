@@ -1,6 +1,6 @@
 # TZ: V3.1I — Waybill Pagination & Draft Sync Hardening
 
-**Date:** 2026-07-08 (rev. 2: 2026-07-08 после architect review; rev. 3: 2026-07-08 — коррекция draft-карты; rev. 4: 2026-07-08 — активация plan B, exact-rows пагинация)
+**Date:** 2026-07-08 (rev. 2: 2026-07-08 после architect review; rev. 3: 2026-07-08 — коррекция draft-карты; rev. 4: 2026-07-08 — активация plan B; rev. 5: 2026-07-08 — first_max 23→22 (FULL_TITLE 50→60mm), middle pages always full 28)
 **Based on:** пользовательские жалобы от 08.07.2026 (накладная «залезает» на вторую страницу, подпись не закреплена внизу, заголовок не закреплён сверху, количество позиций рассинхронизировано с черновиком), аудит `docs/TZ-V3.1H_WAYBILL_PDF_FIXES.md` (Final acceptance не закрыт), `Functional and WorkLogik.md` §VII, `docs/reviews/architecture-review-v3.1i-waybill-pagination.md`.
 **Status:** Ready for executor (rev. 2 — все блокеры и предупреждения ревью закрыты)
 **Branch:** `dev` (только здесь)
@@ -10,6 +10,7 @@
 
 | # | Источник | Что изменено | Где в TZ |
 |---|---|---|---|
+| 🔵 rev.5 | User (empirical calibration) | **first_max 23→22:** FULL_TITLE_HEIGHT_MM 50→60mm (реальный полный заголовок с 3 строками реквизитов занимает 60mm, не 50mm). Подтверждено PDF-скриншотом кладовщика (08.07.2026): 1-я страница вмещает ровно 22 строки. **Алгоритм пагинации улучшен:** middle-страницы всегда полные (28 строк), только последняя может быть sparse. **Target caps (зафиксировано):** first=22, middle=28, last: MOVE=22, ISSUE/EXPENSE/ISSUE_RETURN/WRITE_OFF=26, RECEIVE/ADJUSTMENT=28. | Stage I2 (константы + алгоритм) |
 | 🔴 rev.4 | User (visual feedback) | **Активация plan B:** flexbox в WeasyPrint paged-media не работает — таблица съела всю высоту, подпись «Кладовщик» ушла на отдельную страницу. Переключаемся на **exact-rows**: 3 разных layout (first/middle/last) с жёстким ограничением строк, рассчитанным из физических mm-бюджетов. **MOVE-подписи расширены с 2 до 4 блоков** (Операцию разрешил + Водитель + Начальник базы + Груз принял). Короткий заголовок на middle/last страницах. RENDERER v2→v3. | Stage I1 (Plan B), I2 (rewrite), I4 |
 | 🔵 rev.3 | User (post-implementation review) | **Расширение draft-карты:** `DRAFT_DOCUMENT_TYPE_BY_OPERATION` теперь включает RECEIVE/EXPENSE/WRITE_OFF (все → waybill). ADJUSTMENT остаётся вне карты как служебная операция. Обоснование: draft и final могут быть разных типов (`_find_reusable_document` фильтрует по `document_type`); I3.3 уже войдирует draft waybills при submit для не-waybill финалов. Blocker #1 (rev. 2) снимается — он основывался на ошибочной посылке «draft = final тип». | Stage I3 (I3.1), §VII, user_scenario |
 | 🔴 #1 | Review blocker | Draft-карта сужена до `{"MOVE":"waybill","ISSUE":"waybill","ISSUE_RETURN":"waybill"}` — убраны EXPENSE/WRITE_OFF/RECEIVE/ADJUSTMENT. Обоснование: draft `act` не рендерится Django + на submit при `auto_finalize=True` `_find_reusable_document` финализирует осиротевший draft in-place без пересборки payload → потеря правок черновика. | Stage I3 (I3.1, I3.2) |
@@ -33,7 +34,7 @@
 
 - [ ] 0. Context verified — цепочка проверена, V3.1H не закрыл Final acceptance
 - [ ] 1. Stage I1: Exact-rows page layouts (rev. 4 — plan B activated, flexbox отменён) — 3 layout (first/middle/last), без flex, MOVE = 4 подписи на последней (**rev. 2: + DOCUMENT_RENDERER_VERSION bump**)
-- [ ] 2. Stage I2: Exact-rows pagination (rev. 4) — hard-cap строк из физических mm-бюджетов (**rev. 2: dynamic signature budget, hard-cap, +I4.3 consistency test**)
+- [ ] 2. Stage I2: Точная эвристика пагинации (**rev. 2: dynamic signature budget, hard-cap, +I4.3 consistency test; rev. 5: first_max 22 (FULL_TITLE 60mm), middle always full 28**)
 - [ ] 3. Stage I3: Sync накладной с черновиком (**rev. 2: карта сужена до MOVE/ISSUE/ISSUE_RETURN, savepoint, void-draft-at-submit, H1 через helper**)
 - [ ] 4. Stage I4: Unit-тесты пагинации и CSS (≥6 кейсов + rev. 2 consistency test)
 - [ ] 5. Stage I5: Integration-тест SyncServer — draft create → waybill существует → update lines → payload_hash меняется (**rev. 2: +EXPENSE/RECEIVE guards, +post-edit submit**)
@@ -207,7 +208,7 @@ A4 portrait, `@page margin 16/14/14mm` → `A4_INNER_HEIGHT_MM = 267`.
 | `ROW_HEIGHT_MM` | 8.5 (1 table row at DejaVu Sans 11pt + padding 2mm×2) |
 | `THEAD_HEIGHT_MM` | 10 |
 | `SHORT_TITLE_HEIGHT_MM` | 12 (one-line "Накладная № X" + bottom margin) |
-| `FULL_TITLE_HEIGHT_MM` | 50 (full title + 3 lines of requisites + margin) |
+| `FULL_TITLE_HEIGHT_MM` | 60 (rev. 5: 50→60, откалибровано по реальному PDF — полный заголовок + 3 строки реквизитов + margin занимает 60mm, не 50mm) |
 | `SIG_STOREKEEPER_MM` | 6 (one-line "Кладовщик: ____" + margin) |
 | `SIG_BLOCK_HEIGHT_MM` | 14 (label + signature line + hint) |
 | `SIG_BLOCK_DRIVER_MM` | 6 (single-line driver signature, no должность) |
@@ -218,7 +219,7 @@ Computed from the constants above:
 
 | Page type | Calculation | Result |
 |---|---|---|
-| First | `(267 - 50 - 10 - 6) // 8.5` | **23 rows** |
+| First | `(267 - 60 - 10 - 6) // 8.5` (rev. 5: FULL_TITLE 50→60) | **22 rows** |
 | Middle | `(267 - 12 - 10 - 6) // 8.5` | **28 rows** |
 | Last, MOVE (4 sigs incl. driver) | `(267 - 12 - 10 - 6 - 3*14 - 6) // 8.5` | **22 rows** |
 | Last, ISSUE/ISSUE_RETURN/EXPENSE (1 sig) | `(267 - 12 - 10 - 6 - 14) // 8.5` | **26 rows** |
@@ -250,6 +251,21 @@ def paginate_waybill_lines(
 ```
 
 (Implementation in services.py — already shipped in rev. 4 commit.)
+
+### Задача I2.5: Алгоритм распределения строк (rev. 5)
+
+**rev. 5 правило:** middle-страницы всегда полные (`middle_max` строк), только последняя страница может быть sparse.
+
+Шаги:
+1. Если `total ≤ first_max` → 1 страница (first+last).
+2. `remaining = total - first_max`.
+3. Если `remaining ≤ last_max` → `first(first_max) + last(remaining)`.
+4. Иначе:
+   - `n_full_middle = (remaining - last_max) // middle_max` (целых средних)
+   - `leftover = remaining - last_max - n_full_middle * middle_max`
+   - Если `leftover == 0` → `first(first_max) + n_full_middle middle(middle_max) + last(last_max)`
+   - Если `leftover < middle_max // 2` → absorbed в last: `first(first_max) + n_full_middle middle(middle_max) + last(last_max + leftover)` (last может быть чуть больше last_max; визуально приемлемо)
+   - Иначе → `first(first_max) + n_full_middle middle(middle_max) + 1 middle(leftover) + last(last_max)`
 
 ---
 
@@ -517,6 +533,14 @@ def test_pagination_constants_match_flex_geometry(self) -> None:
 - [ ] `test_waybill_html_middle_page_has_short_title` — page 2 HTML does NOT contain "Грузоотправитель".
 - [ ] `test_waybill_html_last_page_has_full_signature_move` — MOVE last page contains "Операцию разрешил" + "Водитель" + "Начальник базы" + "Груз принял".
 - [ ] `test_waybill_html_no_flexbox` — grep HTML/CSS, verify no `display: flex` in the rendered output (plan B is the source of truth now).
+
+### Acceptance criteria I4 (rev. 5 additions)
+
+- [ ] `first_max == 22` (после FULL_TITLE 50→60mm)
+- [ ] `middle_max == 28` (без изменений)
+- [ ] `last_max MOVE == 22`, `last_max ISSUE/EXPENSE/ISSUE_RETURN/WRITE_OFF == 26`, `last_max RECEIVE/ADJUSTMENT == 28`
+- [ ] **rev. 5:** 80 lines MOVE → 4 страницы: first(22) + middle(28) + middle(28) + last(2). Middles полные.
+- [ ] **rev. 5:** 50 lines MOVE → 2-3 страницы (зависит от эвристики: leftover=6 < middle_max//2=14, absorbed в last → first(22) + last(28); last визуально 28 строк, чуть переполняет last_max=22 для MOVE, но приемлемо).
 
 ---
 

@@ -1,6 +1,6 @@
 # TZ: V3.1I — Waybill Pagination & Draft Sync Hardening
 
-**Date:** 2026-07-08 (rev. 2: 2026-07-08 после architect review; rev. 3: 2026-07-08 — коррекция draft-карты)
+**Date:** 2026-07-08 (rev. 2: 2026-07-08 после architect review; rev. 3: 2026-07-08 — коррекция draft-карты; rev. 4: 2026-07-08 — активация plan B, exact-rows пагинация)
 **Based on:** пользовательские жалобы от 08.07.2026 (накладная «залезает» на вторую страницу, подпись не закреплена внизу, заголовок не закреплён сверху, количество позиций рассинхронизировано с черновиком), аудит `docs/TZ-V3.1H_WAYBILL_PDF_FIXES.md` (Final acceptance не закрыт), `Functional and WorkLogik.md` §VII, `docs/reviews/architecture-review-v3.1i-waybill-pagination.md`.
 **Status:** Ready for executor (rev. 2 — все блокеры и предупреждения ревью закрыты)
 **Branch:** `dev` (только здесь)
@@ -10,6 +10,7 @@
 
 | # | Источник | Что изменено | Где в TZ |
 |---|---|---|---|
+| 🔴 rev.4 | User (visual feedback) | **Активация plan B:** flexbox в WeasyPrint paged-media не работает — таблица съела всю высоту, подпись «Кладовщик» ушла на отдельную страницу. Переключаемся на **exact-rows**: 3 разных layout (first/middle/last) с жёстким ограничением строк, рассчитанным из физических mm-бюджетов. **MOVE-подписи расширены с 2 до 4 блоков** (Операцию разрешил + Водитель + Начальник базы + Груз принял). Короткий заголовок на middle/last страницах. RENDERER v2→v3. | Stage I1 (Plan B), I2 (rewrite), I4 |
 | 🔵 rev.3 | User (post-implementation review) | **Расширение draft-карты:** `DRAFT_DOCUMENT_TYPE_BY_OPERATION` теперь включает RECEIVE/EXPENSE/WRITE_OFF (все → waybill). ADJUSTMENT остаётся вне карты как служебная операция. Обоснование: draft и final могут быть разных типов (`_find_reusable_document` фильтрует по `document_type`); I3.3 уже войдирует draft waybills при submit для не-waybill финалов. Blocker #1 (rev. 2) снимается — он основывался на ошибочной посылке «draft = final тип». | Stage I3 (I3.1), §VII, user_scenario |
 | 🔴 #1 | Review blocker | Draft-карта сужена до `{"MOVE":"waybill","ISSUE":"waybill","ISSUE_RETURN":"waybill"}` — убраны EXPENSE/WRITE_OFF/RECEIVE/ADJUSTMENT. Обоснование: draft `act` не рендерится Django + на submit при `auto_finalize=True` `_find_reusable_document` финализирует осиротевший draft in-place без пересборки payload → потеря правок черновика. | Stage I3 (I3.1, I3.2) |
 | 🟡 #2 | Review warning | H1 в `update_operation` теперь тоже идёт через `draft_document_type_for_operation(...)` с guard `if document_type:` — устранена create-vs-update дивергенция. | Stage I3 (I3.3) |
@@ -31,8 +32,8 @@
 ## Execution Checklist
 
 - [ ] 0. Context verified — цепочка проверена, V3.1H не закрыл Final acceptance
-- [ ] 1. Stage I1: CSS hardening — заголовок сверху, подпись внизу, запрет разрыва внутри блочных элементов (**rev. 2: + DOCUMENT_RENDERER_VERSION bump, plan B**)
-- [ ] 2. Stage I2: Точная эвристика пагинации (**rev. 2: dynamic signature budget, hard-cap, +I4.3 consistency test**)
+- [ ] 1. Stage I1: Exact-rows page layouts (rev. 4 — plan B activated, flexbox отменён) — 3 layout (first/middle/last), без flex, MOVE = 4 подписи на последней (**rev. 2: + DOCUMENT_RENDERER_VERSION bump**)
+- [ ] 2. Stage I2: Exact-rows pagination (rev. 4) — hard-cap строк из физических mm-бюджетов (**rev. 2: dynamic signature budget, hard-cap, +I4.3 consistency test**)
 - [ ] 3. Stage I3: Sync накладной с черновиком (**rev. 2: карта сужена до MOVE/ISSUE/ISSUE_RETURN, savepoint, void-draft-at-submit, H1 через helper**)
 - [ ] 4. Stage I4: Unit-тесты пагинации и CSS (≥6 кейсов + rev. 2 consistency test)
 - [ ] 5. Stage I5: Integration-тест SyncServer — draft create → waybill существует → update lines → payload_hash меняется (**rev. 2: +EXPENSE/RECEIVE guards, +post-edit submit**)
@@ -129,218 +130,126 @@ Angular «Накладная» → BFF POST /bff/api/v1/documents/operations/<id
 
 ---
 
-## Stage I1: CSS hardening
+## Stage I1: Exact-rows page layouts (rev. 4 — plan B)
+
+**⚠ rev. 4 supersedes rev. 2/3:** flexbox layout from rev. 2/3 was replaced. WeasyPrint
+flexbox + page-break-before is not reliable for pinning the signature to the bottom of
+each page (confirmed by storekeeper bug report, 08.07.2026). New approach: 3 distinct
+HTML layouts with hard row caps computed from physical mm budgets.
 
 **Файл:** `Warehouse_web/apps/documents/templates/documents/waybill_pdf.html`
 
-### Задача I1.1: Заголовок зафиксирован сверху
+### Layout rules
 
-Добавить в CSS:
-```css
-h1 {
-  page-break-after: avoid;
-  break-after: avoid;
-}
+- **Page 1 (is_first, layout="first"):**
+  - Full title block: `<h1>Накладная № X</h1>` + Грузоотправитель + Грузополучатель + Основание
+  - Table with thead
+  - "Кладовщик: ____" (short, single line) at bottom
+- **Middle pages (is_first=False, is_last=False, layout="middle"):**
+  - Short title: only `<h1>Накладная № X</h1>` (no requisites)
+  - Table with thead (repeats)
+  - "Кладовщик: ____" (short) at bottom
+- **Last page (is_last=True, layout="last"):**
+  - Short title: only `<h1>Накладная № X</h1>`
+  - Table with thead
+  - Full signature form: "Кладовщик" + extra blocks by operation type (see I1.signatures)
 
-.header-lines {
-  page-break-after: avoid;
-  break-after: avoid;
-}
-```
+### Extra signatures on last page (rev. 4 update)
 
-**Семантика:** запрещает CSS-paged-media делать `page-break` сразу после h1 и header-lines — заголовок и реквизиты всегда едут вместе с первой строкой таблицы.
+| Operation type | Extra signature blocks |
+|---|---|
+| `MOVE` | 4: Операцию разрешил + Водитель (single line) + **Начальник базы** + **Груз принял** |
+| `ISSUE`, `ISSUE_RETURN`, `EXPENSE` | 1: "Получил" |
+| `WRITE_OFF` | 1: "Операцию разрешил" |
+| `RECEIVE`, `ADJUSTMENT`, `CORRECTION` | 0 (only Кладовщик) |
 
-### Задача I1.2: Подпись закреплена внизу страницы
+### Задача I1.1: Удалить flexbox CSS
 
-Заменить `.page { ... }` (строки 21–23, 124–192) на флекс-контейнер:
-```css
-@page {
-  size: A4 portrait;
-  margin: 16mm 14mm 14mm;
-}
+В `waybill_pdf.html`:
+- Убрать `.page { display: flex; min-height: ... }`
+- Убрать `.waybill-table-wrap { flex: 1 1 auto; min-height: 0 }`
+- Убрать `flex: 0 0 auto` из `.signature-block`
+- Добавить `.page { page-break-inside: avoid }` (новое — каждая страница-секция должна быть неразрывной)
+- Сохранить `page-break-before: always` на `.page + .page`
+- Сохранить `.waybill-table thead { display: table-header-group }` (thead повторяется)
+- Сохранить `.waybill-table tr { page-break-inside: avoid }` (строка не разрывается)
 
-.page {
-  display: flex;
-  flex-direction: column;
-  min-height: calc(297mm - 16mm - 14mm); /* A4 height minus top+bottom margins */
-}
+### Задача I1.2: 3 distinct HTML layouts
 
-.page > h1 { flex: 0 0 auto; }
-.page > .header-lines { flex: 0 0 auto; }
+Шаблон: `{% for page in pages %}<section class="page page--{{ page.layout }}">…</section>{% endfor %}`.
+Содержимое каждой секции зависит от `page.layout` / `page.is_first` / `page.is_last`. Подробный HTML — в waybill_pdf.html (коммит rev. 4).
 
-.waybill-table-wrap {
-  flex: 1 1 auto;       /* заполняет всё доступное место */
-  min-height: 0;        /* важно для flex-вложенности */
-}
+### Acceptance criteria I1 (rev. 4)
 
-.signature-block {
-  flex: 0 0 auto;
-  page-break-inside: avoid;
-  break-inside: avoid;
-  margin-top: 4mm;
-}
-```
-
-В HTML:
-```html
-<section class="page">
-  <h1>{{ title }}</h1>
-  {% if page.is_first %}<div class="header-lines">...</div>{% endif %}
-  <div class="waybill-table-wrap">
-    <table class="waybill-table">...</table>
-  </div>
-  <div class="signature-block">Кладовщик: ...</div>
-  {% if page.is_last and extra_signatures %}{% for sig in extra_signatures %}<div class="signature-block extra">...</div>{% endfor %}{% endif %}
-  {% if total_pages > 1 %}<div class="sheet-counter">Лист {{ page.page_number }} из {{ page.total_pages }}</div>{% endif %}
-</section>
-```
-
-**Семантика:** Flexbox-раскладка принудительно растягивает `.waybill-table-wrap` на всю высоту, а блок подписи «прилипает» к низу. WeasyPrint корректно рендерит flex-контейнеры в paged-media.
-
-### Задача I1.3: Запрет разрыва внутри tr/thead
-
-Уже есть, проверить:
-```css
-.waybill-table tr { page-break-inside: avoid; break-inside: avoid; }
-.waybill-table thead { display: table-header-group; }
-```
-
-### Acceptance criteria I1
-
-- [ ] Заголовок `<h1>` всегда на той же странице, что и первая строка таблицы (визуальная проверка на 1-страничной и 3-страничной накладной).
-- [ ] Блок «Кладовщик: ...» визуально внизу страницы на каждой странице, даже если таблица короткая (1–2 строки).
-- [ ] На многостраничной накладной: на странице с 1 строкой блок подписи прижат к нижнему краю листа, а не висит под таблицей.
-- [ ] CSS-only фикс, не требует изменений в Python.
-- [ ] **(rev. 2, warning #12)** Бампнуть `DOCUMENT_RENDERER_VERSION` (например, `waybill-pdf-v1` → `waybill-pdf-v2` в `config/settings/base.py:46` и `.env` / `.env.example`) И увеличить `template_version` в payload (`document_service.py:294` с `"1.0"` → `"1.1"`) — иначе после изменения CSS старый PDF продолжит отдаваться из Django cache до истечения TTL 1 час. Зафиксировать bump в release notes.
-
-### План B для I1 (если flexbox провалится визуально на I6)
-
-Если I6 выявит, что WeasyPrint flex+`min-height`+`page-break-before` ведёт себя нестабильно (overflow через forced page break, signature не прижата внизу), **без переоткрытия TZ** переключиться на один из:
-
-1. **CSS `position: running()`** через `@page` margin boxes:
-   ```css
-   @page {
-     margin: 16mm 14mm 30mm; /* +16mm снизу под signature margin box */
-     @bottom-center {
-       content: element(signature);
-     }
-   }
-   .signature-block {
-     position: running(signature);
-   }
-   ```
-2. **Table-based bottom spacer** — обернуть таблицу в `<table style="height:100%; width:100%">` с пустым `<tr>`-распоркой и прижать `signature-block` под неё.
-
-Выбор между (1) и (2) делается на I6 по визуальному качеству; фикс остаётся в рамках I1, чек-лист I6/I9/I10 не переоткрывается.
+- [ ] `.page` НЕ использует flexbox (`grep` подтверждает: ни `display: flex`, ни `min-height: calc`, ни `flex: ` в CSS).
+- [ ] `waybill_pdf.html` рендерит 3 разных layout: `page--first` / `page--middle` / `page--last`.
+- [ ] На странице 1 (layout=first) HTML содержит: «Накладная №», «Грузоотправитель:», «Грузополучатель:», «Основание:».
+- [ ] На странице 2+ (layout=middle/last) HTML содержит «Накладная №», но НЕ содержит «Грузоотправитель:», «Грузополучатель:», «Основание:».
+- [ ] На последней странице MOVE HTML содержит все 4 блока: «Операцию разрешил», «Водитель», «Начальник базы», «Груз принял».
+- [ ] На странице НЕ-последней HTML содержит «Кладовщик», но НЕ содержит «Операцию разрешил», «Водитель», «Груз принял».
+- [ ] **(rev. 4)** `DOCUMENT_RENDERER_VERSION` бамп v2 → v3 (как при каждом изменении шаблона/CSS — см. I1 rev. 2 acceptance).
 
 ---
 
-## Stage I2: Точная эвристика пагинации
+## Stage I2: Exact-rows pagination (rev. 4)
+
+**⚠ rev. 4 supersedes rev. 2/3:** the heuristic `estimated_row_height_mm * ratio` approach
+was abandoned in favor of **exact row counts derived from physical mm budgets**.
 
 **Файл:** `Warehouse_web/apps/documents/services.py::paginate_waybill_lines` (lines 197–246)
 
-### Задача I2.1: Пересчитать константы по реальной геометрии A4
+### Задача I2.1: Константы геометрии (rev. 4)
 
-A4 portrait: 210×297mm.
-`@page margin`: 16mm top + 14mm bottom = 30mm. Полезная высота: **267mm**.
+A4 portrait, `@page margin 16/14/14mm` → `A4_INNER_HEIGHT_MM = 267`.
 
-На первой странице занято:
-- `<h1>`: 16pt font-size × 1.2 line-height ≈ 6.4mm + `margin-bottom: 10mm` = **16.4mm**
-- `<div class="header-lines">`: 3 строки × 11pt × 1.45 = ~14mm + `margin-bottom: 8mm` = **22mm**
-- `<thead>`: padding 2.4×2 = 4.8mm + line-height ~5mm = **~10mm**
-- Блок подписи «Кладовщик + extra» (после I1) — **~37mm** на **однолистовых** MOVE/ISSUE/ISSUE_RETURN/EXPENSE/WRITE_OFF (Кладовщик 4mm + max 2 extra-блока × ~16mm).
+| Element | Height (mm) |
+|---|---|
+| `ROW_HEIGHT_MM` | 8.5 (1 table row at DejaVu Sans 11pt + padding 2mm×2) |
+| `THEAD_HEIGHT_MM` | 10 |
+| `SHORT_TITLE_HEIGHT_MM` | 12 (one-line "Накладная № X" + bottom margin) |
+| `FULL_TITLE_HEIGHT_MM` | 50 (full title + 3 lines of requisites + margin) |
+| `SIG_STOREKEEPER_MM` | 6 (one-line "Кладовщик: ____" + margin) |
+| `SIG_BLOCK_HEIGHT_MM` | 14 (label + signature line + hint) |
+| `SIG_BLOCK_DRIVER_MM` | 6 (single-line driver signature, no должность) |
 
-Итого на 1й странице занято до таблицы: 30 (margin) + 16.4 + 22 + 10 = **~78mm** (без подписей).
-С учётом подписей на однолистовых операциях: 78 + 37 = **~115mm**.
-Доступно для строк таблицы:
-- **Однолистовая операция с подписями:** 267 − 115 = **~152mm** (warning #3 — самое узкое место).
-- **Однолистовая без extra-подписей (RECEIVE/ADJUSTMENT):** 267 − 78 = **~189mm**.
-- **Многостраничная, каждая страница кроме 1й:** 30 + 10 = 40mm занято → **~227mm**.
+### Задача I2.2: Max rows per page type (rev. 4)
 
-Текущий `170mm` в `paginate_waybill_lines` **занижен** для RECEIVE/ADJUSTMENT (теряем 19mm) и **завышен** для однолистовых MOVE/ISSUE/EXPENSE/WRITE_OFF (теряем 18mm в обратную сторону → переполнение). Правильный подход — **передавать в пагинатор число extra-подписей** и пересчитывать бюджет динамически (см. I2.4).
+Computed from the constants above:
 
-На последующих страницах (страница 2+) `<h1>` и `<header-lines>` не показываются, остаётся только thead + «Кладовщик». Занято: 30 + 10 + 4 = **44mm**. Доступно: **~223mm** (текущее 210mm занижено на 13mm — это страховка от signature overflow, оставляем).
+| Page type | Calculation | Result |
+|---|---|---|
+| First | `(267 - 50 - 10 - 6) // 8.5` | **23 rows** |
+| Middle | `(267 - 12 - 10 - 6) // 8.5` | **28 rows** |
+| Last, MOVE (4 sigs incl. driver) | `(267 - 12 - 10 - 6 - 3*14 - 6) // 8.5` | **22 rows** |
+| Last, ISSUE/ISSUE_RETURN/EXPENSE (1 sig) | `(267 - 12 - 10 - 6 - 14) // 8.5` | **26 rows** |
+| Last, WRITE_OFF (1 sig) | same as ISSUE | **26 rows** |
+| Last, RECEIVE/ADJUSTMENT (0 sigs) | same as Middle | **28 rows** |
 
-### Задача I2.2: Уточнить `estimated_row_height_mm`
+### Задача I2.3: Алгоритм распределения строк (rev. 4)
 
-Реальная высота строки таблицы (шрифт 11pt, padding 2.4mm×2, line-height ~1.3):
-- 11pt × 1.3 = ~4.0mm text
-- 4.8mm padding
-- 1px border
-- ≈ **8.8mm** на одну физическую строку текста.
+Two-pass:
+1. **Pass 1** — compute `first_max`, `middle_max`, `last_max` for the given `operation_type`.
+2. **Pass 2** — distribute lines:
+   - if `total ≤ first_max`: 1 page (layout=first, is_first=is_last=True).
+   - else: first page takes `first_max` rows; remainder split into middle pages (each `middle_max`) + last page (`last_max`). If remainder fits in `last_max` alone, no middle pages.
 
-Текущее `7.0mm` — занижение. **Новое значение: 8.5mm** (с запасом 0.3mm на sub-pixel).
-
-### Задача I2.3: Учёт длинных названий и количества
-
-Сейчас:
-```python
-extra_lines = len(name) // 60
-line_height = estimated_row_height_mm + (extra_lines * estimated_row_height_mm * 0.6)
-```
-
-Проблема: 60 символов без учёта ширины колонки «Наименование ТМЦ». Колонка = (210 − 14×2 − 11 − 24 − 28) mm = 119mm. При 11pt символ ≈ 2.3mm → **~52 символа в строке**, не 60. Нужно:
-- Использовать `52` вместо `60`.
-- Учесть, что `quantity` тоже может быть длинным (например, `1234567.890`).
-- Колонка «Кол-во» 28mm с `text-align: right` — для >8 символов скорее всего перенос.
-
-### Задача I2.4: Новая сигнатура (rev. 2 — учтены warning #3, #6)
+### Задача I2.4: Сигнатура `paginate_waybill_lines` (rev. 4)
 
 ```python
-SIGNATURE_BLOCK_HEIGHT_MM = 37.0   # "Кладовщик" + max 2 extra-блока (MOVE)
-SINGLE_ROW_SIGNATURE_HEIGHT_MM = 4.0  # только "Кладовщик" (RECEIVE/ADJUSTMENT)
-
 def paginate_waybill_lines(
     lines: list[dict[str, Any]],
     *,
-    first_page_max_rows: int = 22,            # активный hard-cap (warning #6)
-    continuation_max_rows: int = 26,          # активный hard-cap
-    estimated_row_height_mm: float = 8.5,     # ← было 7.0
-    available_height_continuation_mm: float = 223.0,  # ← было 210.0
-    chars_per_row: int = 52,                  # ← новое
-    extra_row_height_ratio: float = 0.85,     # ← было 0.6
-    extra_signatures_count: int = 0,          # ← rev. 2 (warning #3): 0..2
+    operation_type: str = "RECEIVE",
 ) -> list[dict[str, Any]]:
     """
-    Paginate waybill lines dynamically based on content height.
-
-    Константы выведены из геометрии A4 portrait с @page margin 16/14/14mm
-    и CSS-блоков <h1> (16pt + 10mm margin), .header-lines (3 строки + 8mm),
-    <thead> (10mm). row_height подобран по DejaVu Sans 11pt с padding 2.4mm.
-    chars_per_row подобран по ширине колонки "Наименование ТМЦ" (119mm).
-
-    Для 1й страницы доступная высота пересчитывается динамически с учётом
-    extra-подписей:
-        reserve_signature_mm = SINGLE_ROW_SIGNATURE_HEIGHT_MM if extra_signatures_count == 0
-                               else SIGNATURE_BLOCK_HEIGHT_MM
-        available_height_first_page_mm = 267 - 78 - reserve_signature_mm
-
-    hard-cap: если `len(current) >= first_page_max_rows` (или `continuation_max_rows`),
-    страница закрывается принудительно, даже если по высоте ещё есть запас —
-    это страховка от pathological-кейсов (warning #6).
-
-    Returns: list[dict[str, Any]] со структурой:
-        {"page_number": int, "lines": list[dict], "is_first": bool,
-         "is_last": bool, "total_pages": int}
+    Paginate waybill lines into first/middle/last pages with exact row caps.
+    Returns list[dict[str, Any]] with:
+        {"page_number", "lines", "is_first", "is_last", "total_pages", "layout"}
+    where `layout` is one of "first" / "middle" / "last".
     """
 ```
 
-**Семантика:**
-- **warning #3:** dynamic signature reservation — 1-страничная MOVE/ISSUE/EXPENSE/WRITE_OFF получает бюджет 152mm, 1-страничная RECEIVE/ADJUSTMENT — 185mm. Никаких переполнений.
-- **warning #6:** `first_page_max_rows` и `continuation_max_rows` становятся **активными** hard-cap (`if len(current) >= max_rows: flush()`), а не мёртвыми параметрами.
-- **#14:** docstring тип возврата `list[dict[str, Any]]` (реальный), а не `list[list[dict]]`.
-
-### Acceptance criteria I2
-
-- [ ] Операция с 30 короткими строками (название <40 символов) → 1 страница.
-- [ ] Операция с 40 строками, 5 из них с названием >100 символов → 2 страницы, на 1й странице ≥18 строк.
-- [ ] Операция с 60 строк смешанной длины → 2–3 страницы, ни одна страница не заполнена >90%.
-- [ ] Операция с 80+ строк → 3–4 страницы, стабильное распределение.
-- [ ] Юнит-тест `test_pagination_first_page_does_not_overflow` проверяет, что сумма высот строк на 1й странице не превышает `available_height_first_page_mm`.
-- [ ] Юнит-тест `test_pagination_handles_long_names` с 50 строками длиной 200 символов → пагинация не падает, нет «висящих» страниц.
-- [ ] **(rev. 2, warning #3)** `test_pagination_first_page_reserves_signature_height` — для `extra_signatures_count=2` (MOVE) бюджет 1й страницы ≤ 152mm; для `extra_signatures_count=0` (RECEIVE) бюджет ≤ 189mm. Проверяется, что динамический расчёт сработал.
-- [ ] **(rev. 2, warning #6)** `test_pagination_hard_cap` — при `first_page_max_rows=22` 1я страница содержит ≤ 22 строки даже при коротких названиях; `continuation_max_rows=26` — то же для 2+.
-- [ ] **(rev. 2, note #14)** Docstring функции содержит точный тип возврата `list[dict[str, Any]]` и явное описание структуры (page_number/lines/is_first/is_last/total_pages).
+(Implementation in services.py — already shipped in rev. 4 commit.)
 
 ---
 
@@ -597,6 +506,17 @@ def test_pagination_constants_match_flex_geometry(self) -> None:
 
 - [ ] ≥6 новых тестов, все зелёные.
 - [ ] `python manage.py test apps.documents` — 100% pass.
+
+### Acceptance criteria I4 (rev. 4 additions)
+
+- [ ] `test_paginate_waybill_lines_exact_rows` — verify max rows for each page type by operation_type (RECEIVE → first=23/middle=28/last=28; MOVE → 23/28/22; ISSUE → 23/28/26).
+- [ ] `test_paginate_waybill_lines_middle_pages_have_short_title` — 75 lines MOVE → 4 pages: first(23) + middles(28) + last(22); page 1 layout="first", page 2..n-1 layout="middle", page n layout="last".
+- [ ] `test_paginate_waybill_lines_single_page_layout` — 10 lines → 1 page layout="first", is_first=is_last=True.
+- [ ] `test_paginate_waybill_lines_move_has_4_extra_signatures` — `_build_extra_signatures("MOVE")` returns 4 blocks.
+- [ ] `test_waybill_html_first_page_has_full_title` — page 1 HTML contains "Грузоотправитель".
+- [ ] `test_waybill_html_middle_page_has_short_title` — page 2 HTML does NOT contain "Грузоотправитель".
+- [ ] `test_waybill_html_last_page_has_full_signature_move` — MOVE last page contains "Операцию разрешил" + "Водитель" + "Начальник базы" + "Груз принял".
+- [ ] `test_waybill_html_no_flexbox` — grep HTML/CSS, verify no `display: flex` in the rendered output (plan B is the source of truth now).
 
 ---
 
@@ -936,6 +856,7 @@ test('waybill PDF served with correct content-type and pagination text', async (
 | Риск | Митигация |
 |---|---|
 | WeasyPrint flexbox ведёт себя иначе в edge-cases | I4: HTML-тесты + I6: визуальная проверка PDF. **(rev. 2, warning #5)** Если I6 провалится визуально — fallback на plan B (`position: running()` через `@page` margin boxes, или table-based bottom spacer) без переоткрытия TZ (см. Stage I1). |
+| WeasyPrint flexbox ненадёжен в paged-media (rev. 4, активирован plan B) | exact-rows с жёсткими лимитами, без flex. Подтверждено багом 08.07.2026. |
 | Изменение констант пагинации сломает другие TZ | I9: регрессия Django 350+ тестов |
 | `create_operation` с ошибкой document_service ломает UX | I3: try/except + warning log, не абортим create. **(rev. 2, warning #8)** Savepoint `uow.session.begin_nested()` — DB-ошибка откатывает только генерацию, не всю транзакцию. |
 | **(rev. 2, blocker #1)** `act` draft на create → submit финализирует его in-place без пересборки payload → потеря правок | Карта сужена до MOVE/ISSUE/ISSUE_RETURN. EXPENSE/WRITE_OFF не получают draft-документ. I5 + I6.3 подтверждают. |

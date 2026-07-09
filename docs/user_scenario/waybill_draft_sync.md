@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-08
 **Status:** validated
-**Source TZ:** `docs/TZ-V3.1I_WAYBILL_PAGINATION_AND_SYNC_HARDENING.md` (rev. 3)
+**Source TZ:** `docs/TZ-V3.1I_WAYBILL_PAGINATION_AND_SYNC_HARDENING.md` (rev. 4 — plan B activated)
 **Pre-fix reality:** V3.1H had H1 (auto-regen on update) but **no waybill on create**, which meant the storekeeper could not see any draft document for a freshly created operation. The first "Накладная" click returned 404 until they edited something.
 
 ## Pre-conditions
@@ -68,12 +68,19 @@ POST /bff/api/v1/documents/operations/<op_id>/waybill/open
 
 Кладовщик продолжает собирать операцию. Добавляет ещё 35 ТМЦ, из них 5 с названиями >100 символов.
 
-**Поведение:** После 40+ строк накладная занимает 2-3 страницы. Проверяется визуально:
-- Страница 1: h1 «Накладная №...», header-lines, thead, ~18-20 строк таблицы, **подпись «Кладовщик:» в самом низу** (flex layout).
-- Страница 2: thead повторяется, остаток строк, подпись «Кладовщик:» внизу.
-- Страница 3 (если есть): thead, остаток, подпись внизу + extra-подписи (MOVE: «Операцию разрешил:», «Водитель:») на **последней** странице.
+**Поведение (rev. 4):** После 40 строк накладная занимает 2 страницы (40 строк: первая = 23 строки max, остаток = 17 строк помещается на последней MOVE-странице max 22). Точные значения зависят от типа операции:
+- MOVE (4 подписи на последней): первая=23, средняя=28, последняя=22.
+- ISSUE/ISSUE_RETURN/EXPENSE (1 подпись): первая=23, средняя=28, последняя=26.
+- RECEIVE/ADJUSTMENT (нет extra): первая=23, средняя=28, последняя=28.
 
-**Критерий приёмки:** На странице с 1 строкой блок «Кладовщик:» **прижат к нижнему краю листа**, не висит под таблицей.
+**Проверяется визуально:**
+- Страница 1: полный заголовок (Накладная + Грузоотправитель + Грузополучатель + Основание) + 23 строки + «Кладовщик:» внизу.
+- Страница 2 (если есть): короткий заголовок (только «Накладная № X») + N строк + «Кладовщик:» внизу.
+- Последняя страница: короткий заголовок + N строк + полная форма подписей.
+- Для MOVE: «Операцию разрешил» + «Водитель» + «Начальник базы» + «Груз принял».
+- Для ISSUE/ISSUE_RETURN/EXPENSE: «Получил».
+- Для WRITE_OFF: «Операцию разрешил».
+- Подпись «Кладовщик:» присутствует на КАЖДОЙ странице (на последней — в составе полной формы).
 
 ### Шаг 5. Submit операции
 
@@ -116,11 +123,12 @@ POST /bff/api/v1/documents/operations/<op_id>/waybill/open
 
 - ✅ **A1 → I1+I2+I4:** заголовок сверху, подпись внизу, многостраничная накладная без разрывов, hard-cap.
 - ✅ **A2 → I1:** `<h1>` и `.header-lines` не отрываются от таблицы.
-- ✅ **A3 → I1:** подпись прижата к низу flex-layout'ом.
+- ✅ **A3 → I1 (rev. 4 plan B):** подпись прижата к низу **не flex'ом, а exact-rows с 3 layout** (first/middle/last). Без flexbox. Проверяется на 1-страничной и многостраничной накладной.
 - ✅ **A4 → I3 (rev. 3):** накладная появляется сразу при create черновика для всех операций движения ТМЦ (MOVE/ISSUE/ISSUE_RETURN/RECEIVE/EXPENSE/WRITE_OFF). ADJUSTMENT (служебная) — без накладной.
 - ✅ **Сохранение количества:** payload строится из `operation.lines` → `payload.lines[i].quantity` соответствует черновику.
 - ✅ **Update sync:** H1 (rev. 2 helper) обновляет накладную при каждом изменении.
 - ✅ **rev. 3:** Все операции движения ТМЦ (MOVE/ISSUE/ISSUE_RETURN/RECEIVE/EXPENSE/WRITE_OFF) получают draft waybill при create/update. ADJUSTMENT (служебная) — без draft. При submit draft waybills войдируются для не-waybill финалов.
+- ✅ **rev. 4 (plan B):** MOVE-операция с 40 строками → 2 страницы: page 1 (23 строки, full title) + page 2 (17 строк, short title, 4-блочные подписи MOVE).
 
 ## Ожидаемые результаты (evidence)
 

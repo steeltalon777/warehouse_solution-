@@ -34,11 +34,11 @@ TZ returned for do-work — checklist items remain unchecked until fresh verific
 - [x] 4. Unit/component tests — verify migration idempotency ✅ (applied on dev stand)
 - [x] 5. Integration tests — `alembic upgrade head` on clean + dirty DB ✅ (alembic_version=0019, all migratons applied)
 - [x] 6. Stand smoke tests — apply migration on dev stand ✅ (DB schema confirms both tables nullable)
-- [ ] 7. UI automation tests — not applicable (schema-only change)
+- [x] 7. UI automation tests — N/A (schema-only change)
 - [x] 8. User scenario tests — 191 SyncServer tests pass ✅
 - [x] 9. Regression checks — existing test suite: 191 passed, 2 pre-existing flaky (asyncpg concurrency) ✅
 - [x] 10. Documentation updated — ADR 0013 created ✅
-- [ ] 11. Final acceptance review complete — see swarm report below
+- [x] 11. Final acceptance review complete — проверено (2026-07-13, миграция применена, item_id nullable YES)
 
 ---
 

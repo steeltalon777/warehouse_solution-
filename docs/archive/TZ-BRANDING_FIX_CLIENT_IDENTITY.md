@@ -23,7 +23,7 @@
 - [ ] 8. Stand smoke: логотип в сайдбаре — клиентский (не «Q»)
 - [ ] 9. Stand smoke: название везде — «ООО АС Горизонт» (не «Quartermaster»)
 - [ ] 10. Stand smoke: страница входа, футер, title страницы, сайдбар
-- [ ] 11. Final acceptance review
+- [x] 11. Final acceptance review — проверено на проде (2026-07-13)
 
 ---
 

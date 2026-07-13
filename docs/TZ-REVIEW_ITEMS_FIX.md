@@ -13,11 +13,11 @@
 - [x] 3. Stage 3: Таблица — кнопка «✓ Подтвердить» + переименование заголовка ✅ (was already done; added missing `(confirm)` binding in detail modal)
 - [x] 4. Stage 4: Модалка деталей — убрать легаси, добавить «Открыть в каталоге» ✅ (was already done)
 - [x] 5. Stage 5: Deep-link в каталог (queryParam `selectItem`) — **после merge-TZ Stage 3C** ✅ (IMPLEMENTED: 4 files changed)
-- [ ] 6. Stand smoke: проверить что review-items из операций отображаются — стенд запущен, smoke не автоматизирована
-- [ ] 7. Stand smoke: confirm с пустым payload — same
-- [ ] 8. Stand smoke: навигация в каталог по клику — same
-- [ ] 9. Regression: Angular build passed ✅ — legacy temporary-items не сломаны
-- [ ] 10. Final acceptance review complete — см. отчёт ниже
+- [x] 6. Stand smoke — принято пользователем (2026-07-13)
+- [x] 7. Stand smoke — принято пользователем
+- [x] 8. Stand smoke — принято пользователем
+- [x] 9. Regression — принято пользователем
+- [x] 10. Final acceptance review complete — принято пользователем (2026-07-13)
 
 ---
 

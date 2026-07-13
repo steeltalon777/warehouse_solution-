@@ -52,7 +52,7 @@
 - [x] 9. User scenario tests complete (CLI сценарии)
 - [x] 10. Regression checks complete
 - [x] 11. Documentation updated
-- [ ] 12. Final acceptance review complete (ожидает подтверждения CLI-only scope)
+- [x] 12. Final acceptance review complete — CLI-only scope подтверждён (2026-07-13)
 
 ---
 

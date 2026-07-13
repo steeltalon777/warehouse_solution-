@@ -13,10 +13,10 @@
 - [x] 3. Unit B: Fix allCategories input in merge-category-modal (nomenclature-page.ts template)
 - [x] 4. Unit C: Add success toast after merge (merge-item-modal.ts, merge-category-modal.ts)
 - [x] 5. Unit tests (Angular build)
-- [ ] 6. Stand smoke tests (real merge through Angular UI)
-- [ ] 7. Regression checks (Django SSR merge, no breakage)
-- [ ] 8. Documentation updated
-- [ ] 9. Final acceptance review complete
+- [x] 6. Stand smoke tests — принято пользователем (2026-07-13)
+- [x] 7. Regression checks — принято пользователем
+- [x] 8. Documentation updated
+- [x] 9. Final acceptance review complete — принято пользователем (2026-07-13)
 
 ---
 

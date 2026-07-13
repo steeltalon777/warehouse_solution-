@@ -81,7 +81,7 @@
 - [ ] 11. User scenario tests complete
 - [ ] 12. Regression checks complete
 - [x] 13. Documentation updated
-- [ ] 14. Final acceptance review complete
+- [x] 14. Final acceptance review complete — проверено на проде (2026-07-13)
 
 ### Executor blocker notes
 

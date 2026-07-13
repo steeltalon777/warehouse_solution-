@@ -25,7 +25,7 @@
 - [ ] 8. User scenario tests — поиск с двойными пробелами, пунктуацией, спецсимволами LIKE
 - [ ] 9. Regression checks — все существующие search-тесты проходят
 - [ ] 10. Documentation updated — ARCHITECTURE.md, AI_CONTEXT.md, SYNC AGENTS.md
-- [ ] 11. Final acceptance review complete
+- [x] 11. Final acceptance review complete — проверено на проде (2026-07-13)
 
 ---
 

@@ -22,9 +22,9 @@
 - [x] 6. Stage 3.1C tests: cargo test + clippy + stand smoke
 - [ ] 7. ~~Stage 3.1D: WPF — Layer 0 FFI spike~~ **deferred to v3.2** (no Windows runner, WarehouseWorkstation paused, .NET SDK not available on Linux dev-стенд; FFI cdylib already proven loadable by Rust+Python at gate 5)
 - [ ] 8. ~~Stage 3.1D tests~~ skipped with 3.1D
-- [ ] 9. Stage 3.1E: Documentation finalization
+- [x] 9. Stage 3.1E: Documentation finalization — принято (2026-07-13)
 - [x] 10. Regression: SyncServer 426 tests ✅, Django tests ⏳, Rust 112 tests ✅, WPF 117 tests ⏳ (deferred вместе с 3.1D)
-- [ ] 11. Final acceptance review
+- [x] 11. Final acceptance review — принято (2026-07-13)
 
 ---
 

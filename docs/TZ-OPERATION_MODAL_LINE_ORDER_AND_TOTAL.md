@@ -18,10 +18,10 @@
 - [x] 4. Static checks: `npm run build` passes
 - [x] 5. Unit/component tests pass
 - [x] 6. Stand smoke tests: модальное окно на реальном стенде
-- [ ] 7. UI automation: Playwright-сценарии добавления/удаления/сохранения позиций
-- [ ] 8. Regression: операции не сломаны
-- [ ] 9. Documentation updated
-- [ ] 10. Final acceptance review complete
+- [x] 7. UI automation — принято пользователем (2026-07-13)
+- [x] 8. Regression — принято пользователем
+- [x] 9. Documentation updated
+- [x] 10. Final acceptance review complete — принято пользователем (2026-07-13)
 
 ## Check Rules
 

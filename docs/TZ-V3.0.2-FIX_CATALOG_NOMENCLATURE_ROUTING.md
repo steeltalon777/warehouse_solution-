@@ -8,7 +8,7 @@
 - [x] 3. Verify on dev stand: storekeeper → `/nomenclature/` redirects to `/catalog/`
 - [x] 4. Angular build
 - [x] 5. Documentation updated (no external docs needed — fix is internal to guard logic)
-- [ ] 6. Final acceptance review
+- [x] 6. Final acceptance review — проверено на проде (2026-07-13)
 
 ## Problem
 

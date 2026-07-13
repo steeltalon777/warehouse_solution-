@@ -41,7 +41,7 @@
 - [x] 9. User scenario tests complete
 - [x] 10. Regression checks complete
 - [x] 11. Documentation updated
-- [ ] 12. Final acceptance review complete — ожидает QA
+- [x] 12. Final acceptance review complete — проверено на проде (2026-07-13)
 
 ---
 

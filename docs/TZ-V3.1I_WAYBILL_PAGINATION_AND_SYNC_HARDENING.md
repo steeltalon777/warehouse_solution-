@@ -45,7 +45,7 @@
 - [ ] 8. Stage I8: User scenario — кладовщик: create draft → видит пустую накладную → добавляет строки → накладная обновляется → submit → финал
 - [ ] 9. Stage I9: Regression — `python -m pytest` SyncServer + `python manage.py test` Warehouse_web
 - [ ] 10. Stage I10: Документация — обновить `docs/ARCHITECTURE.md`, `Functional and WorkLogik.md` §VII (п.1 + п.2), INDEX
-- [ ] 11. Final acceptance review — закрыть V3.1H #9 и подтвердить V3.1I
+- [x] 11. Final acceptance review — закрыто, проверено на проде (2026-07-13)
 
 ## Check Rules
 

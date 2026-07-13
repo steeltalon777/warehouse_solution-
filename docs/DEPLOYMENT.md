@@ -222,6 +222,29 @@ docker exec -i pg-main psql -U appuser -d syncserver_main < ~/backups/syncserver
 
 ---
 
+### Admin Hardening Gate (v3.1F)
+
+Starting from v3.1F, all Django Admin management routes require active superuser + POST + CSRF.
+
+**Deployment order:**
+
+1. Build and tag new SyncServer + Warehouse_web images. Do NOT switch traffic.
+2. Run `python manage.py audit_admin_security --mode pre-scrub` with new Warehouse_web image against current schema. Save redacted inventory (IDs/key paths/counts only) as deployment evidence.
+3. Create encrypted PostgreSQL backup. Document owner, retention, deletion date.
+4. Deploy SyncServer additive changes (ensure endpoint, root-only policy).
+5. Run `python manage.py migrate` (applies 0012_scrub_sync_payload_secrets and 0013_align_site_mirror_contract).
+6. Run `python manage.py audit_admin_security --fail-on-findings`. Any blocker = NO-GO.
+7. Only on exit code 0: switch Warehouse_web traffic to new image.
+8. Perform stand smoke and Playwright admin scenarios.
+
+**Rollback rules:**
+- Return to pre-hardening Warehouse_web without external `/admin/` block is forbidden.
+- Scrub migration 0012 is irreversible — payload secrets are intentionally not restored.
+- Additive SyncServer endpoints may remain after Django rollback.
+- Root-only mutation policy must not be relaxed during rollback.
+
+---
+
 ## SSH Access
 
 - Агент **не хранит** SSH-ключи, пароли, IP-адреса, пути к ключам в правилах или коде.

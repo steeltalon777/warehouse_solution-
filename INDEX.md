@@ -72,13 +72,14 @@
 - `docs/TZ-ISSUED_REPOSITORY_BACKEND_CONTRACT.md` - SyncServer + BFF contract for issue-object categories, tree, and register math.
 - `docs/TZ-ISSUED_REPOSITORY_FRONTEND_WORKSPACE.md` - 40/60 repository workspace, sidebar entry, operation modal prefill.
 - `docs/TZ-DOCUMENT_PDF_RENDERING_AND_UI.md` - PDF rendering.
-- `docs/TZ-V3.1F_ADMIN_PANEL_HARDENING.md` - admin panel hardening (password bug, multi-site, device parity, reset flow).
+- `docs/TZ-DJANGO_ADMIN_PREDEPLOY_HARDENING.md` - ✅ реализовано (2026-07-11): admin security, credential redaction, sync saga, audit, Playwright.
 - `docs/TZ-V3.1G_OPERATIONS_UX_HARDENING.md` - operations UX hardening (submit errors, field-level propagation, PDF verification).
 - [TZ-V3.1I — Waybill Pagination & Draft Sync Hardening](TZ-V3.1I_WAYBILL_PAGINATION_AND_SYNC_HARDENING.md) (rev. 4, 2026-07-08) — 4 архитектурных дефекта накладной, план из 10 этапов. **rev. 4 активировал plan B (exact-rows) после того, как WeasyPrint flexbox не закрепил подпись внизу первой страницы** (баг 08.07.2026). 3 разных layout (first/middle/last), MOVE = 4 подписи.
 
 ### Architecture Reviews
 
 - [Architecture review — V3.1I waybill pagination](reviews/architecture-review-v3.1i-waybill-pagination.md) (2026-07-08) — ревью TZ-V3.1I rev. 1, 1 blocker + 11 warnings + 2 notes.
+- [Architecture review — Django Admin pre-deploy hardening](docs/reviews/architecture-review-django-admin-predeploy-hardening.md) (2026-07-11) — approved with conditions; deployment remains NO-GO until security and consistency evidence is complete.
 
 ## Rules To Remember
 

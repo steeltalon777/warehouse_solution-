@@ -38,7 +38,7 @@
 | 3.1C Rust core: compatibility gate | ✅ payload_hash (canonical JSON+SHA-256), stand smoke pass |
 | 3.1D WPF: Layer 0 FFI spike | [ ] |
 | 3.1E Documentation: ADR-0015/0016/0017 | ✅ ADR созданы, docs Stage 5 выполнено |
-| 3.1F Admin Panel Hardening: password fix, multi-site, device parity, reset flow | [ ] TZ создан |
+| 3.1F Admin Panel Hardening: password, root-only admin, credential redaction, sync consistency | ✅ выполнено (2026-07-11) |
 | 3.1G Operations UX Hardening: submit error tracebacks, inline-SKU validation | [ ] |
 | 3.1H Waybill PDF Fixes: metadata sync, multi-page rendering, on-demand PDF | [ ] TZ создан |
 | 3.1I Operation Lines Sorting: default sort by lineNumber in modal | ✅ выполнено |

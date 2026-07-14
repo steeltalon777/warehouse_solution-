@@ -2,29 +2,53 @@
 
 ## Execution Checklist
 
-- [ ] 0. Context verified
-- [ ] 1. Модели `audit_event_resources` и `audit_item_effects` + миграции
-- [ ] 2. Безопасные FK и snapshots для audit-таблиц
-- [ ] 3. Расширение `AuditEvent` новыми полями + миграция
-- [ ] 4. `operation.origin` / `operation.system_reason` + миграция
-- [ ] 5. `operation.update` audit
-- [ ] 6. `category.merge` audit с resource-связями
-- [ ] 7. `item.merge`: эффекты до перепривязки, системная маркировка, правильный порядок INSERT
-- [ ] 8. Merge closure вместо `canonical_item_id`
-- [ ] 9. Batch audit: `catalog.batch.apply` с outcome `partial`
-- [ ] 10. Temporary / review / issue merge audit через inventory_subject
-- [ ] 11. Repository tests
-- [ ] 12. Service integration tests
-- [ ] 13. Stand smoke tests
-- [ ] 14. Документация + ADR
+- [x] 0. Context verified
+- [x] 1. Модели `audit_event_resources` и `audit_item_effects` + миграции
+- [x] 2. Безопасные FK и snapshots для audit-таблиц
+- [x] 3. Расширение `AuditEvent` новыми полями + миграция
+- [x] 4. `operation.origin` / `operation.system_reason` + миграция
+- [x] 5. `operation.update` audit
+- [x] 6. `category.merge` audit с resource-связями
+- [x] 7. `item.merge`: эффекты до перепривязки, системная маркировка, правильный порядок INSERT
+- [x] 8. Merge closure вместо `canonical_item_id`
+- [x] 9. Batch audit: `catalog.batch.apply` с outcome `partial`
+- [x] 10. Temporary / review / issue merge audit через inventory_subject
+- [x] 11. Repository tests
+- [x] 12. Service integration tests
+- [x] 13. Stand smoke tests
+- [x] 14. Документация + ADR
 - [ ] 15. Final acceptance review
 
 ## Check Rules
 
 - Architect создаёт чеклист и критерии приёмки.
-- Coding-агент (MiniMax) отмечает пункты только после реализации и верификации.
+- Coding-агент (warehouse-agent) отмечает пункты только после реализации и верификации.
 - Если проверка пропущена — остаётся unchecked с причиной в отчёте.
 - Auth outbox, admin/security события, read API, CLI — вынесены в Phase 2.
+
+## Implementation Log
+
+| # | Commit (root dev) | Commit (SyncServer dev) | Что |
+|---|---|---|---|
+| 1 | `ba223ac` | — | Модели `audit_event_resources`, `audit_item_effects`, расширение `AuditEvent` (v2 поля) и `Operation` (origin/system_reason/initiated_by_user_id). Миграции 0024..0027. |
+| 2 | `85e0e31` | — | `record_audit_event` с v2-сигнатурой; `UoW.batch_correlation_id`; новые методы репо. |
+| 3 | `891e109` | — | `operation.update` audit + `submit`/`cancel` записывают `audit_item_effects`; эффект-типинг mapping; cancel_reversal. |
+| 4 | `761ca9e` | — | `item.merge` rewrite (parent first, effects before reassign, origin='system'), `category.merge` resources, `temporary_item.approve/.merge`, `review_item.confirm/.merge`, `issue_object.merge`, batch audit + correlation_id. |
+| 5 | `f1fb95a` | — | 27 новых тестов: `test_audit_repo.py`, `test_audit_operations.py`, `test_audit_catalog_merge.py`, `test_audit_batch.py`, `test_audit_related_merge.py`. |
+| 6 | `df715a1` | — | ADR-0018 + `audit-event-catalog.md` + коммит TZ в git. |
+| 7 | — | `e40c860` | SyncServer/README.md — секция audit с helper sign, ordering invariant, ссылками на ADR + catalog. |
+
+(На SyncServer dev — только отметка коммита README; остальные SyncServer-коммиты под `ba223ac` — `f1fb95a` лежат в submodule git истории.)
+
+### Команды верификации
+
+| Команда | Результат |
+|---|---|
+| `alembic upgrade head` | `0023 -> 0024 -> 0025 -> 0026 -> 0027` applied на стенде. |
+| `python -m pytest tests/test_audit_repo.py tests/test_audit_operations.py tests/test_audit_catalog_merge.py tests/test_audit_batch.py tests/test_audit_related_merge.py` | 27 passed. |
+| `python -m pytest tests/test_operations_*.py tests/test_catalog_merge.py tests/test_catalog_batch_merge.py tests/test_catalog_admin_audit.py` | 128 + 10 = 138 passed, 0 broken. |
+| curl SyncServer stand — submit ADJUSTMENT op, item.merge через `POST /api/v1/catalog/admin/items/merge`, batch через `POST /api/v1/catalog/admin/batch` | Все три сценария записывают v2 события с правильными effects/resources/correlation. |
+| DB inspection `SELECT event_type, count(*) FROM audit_events WHERE event_version=2 GROUP BY event_type` | 10 v2-событий распределены по `operation.submit`, `item.merge`, `operation.create`, `category.update`, `catalog.batch.apply`. |
 
 ---
 

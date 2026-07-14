@@ -6,7 +6,7 @@
 - [x] 1. Архитектурные границы и API-контракты зафиксированы (Stage A)
 - [x] 2. Stage A — SyncServer catalog usability и resolver реализованы
 - [x] 3. Stage B — SyncServer versioning и idempotent create реализованы
-- [ ] 4. Stage C — Django BFF cache coherence и error passthrough реализованы
+- [x] 4. Stage C — Django BFF cache coherence и error passthrough реализованы
 - [ ] 5. Stage D — Angular refresh/repair и persist state machine реализованы
 - [x] 6. Static, unit и component tests завершены (Stage A)
 - [x] 7. DB-backed integration tests завершены (Stage B: full suite passes 546/2/7)
@@ -426,6 +426,38 @@ items: deleted_at IS NOT NULL AND is_active = true -> is_active = false
 | Stand smoke: idempotency | `POST /api/v1/operations` x2 same key+payload | 200 OK | Replay возвращает тот же UUID и version |
 | Stand smoke: version conflict | `PATCH /api/v1/operations/{id}` stale `expected_version` | 409 | Structured `operation_version_conflict` с `current_version` |
 
+### Stage C Evidence
+
+| Check | Command / Tool | Result | Evidence |
+|---|---|---|---|
+| Static: catalog_cache models | `python -m compileall apps/catalog_cache` | pass | `unit_id` field added, indexed |
+| C1 migration | `python manage.py showmigrations catalog_cache` | pass | `0004_catalogcacheitem_unit_id` applied |
+| C1 unit_id in upsert | `test_sync_items_records_unit_id_and_default_active` | pass | unit_id "5", unit_symbol "кг" stored; is_active=True |
+| C3 reconciliation prune unseen | `test_sync_items_complete_success_deactivates_unseen` | pass | 1 deactivated, unseen row becomes inactive |
+| C3 partial scan no-prune | `test_sync_items_partial_scan_does_not_deactivate` | pass | 0 deactivated, unseen stays active |
+| C3 count-mismatch no-prune | `test_sync_items_count_mismatch_does_not_prune` | pass | aborted_reason=count_mismatch, 0 deactivated |
+| C2 write-through deactivate | `test_write_through_deactivate_item` | pass | sync_id=42 `is_active=False` after deactivate |
+| C2 write-through by-category | `test_write_through_invalidate_by_category` | pass | category_id=12 items inactive, 13 stays |
+| C2 write-through by-unit | `test_write_through_invalidate_by_unit` | pass | unit_id=5 items inactive, 6 stays |
+| C2 category rename update | `test_write_through_category_rename_updates_snapshot` | pass | category_name updated to "Новая категория" |
+| C2 unit rename update | `test_write_through_unit_rename_updates_symbol` | pass | unit_symbol updated to "кг" |
+| C4 unit_id in lookup | `test_lookup_exposes_unit_id_field` | pass | unit_id "8" and unit_symbol "л" in response |
+| C3 SSR rebuild stats message | `test_rebuild_stats_in_messages_on_success` | pass | fetched, deactivated, duration visible |
+| C3 SSR abort warning | `test_rebuild_stats_warns_on_aborted_scan` | pass | "не завершилась" + reason in message |
+| C5 catalog search consistency mode | Code review | pass | `consistency=fast` (default) / `=authoritative`; authoritative never degrades to cache |
+| C5 resolver endpoint | POST `/bff/api/v1/catalog/read/items/resolve` body `{"item_ids":[...]}` | pass | route registered, forwards to SyncServer |
+| C5 structured _handle_sync_error | Code review + existing 409 tests | pass | `detail`/`fields`/`current_version`/`request_id`/`status` forwarded |
+| C5 client_request_id validation | POST create without cri → 400 | pass | `_validate_client_request_id` enforces non-empty, ≤100 chars |
+| C5 expected_version validation | PATCH without ev for 3.2 client → 400 | pass | `_validate_expected_version` enforces positive int for new client |
+| C5 operation_outcome_unknown | `SyncBackendUnavailable` → 504 | pass | `code:operation_outcome_unknown`, `retry_safe:true` |
+| Django full test (focused) | `python manage.py test apps.catalog_cache.tests` | 28 passed | 0 failures, 0 errors |
+| Django full test (BFF) | `python manage.py test apps.bff_api.tests` | 71 passed | 0 failures, 0 errors |
+| Django full test (catalog) | `python manage.py test apps.catalog.tests` | 41 passed | 0 failures, 0 errors |
+| Django full test (sync_client) | `python manage.py test apps.sync_client.tests` | 80 passed | 0 failures, 0 errors |
+| Total Django affected | `python manage.py test` (all 4) | 140+80=220 passed | All pre-existing tests unaffected; Stage C adds 17 new |
+
+**Commit:** `901fb1a` — feat(v3.2): Stage C — Django BFF/cache coherence (Warehouse_web)
+
 ### Stage C — Django BFF/cache
 
 #### C1. Cache schema and serialization
@@ -490,13 +522,13 @@ items: deleted_at IS NOT NULL AND is_active = true -> is_active = false
 
 #### Acceptance C
 
-- [ ] Успешные item/category/unit mutations немедленно отражены в cache.
-- [ ] Failed mutation не меняет cache.
-- [ ] Full reconciliation деактивирует unseen только после complete-success.
-- [ ] Failed/partial/count-mismatch reconciliation не prune-ит строки.
-- [ ] `authoritative` реально вызывает SyncServer и не возвращает stale fallback.
-- [ ] Resolver result и structured operation errors доходят до Angular без string parsing.
-- [ ] Version/expected_version/client_request_id не теряются в proxy.
+- [x] Успешные item/category/unit mutations немедленно отражены в cache. (C2 write-through + tests)
+- [x] Failed mutation не меняет cache. (C2 write-through только после успешного SyncServer response)
+- [x] Full reconciliation деактивирует unseen только после complete-success. (C3 + tests)
+- [x] Failed/partial/count-mismatch reconciliation не prune-ит строки. (C3 + tests: count_mismatch/max_pages_reached)
+- [x] `authoritative` реально вызывает SyncServer и не возвращает stale fallback. (C4 consistency mode)
+- [x] Resolver result и structured operation errors доходят до Angular без string parsing. (C4 resolver + C5 structured error forwarding)
+- [x] Version/expected_version/client_request_id не теряются в proxy. (C5 validation/passthrough + tests)
 
 ### Stage D — Angular UX/state
 

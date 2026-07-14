@@ -8,11 +8,11 @@
 - [x] 3. Stage B — SyncServer versioning и idempotent create реализованы
 - [x] 4. Stage C — Django BFF cache coherence и error passthrough реализованы
 - [x] 5. Stage D — Angular refresh/repair и persist state machine реализованы
-- [x] 6. Static, unit и component tests завершены (Stage A)
-- [x] 7. DB-backed integration tests завершены (Stage B: full suite passes 546/2/7)
-- [x] 8. Реальный stand smoke завершён (Stage A + Stage B idempotency/version)
-- [ ] 9. Playwright и пользовательские сценарии завершены
-- [ ] 10. Regression, документация и финальная приёмка завершены
+- [x] 6. Static, unit и component tests завершены (Stages A+B+C+D: SyncServer 546/2/7, Django 220p, Angular 57p)
+- [x] 7. DB-backed integration tests завершены (Stage B: full suite passes 546/2/7; Stage C DDL: unit_id applied on stand)
+- [x] 8. Реальный stand smoke завершён (A: resolver, B: idempotency/version, C: BFF search/consistency/resolver, D: structured errors chain)
+- [ ] 9. Playwright и пользовательские сценарии завершены (отложено до Stage D Angular на стенде)
+- [ ] 10. Regression, документация и финальная приёмка завершены (QA verifier)
 
 ## Check Rules
 
@@ -899,16 +899,20 @@ Unverified until implementation/stand phase:
 
 | Check | Command / Tool | Result | Evidence |
 |---|---|---|---|
-| Static/migration drift | commands from §7.1 | pending | — |
-| SyncServer focused/full | `python -m pytest <focused>`; `python -m pytest` | pending | — |
-| Django focused/full | `python manage.py test <labels>`; `python manage.py test` | pending | — |
-| Angular component/build | `npm test -- --watch=false`; `npm run build` | pending | — |
-| SyncServer migration | `python -m alembic upgrade head` on safe DB | pending | — |
-| Django migration | `python manage.py migrate` on safe DB | pending | — |
-| Stand smoke | Docker stand | pending | — |
-| UI automation | focused Playwright; `make test-e2e` | pending | — |
-| User scenarios | manual + Playwright | pending | — |
-| Regression | three project full checks | pending | — |
+| Static/migration drift | commands from §7.1 | pass | SyncServer `alembic head=0023`, Django `0004` DDL applied |
+| SyncServer focused | `docker exec warehouse_syncserver python -m pytest tests/test_operations_service_update.py tests/test_operations_effective_at_api.py tests/test_temporary_items_stage3b.py` | 18 passed | Stage B idempotency/version/guard passes |
+| Django focused | `docker exec warehouse_web python manage.py test apps.catalog_cache.tests apps.bff_api.tests apps.catalog.tests` | 140 passed | Stage C+D write-through/reconciliation/resolver passes |
+| Angular component/build | `npm test -- --watch=false`; `npm run build` | 57 passed | Stage D DTO/services/state machine pass |
+| SyncServer migration | `docker exec warehouse_syncserver alembic current` | head | `0023_add_operation_client_request_id (head)` |
+| Django migration | `docker exec warehouse_web python manage.py migrate catalog_cache 0004` | OK | `unit_id` column verified in DB |
+| Stand smoke: resolver | `POST /bff/api/v1/catalog/read/items/resolve` | pass | Full chain: browser->BFF->SyncServer->structured response |
+| Stand smoke: consistency | `GET /catalog/search/items?consistency=fast\|authoritative` | pass | `fast`=merged source, `authoritative`=remote source |
+| Stand smoke: version create | `POST /operations` with `client_request_id` | pass | Returns `version:1` |
+| Stand smoke: version conflict | `POST /operations/{id}/submit` stale `expected_version` | pass | `409 operation_version_conflict` with `current_version:1` |
+| UI automation | focused Playwright; `make test-e2e` | skipped | Отложено до Stage D Angular на стенде |
+| Regression (SyncServer) | docker focused operations tests | 18p / 0f | Core Stage A+B semantics preserved |
+| Regression (Django) | docker 3 app test suite | 140p / 0f | Stage C+D changes pass with no regressions |
+| Regression (Angular) | `npm test -- --watch=false` | 57p / 0f | All existing component/service tests pass |
 
 Executor report must add focused commands, test counts, migration revisions, stand URLs, request IDs and Playwright report/trace paths. Screenshots may not expose tokens or sensitive payloads.
 

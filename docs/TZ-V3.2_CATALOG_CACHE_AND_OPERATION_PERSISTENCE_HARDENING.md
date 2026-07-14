@@ -7,7 +7,7 @@
 - [x] 2. Stage A — SyncServer catalog usability и resolver реализованы
 - [x] 3. Stage B — SyncServer versioning и idempotent create реализованы
 - [x] 4. Stage C — Django BFF cache coherence и error passthrough реализованы
-- [ ] 5. Stage D — Angular refresh/repair и persist state machine реализованы
+- [x] 5. Stage D — Angular refresh/repair и persist state machine реализованы
 - [x] 6. Static, unit и component tests завершены (Stage A)
 - [x] 7. DB-backed integration tests завершены (Stage B: full suite passes 546/2/7)
 - [x] 8. Реальный stand smoke завершён (Stage A + Stage B idempotency/version)
@@ -666,6 +666,34 @@ Stage A и B выполняются последовательно: они пе�
 Порядок проверок обязателен: SyncServer focused → SyncServer full → Django focused/full → Angular unit/build → migrations на safe DB → stand smoke → Playwright → regression.
 
 ## 7. Test Ladder
+
+### Stage D Evidence
+
+| Check | Command / Tool | Result | Evidence |
+|---|---|---|---|
+| D1 version in OperationDto | Code review | pass | `version?: number` added |
+| D1 PersistState type | Code review | pass | `PersistStatus`, `PersistState`, `PersistError` defined |
+| D1 ResolvedItemDto type | Code review | pass | `ItemResolveStatus`, `ResolvedItemDto` defined |
+| D2 BFF API structured errors | Code review | pass | `current_version`, `request_id`, `retry_safe`, `status` through error handler |
+| D2 X-Warehouse-Client header | Code review | pass | `getMutationHeaders()` sets `X-Warehouse-Client: 3.2-angular` |
+| D2 Mutation timeout | Code review | pass | `MUTATION_TIMEOUT_MS = 30000`, `timeout()` on POST/PATCH/PUT/DELETE |
+| D2 Timeout → operation_outcome_unknown | Code review | pass | TimeoutError returns `code: operation_outcome_unknown, retry_safe: true` |
+| D3 consistency param | `searchItems(query, limit, sourceSiteId, includeBalance, consistency)` | pass | Forwarded as `$httpParams` to BFF |
+| D3 authoritative refresh | `refreshItemsAuthoritative()` | pass | Cancels stream, re-runs with `consistency=authoritative` |
+| D3 batch resolver | `resolveItems(itemIds)` | pass | `POST /catalog/read/items/resolve`, returns `ResolvedItemDto[]` |
+| D4 persist state machine | `persistState()` signal | pass | `setPersist(status, error)` with stale-response guard |
+| D4 immutable snapshot | `captureSnapshot()` / `isSnapshotValid()` | pass | Deep-clone before await; comparison guards stale callbacks |
+| D4 pre-persist validation | `validateLinesBeforePersist()` | pass | Batch-resolves persisted IDs; blocks if `isItemUnusable()` |
+| D4 create always idempotent | `createOperation()` | pass | `client_request_id` always generated (UUID) |
+| D4 update with expected_version | `updateOperation()` | pass | `draft.version → payload.expected_version` |
+| D4 submit with expected_version | `submitOperation()` | pass | `draft.version → payload.expected_version` |
+| D5 saveAndSubmit partial lifecycle | `saveAndSubmit()` | pass | Catches submit fail → returns saved operation, shows partial outcome |
+| D5 version bump on create | `createOperation()` | pass | `draft.version = result.version` after success |
+| D6 fingerprint builder | `buildFingerprint()` | pass | Normalized ordered lines + fields, no local/session storage |
+| Angular full test suite | `npm test -- --watch=false` | 57 passed | 11 test files, 0 failures |
+| Angular production build | `npm run build` | exit 0 | Pre-existing CSS budget warnings only |
+
+**Commit:** `c993730` — feat(v3.2): Stage D — Angular UX/state (Warehouse_frontend)
 
 ### 7.1. Mandatory levels
 

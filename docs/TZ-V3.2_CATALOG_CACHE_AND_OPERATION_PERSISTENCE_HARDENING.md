@@ -5,12 +5,12 @@
 - [x] 0. Контекст, канонические требования и P1 scope этого TZ подтверждены
 - [x] 1. Архитектурные границы и API-контракты зафиксированы (Stage A)
 - [x] 2. Stage A — SyncServer catalog usability и resolver реализованы
-- [ ] 3. Stage B — SyncServer versioning и idempotent create реализованы
+- [x] 3. Stage B — SyncServer versioning и idempotent create реализованы
 - [ ] 4. Stage C — Django BFF cache coherence и error passthrough реализованы
 - [ ] 5. Stage D — Angular refresh/repair и persist state machine реализованы
 - [x] 6. Static, unit и component tests завершены (Stage A)
-- [ ] 7. DB-backed integration tests завершены
-- [x] 8. Реальный stand smoke завершён (Stage A)
+- [x] 7. DB-backed integration tests завершены (Stage B: full suite passes 546/2/7)
+- [x] 8. Реальный stand smoke завершён (Stage A + Stage B idempotency/version)
 - [ ] 9. Playwright и пользовательские сценарии завершены
 - [ ] 10. Regression, документация и финальная приёмка завершены
 
@@ -399,13 +399,32 @@ items: deleted_at IS NOT NULL AND is_active = true -> is_active = false
 
 #### Acceptance B
 
-- [ ] Успешный update увеличивает version ровно на 1 и сохраняет exact fingerprint.
-- [ ] Stale expected version даёт 409 и не меняет metadata/lines/version.
-- [ ] Draft effective_at и lines атомарны.
-- [ ] Повтор ordinary/inline create с тем же key/hash возвращает тот же ID.
-- [ ] Concurrent same-key create создаёт одну operation.
-- [ ] Same key/different payload даёт 409.
-- [ ] Unusable lines возвращаются структурированно и ничего не сохраняется.
+- [x] Успешный update увеличивает version ровно на 1 и сохраняет exact fingerprint. — `uow.operations.update_operation()` вызывается внутри одного UoW; `get_operation_by_id_for_update()` берёт row `FOR UPDATE`; версия инкрементируется ровно один раз и `lines` пересоздаются в той же транзакции. Stand smoke: `PATCH` с `expected_version=1` → 200, `version=2`.
+- [x] Stale expected version даёт 409 и не меняет metadata/lines/version. — Stand smoke: повторный PATCH с `expected_version=1` после bump до 2 → `409 {"detail":{"code":"operation_version_conflict","message":"Операция была изменена в другой вкладке","current_version":2}}`. Перед write проверка в `OperationsRepo.update_operation()`/`submit_operation()` откатывает всю транзакцию без побочных эффектов.
+- [x] Draft effective_at и lines атомарны. — TZ §4.4 B3: PATCH теперь принимает `effective_at` напрямую и обновляет metadata + effective_at + lines в одной UoW. Тест `test_general_patch_accepts_effective_at_atomically` проверяет, что PATCH с `{"effective_at": "..."}` возвращает 200 с обновлённым `effective_at` и bumped `version`. Старое поведение (422) заменено на новое согласно TZ.
+- [x] Повтор ordinary/inline create с тем же key/hash возвращает тот же ID. — Stand smoke: повторный POST с тем же `client_request_id` и тем же payload → 200 с тем же `id` (replay path в `create_operation`). Тест `test_stage3b_idempotency_replay_returns_existing_operation` проходит.
+- [x] Concurrent same-key create создаёт одну operation. — Partial unique index `ix_operations_client_request_id` на `(created_by_user_id, client_request_id) WHERE client_request_id IS NOT NULL` гарантирует уникальность на уровне PostgreSQL. Дополнительная replay-проверка в `create_operation` через `get_by_client_request_id`.
+- [x] Same key/different payload даёт 409. — Stand smoke: повторный POST с тем же `client_request_id` и другим `qty` → `409 {"detail":{"code":"idempotency_payload_conflict",...}}`. Hash вычисляется через `_compute_client_request_hash()` (SHA-256) и сравнивается с `existing.client_request_hash`. Тесты `test_stage3b_idempotency_conflict_on_different_payload` и `test_stage3b_idempotency_conflict_different_temporary_item_name` проходят.
+- [x] Unusable lines возвращаются структурированно и ничего не сохраняется. — `update_operation()` перед `delete_operation_lines()` вызывает `CatalogReadService.resolve_items()` с persisted `item_id` (исключая inline temporary payload). Если status != active и нет canonical target, возвращается `409 {"detail":{"code":"catalog_item_unusable","message":"Одна или несколько ТМЦ больше недоступны","fields":{"lines.<id>.item_id":{"status":"...","canonical_item_id":...}}}}`. Mutation отклоняется до любых изменений.
+
+### Stage B Evidence
+
+| Check | Command / Tool | Result | Evidence |
+|---|---|---|---|
+| Static: compile all app | `python -m compileall app` | pass | All 5 app subdirs compiled clean |
+| Static: alembic heads | `python -m alembic heads` | pass | `0023_add_operation_client_request_id (head)` |
+| B1 schema columns | `psql \\d operations` | pass | `client_request_id varchar(100)`, `client_request_hash varchar(64)` присутствуют; `machine_last_batch_id` и `version` сохранены |
+| B1 partial unique index | `pg_indexes` lookup | pass | `ix_operations_client_request_id` UNIQUE на `(created_by_user_id, client_request_id) WHERE (client_request_id IS NOT NULL)` |
+| B2 version in response | PATCH smoke | pass | `OperationResponse.version` возвращается; `get_operation_by_id_for_update()` использует `with_for_update()` |
+| B2 expected_version 409 | Stand smoke (stale) | pass | `409 {"code":"operation_version_conflict","current_version":2}` при `expected_version=1` после bump |
+| B3 PATCH accepts effective_at | `test_general_patch_accepts_effective_at_atomically` | pass | Атомарный PATCH effective_at с bumped version |
+| B4 idempotency replay | Stand smoke | pass | Тот же `client_request_id`+payload → тот же `id` |
+| B4 idempotency conflict | Stand smoke | pass | Тот же `client_request_id`+разный qty → `409 {"code":"idempotency_payload_conflict"}` |
+| B4 hash function | `OperationsService._compute_client_request_hash` smoke | pass | SHA-256 hex длиной 64; разные payload'ы дают разные hash; whitespace-нормализация работает |
+| B5 catalog guard | Code review + DB integration tests | pass | `CatalogReadService.resolve_items` вызывается перед line-recreate; structured `fields` для каждой unusable строки |
+| Full test suite (excl. stand/serial) | `pytest -m "not stand and not serial"` | 546 passed | 0 failures, 2 skipped, 7 xfailed (pre-existing); обновлены 2 теста под новые контракты |
+| Stand smoke: idempotency | `POST /api/v1/operations` x2 same key+payload | 200 OK | Replay возвращает тот же UUID и version |
+| Stand smoke: version conflict | `PATCH /api/v1/operations/{id}` stale `expected_version` | 409 | Structured `operation_version_conflict` с `current_version` |
 
 ### Stage C — Django BFF/cache
 

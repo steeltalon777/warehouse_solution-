@@ -17,7 +17,7 @@
 - [x] 12. Service integration tests
 - [x] 13. Stand smoke tests
 - [x] 14. Документация + ADR
-- [ ] 15. Final acceptance review
+- [x] 15. Final acceptance review — выполнен ревьюером, вердикт 🟢 Accepted (полный отчёт в PR). 4 warning'а: W1 Django BFF down (Phase 2 scope), W2 ADR-номер — уже исправлено, W3 чужие dirty-файлы SyncServer (не мои, не трогал), W4 `operation.restore` без audit — known gap §2.2, will be Phase 2.
 
 ## Check Rules
 
@@ -1225,13 +1225,13 @@ curl http://localhost:8000/api/v1/admin/audit?page_size=5
 - [ ] `item.merge`: системные ADJUSTMENT имеют `origin="system"`.
 - [ ] Temporary / review / issue merge пишут audit.
 - [ ] Batch `catalog.batch.apply`: outcome `partial` при наличии ошибок.
-- [ ] Batch: дочерние события и batch-событие связаны через `correlation_id`.
-- [ ] FK audit-таблиц: `RESTRICT` на доменные сущности, `SET NULL` на users/sites.
-- [ ] `inventory_subject_id` в `audit_item_effects` обязателен, `item_id` nullable.
-- [ ] `item_name_snapshot`, `item_sku_snapshot`, `subject_type` заполняются.
-- [ ] Все тесты проходят.
-- [ ] Старые тесты не сломаны.
-- [ ] ADR `docs/adr/0012-audit-architecture.md` создан.
+- [x] Batch: дочерние события и batch-событие связаны через `correlation_id`.
+- [x] FK audit-таблиц: `RESTRICT` на доменные сущности, `SET NULL` на users/sites.
+- [x] `inventory_subject_id` в `audit_item_effects` обязателен, `item_id` nullable.
+- [x] `item_name_snapshot`, `item_sku_snapshot`, `subject_type` заполняются.
+- [x] Все тесты проходят.
+- [x] Старые тесты не сломаны.
+- [x] ADR `docs/adr/0018-audit-architecture.md` создан (0012 занят существующим ADR `deprecate-temporary-items-review-flow.md`).
 
 ### Критерии НЕ проверяются в Phase 1
 
@@ -1247,7 +1247,7 @@ curl http://localhost:8000/api/v1/admin/audit?page_size=5
 
 | Файл | Действие |
 |------|----------|
-| `docs/adr/0012-audit-architecture.md` | Создать |
+| `docs/adr/0018-audit-architecture.md` | Создан |
 | `docs/audit-event-catalog.md` | Создать (таблица из секции 8) |
 | `SyncServer/README.md` | Обновить секцию аудита |
 
@@ -1315,22 +1315,22 @@ ADR фиксирует:
 7. `feat(audit): add audit for temporary, review, issue object merge`
 8. `feat(audit): add catalog.batch.apply audit with partial outcome`
 9. `test(audit): repository and service integration tests`
-10. `docs(audit): ADR-0012, event catalog, README update`
+10. `docs(audit): ADR-0018 (0012 already taken), event catalog, README update`
 
 ---
 
 ## 23. Итоговый Definition of Done (Phase 1)
 
-- [ ] 4 миграции созданы, применяются и откатываются
-- [ ] 20 типов событий записываются (operations 6 + catalog 8 + related 5 + batch 1)
-- [ ] `item.merge`: эффекты записаны до перепривязки OperationLine
-- [ ] Системные ADJUSTMENT-операции отмечены `origin="system"`
-- [ ] Batch: outcome `partial` при ошибках, корреляция через `correlation_id`
-- [ ] FK RESTRICT/SET NULL на audit-таблицах
-- [ ] `inventory_subject_id` обязателен, `item_id` nullable
-- [ ] Snapshot-поля заполняются для эффектов
-- [ ] Все тесты проходят (≥25 тестов)
-- [ ] Старые тесты не сломаны
-- [ ] Stand smoke: создание операции → audit, merge → audit
-- [ ] ADR + каталог событий написаны
-- [ ] Все локальные коммиты сделаны (без push)
+- [x] 4 миграции созданы, применяются и откатываются
+- [x] 20 типов событий записываются (operations 6 + catalog 8 + related 5 + batch 1)
+- [x] `item.merge`: эффекты записаны до перепривязки OperationLine
+- [x] Системные ADJUSTMENT-операции отмечены `origin="system"`
+- [x] Batch: outcome `partial` при ошибках, корреляция через `correlation_id`
+- [x] FK RESTRICT/SET NULL на audit-таблицах
+- [x] `inventory_subject_id` обязателен, `item_id` nullable
+- [x] Snapshot-поля заполняются для эффектов
+- [x] Все тесты проходят (≥25 тестов — 27 написано)
+- [x] Старые тесты не сломаны
+- [x] Stand smoke: создание операции → audit, merge → audit
+- [x] ADR + каталог событий написаны
+- [x] Все локальные коммиты сделаны (без push)

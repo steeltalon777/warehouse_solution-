@@ -222,6 +222,7 @@ Notes:
 - MOVE operations require `source_site_id` + `destination_site_id` in create/update payloads and corresponding site access.
 - `effective_at` must be changed via the dedicated `PATCH /operations/{id}/effective-at`, not through generic `PATCH /operations/{id}`.
 - `POST /operations/from-source-document` (TZ-SOURCE_DOCUMENT_OPERATION_INTAKE_HARDENING) создаёт операцию из внешнего документа (накладная, OCR, импорт). Schema физически не допускает `temporary_item`. Каждая строка обязана иметь `item_id`. Endpoint проставляет `creation_source='source_document'`. Idempotency по `source_ref` + content hash (409 при конфликте).
+- BFF: `/bff/api/v1/operations/from-source-document` — зеркалирует SyncServer endpoint для Django/Angular.
 
 ---
 

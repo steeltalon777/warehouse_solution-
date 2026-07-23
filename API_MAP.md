@@ -209,6 +209,7 @@ Mutation endpoints for units, categories, items. Requires `X-User-Token`. Author
 | `GET` | `/operations` | `X-User-Token` | query: `site_id`, `type`, `status`, `created_by_user_id`, `effective_after`, `effective_before`, `created_after`, `created_before`, `updated_after`, `updated_before`, `search`, `page`, `page_size` | `{items, total_count, page, page_size}` |
 | `GET` | `/operations/{operation_id}` | `X-User-Token` | — | `OperationResponse` |
 | `POST` | `/operations` | `X-User-Token` | `OperationCreate` | `OperationResponse` |
+| `POST` | `/operations/from-source-document` | `X-User-Token` | `SourceDocumentOperationCreate` | `OperationResponse` |
 | `PATCH` | `/operations/{operation_id}` | `X-User-Token` | `OperationUpdate` | `OperationResponse` |
 | `PATCH` | `/operations/{operation_id}/effective-at` | `X-User-Token` | `{effective_at}` | `OperationResponse` |
 | `POST` | `/operations/{operation_id}/submit` | `X-User-Token` | `{submit: true}` | `OperationResponse` |
@@ -220,6 +221,7 @@ Notes:
 - Write roles: `root`, `chief_storekeeper`, `storekeeper`.
 - MOVE operations require `source_site_id` + `destination_site_id` in create/update payloads and corresponding site access.
 - `effective_at` must be changed via the dedicated `PATCH /operations/{id}/effective-at`, not through generic `PATCH /operations/{id}`.
+- `POST /operations/from-source-document` (TZ-SOURCE_DOCUMENT_OPERATION_INTAKE_HARDENING) создаёт операцию из внешнего документа (накладная, OCR, импорт). Schema физически не допускает `temporary_item`. Каждая строка обязана иметь `item_id`. Endpoint проставляет `creation_source='source_document'`. Idempotency по `source_ref` + content hash (409 при конфликте).
 
 ---
 

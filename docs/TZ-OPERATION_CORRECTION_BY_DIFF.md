@@ -40,18 +40,18 @@
 - [x] 8. Service: begin_correction (клонирует baseline, partial unique reject)
 - [x] 9. Service: update_correction (PUT full / command endpoints)
 - [x] 10. Service: _compute_correction_diff (server-side kind computation)
-- [x] 11. Service: _validate_delta (safe-delete matrix V1)
-- [x] 12. Service: submit_correction (atomic, immutable revision create, lock order)
-- [x] 13. Document: OperationRevisionLine вместо OperationLine (INV-C16)
-- [x] 14. Document: operation_revision_id FK + supersede chain
-- [x] 15. Endpoints: begin + PUT + POST/PATCH/DELETE line + submit + DELETE abandon
-- [x] 16. Audit events: operation.correction.{applied,abandoned} + document.revision_created, document.superseded
+- [x] 11. Service: _validate_delta (safe-delete matrix V1) — 🔴 FIXED rev.2: _validate_new_item заменён на рабочий async; item_replaced проверяет полный old_qty
+- [x] 12. Service: submit_correction (atomic, immutable revision create, lock order) — 🔴 FIXED rev.2: idempotent retry (INV-C13), _collect_affected_subjects реализован, документы без try/except
+- [x] 13. Document: OperationRevisionLine вместо OperationLine (INV-C16) — 🔴 FIXED rev.2: operation_revision_id прокинут в generate_from_operation
+- [x] 14. Document: operation_revision_id FK + supersede chain — 🔴 FIXED rev.2: новые документы создаются, старые supersede'ятся, audit пишется
+- [x] 15. Endpoints: begin + PUT + POST/PATCH/DELETE line + submit + DELETE abandon + GET draft + root-only auth — REVIEW: исправлено rev.2
+- [x] 16. Audit events: operation.correction.{applied,abandoned} + document.revision_created + document.superseded — 🔴 FIXED rev.2
 - [x] 17. Cancel after correction — 4 unit tests (cancel after correction, cancel without correction, abandon+resubmit, draft rejection)
-- [x] 18. Unit tests: 22 теста (compute_diff 8 + validation 5 + cancel 4 + concurrency 5) + 59 existing pass
-- [ ] 19. Integration tests: 7 integration test scenarios написаны; полный прогон 12 mandatory deferred (требуют dedicated test DB)
-- [x] 20. Concurrency tests: 5 unit tests (version conflicts, status transitions, abandon+submit)
+- [x] 18. Unit tests: 22 теста (mock-based) pass; полный прогон reviewer'ом 2026-07-24: 656 passed, 3 skipped, 7 xfailed, 13 deselected (stand), 709s — регрессий нет
+- [ ] 19. Integration tests: 7 scenarios; import fixed (from main import create_app); require dedicated test DB — 🟡 REVIEW 2026-07-24: починено rev.2
+- [x] 20. Concurrency tests: 5 unit tests (version conflicts, status transitions, abandon+submit) — REVIEW note: mock-based, реальную DB-concurrency не проверяют; partial unique + version conflict проверены reviewer'ом live на стенде (409)
 - [x] 21. Documentation: ARCHITECTURE.md (data model + correction flow + principles), Functional and WorkLogik.md (section II.6.8.1)
-- [ ] 22. Final acceptance review: pending
+- [ ] 22. Final acceptance review: 🔴 REJECTED 2026-07-24 → 🔄 FIXED rev.2 (4 блокера устранены). Требуется повторное ревью.
 
 ---
 

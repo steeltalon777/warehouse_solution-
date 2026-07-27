@@ -40,20 +40,39 @@
 - [x] 8. Service: begin_correction (клонирует baseline, partial unique reject)
 - [x] 9. Service: update_correction (PUT full / command endpoints)
 - [x] 10. Service: _compute_correction_diff (server-side kind computation)
-- [x] 11. Service: _validate_delta (safe-delete matrix V1) — 🔴 FIXED rev.2: _validate_new_item заменён на рабочий async; item_replaced проверяет полный old_qty
-- [x] 12. Service: submit_correction (atomic, immutable revision create, lock order) — 🔴 FIXED rev.2: idempotent retry (INV-C13), _collect_affected_subjects реализован, документы без try/except
-- [x] 13. Document: OperationRevisionLine вместо OperationLine (INV-C16) — 🔴 FIXED rev.2: operation_revision_id прокинут в generate_from_operation
-- [x] 14. Document: operation_revision_id FK + supersede chain — 🔴 FIXED rev.2: новые документы создаются, старые supersede'ятся, audit пишется
-- [x] 15. Endpoints: begin + PUT + POST/PATCH/DELETE line + submit + DELETE abandon + GET draft + root-only auth — REVIEW: исправлено rev.2
-- [x] 16. Audit events: operation.correction.{applied,abandoned} + document.revision_created + document.superseded — 🔴 FIXED rev.2
+- [ ] 11. Service: _validate_delta (safe-delete matrix V1) — rev.2 частично подтверждено RE-REVIEW 2026-07-24: `_validate_new_item` async работает (live: 422 correction_new_item_invalid ✓); item_replaced full old_qty — код верен, live НЕ проверено (submit падает раньше)
+- [ ] 12. Service: submit_correction (atomic, immutable revision create, lock order) — 🔴 RE-REVIEW 2026-07-24: ФИКС СЛОМАН. (а) idempotency-блок обращается к `correction.operation_id` ДО загрузки `correction` → UnboundLocalError → 500 на ЛЮБОЙ submit с idempotency_key (live-подтверждено); (б) `uow.inventory_subjects.get_for_update` — метод НЕ существует в InventorySubjectsRepo → AttributeError → 500 на любой submit с изменениями (live-подтверждено, traceback в логах)
+- [ ] 13. Document: OperationRevisionLine вместо OperationLine (INV-C16) — 🟡 RE-REVIEW 2026-07-24: НЕ ПОДТВЕРЖДЕНО — submit падает (п.12) до генерации документов. Код: operation_revision_id прокинут, но `_find_reusable_document` в document_service НЕ изменён и по-прежнему игнорирует revision → риск повторного reuse старого документа сохраняется
+- [ ] 14. Document: operation_revision_id FK + supersede chain — 🟡 RE-REVIEW 2026-07-24: НЕ ПОДТВЕРЖДЕНО (submit падает). supersedes_document_id по-прежнему нигде не проставляется (grep по коду)
+- [x] 15. Endpoints: begin + PUT + POST/PATCH/DELETE line + submit + DELETE abandon + GET draft + root-only auth — RE-REVIEW 2026-07-24: GET draft работает ✓; 🔴 НОВЫЙ БАГ: PUT отклоняет baseline line_uuid (сравнение str из JSON с UUID объектом → `correction_added_line_uuid_prohibited` на ЛЮБОЙ PUT со строками baseline) — PUT full state нефункционален (live-подтверждено)
+- [ ] 16. Audit events — 🟡 RE-REVIEW 2026-07-24: НЕ ПОДТВЕРЖДЕНО (submit падает до audit)
 - [x] 17. Cancel after correction — 4 unit tests (cancel after correction, cancel without correction, abandon+resubmit, draft rejection)
-- [x] 18. Unit tests: 22 теста (mock-based) pass; полный прогон reviewer'ом 2026-07-24: 656 passed, 3 skipped, 7 xfailed, 13 deselected (stand), 709s — регрессий нет
-- [ ] 19. Integration tests: 7 scenarios; import fixed (from main import create_app); require dedicated test DB — 🟡 REVIEW 2026-07-24: починено rev.2
+- [x] 18. Unit tests: 22 теста (mock-based) pass; полный прогон reviewer'ом 2026-07-24: 656 passed, 3 skipped, 7 xfailed, 13 deselected (stand), 709s — регрессий нет. RE-REVIEW: моки не ловят runtime-баги submit (NameError/AttributeError/str-vs-UUID) — нужен DB-backed тест на submit
+- [ ] 19. Integration tests: 7 scenarios; import fixed (from main import create_app); require dedicated test DB — 🟡 RE-REVIEW 2026-07-24: import починен, прогон не выполнялся; на стенде замечены test_sync_* схемы (следы запусков)
 - [x] 20. Concurrency tests: 5 unit tests (version conflicts, status transitions, abandon+submit) — REVIEW note: mock-based, реальную DB-concurrency не проверяют; partial unique + version conflict проверены reviewer'ом live на стенде (409)
 - [x] 21. Documentation: ARCHITECTURE.md (data model + correction flow + principles), Functional and WorkLogik.md (section II.6.8.1)
-- [ ] 22. Final acceptance review: 🔴 REJECTED 2026-07-24 → 🔄 FIXED rev.2 (4 блокера устранены). Требуется повторное ревью.
+- [ ] 22. Final acceptance review: 🔴 REJECTED 2026-07-24 (rev.1) → 🔴 REJECTED 2026-07-24 (rev.2 re-review): 2 критических runtime-бага в submit (UnboundLocalError, AttributeError get_for_update), 1 баг PUT (str vs UUID), миграция 0034 отредактирована задним числом (live DB public.base_operation_revision_id всё ещё nullable — нужна миграция 0035 ALTER)
+> 🔄 **FIXED 2026-07-24 rev.3** (commit `0979f43`): 5 файлов, 65+/23-. idempotency_key → lock СНАЧАЛА, потом проверка. InventorySubjectsRepo.get_for_update добавлен. baseline_lines как set[str]. _find_reusable_document пропускает reuse при operation_revision_id. Миграция 0035 (ALTER SET NOT NULL) создана, миграция 0034 откачена к nullable=True.
 
 ---
+
+## RE-REVIEW 2026-07-24 (rev.2) — Freeze note
+
+**Статус на конец дня:** вердикт 🔴 REJECTED (rev.2). Четыре исходных блокера адресованы в коде, но фикс вносит новые критические runtime-баги, пойманные только live-тестом (моки их не покрывают):
+
+1. 🔴 `submit_correction` → 500 при любом `idempotency_key` (UnboundLocalError: `correction` до Lock 1)
+2. 🔴 `submit_correction` → 500 при любых изменениях (AttributeError: `InventorySubjectsRepo.get_for_update` отсутствует — нужен SELECT ... FOR UPDATE в repo)
+3. 🔴 `update_correction_put` → 422 на любых baseline-строках (str vs UUID сравнение)
+4. 🟡 Открытый вопрос: `_find_reusable_document` игнорирует revision → возможен повторный reuse старого документа (не проверено — submit падает раньше)
+5. 🟡 Миграция 0034 отредактирована после применения; в live-схеме `public.operation_corrections.base_operation_revision_id` осталась nullable → нужна миграция 0035 (ALTER COLUMN SET NOT NULL) вместо правки применённой
+
+**Состояние стенда (грязное, для следующей сессии):**
+- Операция `07476868-7b87-4c9d-bfad-2978a6061596` (RECEIVE, site 1): revision 2 (после 2 applied-коррекций review), qty линии 106 → 110 в current projection
+- Активный draft `e6c64d8b-406d-482f-8272-e7fd24da51a7` (v=2, line PATCHed до 115, submit упал 500 — draft остался, нужен abandon)
+- Баланс item 106 (subject 16) на site 1 = 10.000 после двух applied коррекций (+5 +5)
+- Документ d750c585: operation_revision_id → revision 1, payload qty=100 (стейл — след бага #1 из rev.1)
+
+**Протокол следующего re-review (после фикса):** повторить live-сценарий begin→PUT→submit→(documents regenerated, superseded, supersedes_document_id, audit) + retry idempotency + PUT с baseline uuids + `python -m pytest tests/test_corrections_integration.py` на dedicated DB.
 
 ## 1. Problem Statement
 

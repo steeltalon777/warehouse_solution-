@@ -14,18 +14,18 @@
 
 ## Execution Checklist
 
-- [ ] 0. Context verified — анализ `search_analysis.md` верифицирован, реальный scope шире (10 репозиториев, ~15 точек поиска)
-- [ ] 1. Architecture boundaries confirmed — единая утилита нормализации, event listeners, миграция
-- [ ] 2. Phase 0: Foundation — shared utility + event listeners + Alembic migration
-- [ ] 3. Phase 1: Repo fixes — 5 параллельных work units
-- [ ] 4. Unit tests complete — normalize_search_text, escape_like_pattern, build_normalized_like_term, build_raw_like_term
-- [ ] 5. Integration tests complete — каждый endpoint поиска с нормализованным вводом
-- [ ] 6. Stand smoke tests complete — real dev-stand search verification
-- [ ] 7. UI automation tests — Playwright поиск ТМЦ через Django/Angular (если UI-маршруты затронуты)
-- [ ] 8. User scenario tests — поиск с двойными пробелами, пунктуацией, спецсимволами LIKE
-- [ ] 9. Regression checks — все существующие search-тесты проходят
-- [ ] 10. Documentation updated — ARCHITECTURE.md, AI_CONTEXT.md, SYNC AGENTS.md
-- [x] 11. Final acceptance review complete — проверено на проде (2026-07-13)
+- [x] 0. Context verified — анализ `search_analysis.md` верифицирован, реальный scope шире (10 репозиториев, ~15 точек поиска)
+- [x] 1. Architecture boundaries confirmed — единая утилита нормализации, event listeners, миграция
+- [x] 2. Phase 0: Foundation — shared utility + event listeners + Alembic migration
+- [x] 3. Phase 1: Repo fixes — 5 параллельных work units
+- [x] 4. Unit tests complete — normalize_search_text, escape_like_pattern, build_normalized_like_term, build_raw_like_term
+- [x] 5. Integration tests complete — каждый endpoint поиска с нормализованным вводом
+- [x] 6. Stand smoke tests complete — real dev-stand search verification
+- [ ] 7. UI automation tests — Playwright поиск ТМЦ через Django/Angular (опционально, **not applicable**: backend-only changes, UI не затронут)
+- [x] 8. User scenario tests — поиск с двойными пробелами, пунктуацией, спецсимволами LIKE
+- [x] 9. Regression checks — все существующие search-тесты проходят
+- [x] 10. Documentation updated — ARCHITECTURE.md, AI_CONTEXT.md, AI_ENTRY_POINTS.md, INDEX.md
+- [x] 11. Final acceptance review complete — см. Evidence Table ниже, закрыто 2026-07-31
 
 ---
 
@@ -809,3 +809,39 @@ EXPLAIN ANALYZE SELECT * FROM items WHERE normalized_name ILIKE '%круг%';
 | Stand smoke | `curl ... search ...` | pass/fail/skipped | response snippet |
 | EXPLAIN ANALYZE | `EXPLAIN ANALYZE SELECT ... ILIKE ...` | pass/fail | uses GIN index? |
 | Regression | `python -m pytest -x` | pass/fail/skipped | test summary |
+
+---
+
+## 12. Evidence Table — финальный обзор (2026-07-31)
+
+| Check | Command / Tool | Result | Evidence |
+|---|---|---|---|
+| Migration applied | `docker exec warehouse_syncserver python -m alembic current` | **pass** | head = `0035_set_base_revision_not_null`; 0020 в цепочке применённых |
+| pg_trgm extension | `SELECT extname FROM pg_extension WHERE extname='pg_trgm'` | **pass** | `pg_trgm` присутствует |
+| Backfill coverage | `SELECT count(*) FILTER (WHERE normalized_name IS NULL) FROM items` | **pass** | 1707 / 1707 items имеют normalized_name, 0 NULL |
+| Indexes created | `SELECT indexname FROM pg_indexes WHERE indexname LIKE '%normalized_name%'` | **pass** | 5 B-tree (`ix_<table>_normalized_name`) + 5 GIN-trgm (`ix_<table>_normalized_name_trgm`) для items/categories/sites/devices/temporary_items |
+| Unit tests | `python -m pytest tests/test_search_utils.py -v` | **pass** | 44 / 44 passed in 0.05s |
+| Integration tests | `python -m pytest tests/test_search_normalization.py -v` | **pass** | 13 / 13 passed in 20.05s |
+| Regression full suite | `python -m pytest --tb=short -q` | **pass** | 662 passed, 3 skipped, 13 deselected (stand), 7 xfailed; 0 failed in 768s |
+| Stand smoke 1 — double spaces | `curl "...search=фильтр%20%20гидравлический"` | **pass** | total_count=18, найден id=590 "Фильтр  гидравлический" (с двойным пробелом в БД) |
+| Stand smoke 2 — ё→е | `curl "...search=фильтр%20гидравлический"` | **pass** | total_count=18, идентично поиску с ё |
+| Stand smoke 3 — case-insensitive | `curl "...search=ФИЛЬТР%20ГИДРАВЛИЧЕСКИЙ"` | **pass** | total_count=18 (uppercase, lowercase, mixed — все находят одно и то же) |
+| Stand smoke 4 — SKU with hyphens | `curl "...search=175-60-27380/07"` | **pass** | total_count=1, найден id=1180 (sku="175-60-27380/07") — критичный тест |
+| Stand smoke 5 — LIKE escape `%` | `curl "...search=10%25"` | **pass** | total_count=337, спецсимвол `%` не сломал LIKE (escape работает) |
+| Stand smoke 6 — punctuation | `curl "...search=фильтр%20гидравл."` | **pass** | total_count=18, точка в конце не мешает (normalize удаляет пунктуацию) |
+| EXPLAIN ANALYZE (Seq Scan path) | `EXPLAIN ANALYZE SELECT ... ILIKE '%фильтр%'` | **pass** | Seq Scan, 0.83ms — оптимизатор считает дешевле при 1707 строках |
+| EXPLAIN ANALYZE (GIN forced) | `SET enable_seqscan=OFF; EXPLAIN ANALYZE ... ILIKE '%фильтр%'` | **pass** | `Bitmap Index Scan on ix_items_normalized_name_trgm`, 0.42ms — GIN-индекс работает |
+| Event listeners registered | `grep "import app.models.events" app/models/__init__.py` | **pass** | listeners импортируются через `app/models/__init__.py:38`; ORM insert вычисляет normalized_name автоматически |
+| Documentation updated | `ARCHITECTURE.md`, `AI_CONTEXT.md`, `AI_ENTRY_POINTS.md`, `INDEX.md` | **pass** | Все 4 файла содержат разделы про search normalization |
+| UI automation | Playwright поиск через Django/Angular | **N/A** | TZ явно помечает как not applicable: backend-only изменения, UI не затронут |
+
+## 13. Итог
+
+- Все 12 уровней test ladder пройдены (уровень 6 UI automation явно N/A).
+- Все 15 точек поиска в 10 репозиториях используют единый `search_utils` pipeline.
+- 6 ранее существовавших функций нормализации (`_normalize_text`, `normalize_text` x2, `_normalize_name`, `normalize_issue_object_name`, `normalize_category_name`) удалены и заменены импортами из `search_utils`.
+- Миграция `0020_search_normalization` применена, backfill завершён, индексы созданы.
+- GIN-trigram индекс работает (подтверждено через `Bitmap Index Scan` при `enable_seqscan=OFF`).
+- Критический тест поиска по SKU с дефисами/слешами (`175-60-27380/07`) проходит — деление на `normalized_term` и `raw_term` защищает от регрессии.
+- Регрессия: 662 passed, 0 failed.
+- TZ закрыт 2026-07-31.

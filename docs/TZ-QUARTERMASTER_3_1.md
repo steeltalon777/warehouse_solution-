@@ -288,10 +288,10 @@ pub async fn write_operations(&self, ops: &[OperationListItem]) -> CoreResult<()
 
 ### Тесты Stage 3.1C
 
-- [ ] `cargo fmt --all -- --check`
-- [ ] `cargo clippy --workspace --all-targets -- -D warnings`
-- [ ] `cargo test --workspace` — все существующие ~90 тестов проходят
-- [ ] Новый тест: `compute_payload_hash` совместим с SyncServer
+- [x] `cargo fmt --all -- --check`
+- [x] `cargo clippy --workspace --all-targets -- -D warnings`
+- [x] `cargo test --workspace` — все существующие ~90 тестов проходят (фактически: 114 passed, 0 failed, 2026-07-31)
+- [x] Новый тест: `compute_payload_hash` совместим с SyncServer
 - [ ] Stand smoke: `cargo run --release -p warehouse_cli -- sync full` проходит на Docker-стенде
 - [ ] Release DLL: `cargo build --release -p warehouse_ffi` успешно, файл существует
 
@@ -387,3 +387,23 @@ pub async fn write_operations(&self, ops: &[OperationListItem]) -> CoreResult<()
   Windows-окружения для P/Invoke + `warehouse_ffi.dll`; (3) gate 5 из ADR-0017
   (FFI cdylib loadable by client runtime) уже подтверждён в 3.1C через Rust+Python
   smoke. Verification загрузки .NET-рантаймом перенесён в v3.2.
+
+---
+
+## Evidence (2026-07-31)
+
+Проверки Stage 3.1C (Rust core compatibility gate) выполнены в `Warehouse_client_core`
+(ветка dev, run 2026-07-31).
+
+| Check | Command | Result | Note |
+|---|---|---|---|
+| fmt | `cargo fmt --all -- --check` | PASS exit 0 | — |
+| clippy | `cargo clippy --workspace --all-targets -- -D warnings` | PASS exit 0 | — |
+| tests | `cargo test --workspace` | PASS, 114 passed, 0 failed | сумма «test result: ok. N passed» = 75+11+1+10+17=114; в TZ стояло «~90/112» |
+| payload_hash compat | `cargo test --workspace payload_hash` | PASS | 3 unit-теста `operations::outbox_service::tests::compute_payload_hash_*` + интеграционный `tests/cross_lang_payload_hash.rs::compute_payload_hash_matches_python_reference` — все ok; `stand_smoke_payload_hash_matches_syncserver` ignored (требует реального стенда — остаётся вне scope) |
+
+Примечания:
+- Коммит делает родительский агент (этот агент только редактирует TZ, не коммитит).
+- Stage 3.1D (WPF Layer 0 FFI spike) остаётся deferred to v3.2 — боксы не трогала.
+- Вне scope остались незакрытыми: stand-smoke 3.1A (строки 89-93), 3.1B SyncServer
+  pytest (198-204), 3.1E (335-337), acceptance-критерии с Django/стендом (343-355).

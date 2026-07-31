@@ -1,0 +1,49 @@
+name: Frontend Unit Tests
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+    paths:
+      - 'Warehouse_frontend/**'
+  pull_request:
+    branches:
+      - dev
+      - main
+    paths:
+      - 'Warehouse_frontend/**'
+  workflow_dispatch:
+
+jobs:
+  unit:
+    name: ng test (single-run)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: Warehouse_frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          # Matches local dev Node (v20.x as of 2026-07). Bump deliberately
+          # if the team upgrades the local toolchain.
+          node-version: 20
+          cache: npm
+          cache-dependency-path: Warehouse_frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Canonical runner per TZ-FRONTEND_VITEST_ZONELESS_FIX / ADR-0024:
+      # @angular/build:unit-test on top of vitest. Fails the build on
+      # spec type drift (RC5); exercises real Angular compilation so DI
+      # metadata and signal-input bindings resolve (RC1/RC2/RC3).
+      - name: Run unit tests
+        run: npx ng test --watch=false

@@ -64,3 +64,4 @@ GIT_STATE.md
 
 # Prod working directory (agent workspace, untracked)
 prod_working/
+backups/

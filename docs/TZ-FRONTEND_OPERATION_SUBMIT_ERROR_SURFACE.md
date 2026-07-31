@@ -14,23 +14,23 @@
 ## 0. Execution Checklist
 
 - [x] 0. Контекст verified
-- [ ] 1. Контекст и подтверждённые факты
-- [ ] 2. Цели и не-цели
-- [ ] 3. TypeScript-модели envelope
-- [ ] 4. Parser / normalizer
-- [ ] 5. Сервис ошибок и хранение
-- [ ] 6. Inline-подсветка строк
-- [ ] 7. Подсчёт строк в toast
-- [ ] 8. Toast для operation-level ошибок
-- [ ] 9. Scroll / focus
-- [ ] 10. Очистка групповых ошибок
-- [ ] 11. a11y
-- [ ] 12. Неизвестные коды
-- [ ] 13. Unit-тесты
-- [ ] 14. Playwright-сценарии
-- [ ] 15. Стенд smoke
-- [ ] 16. Документация
-- [ ] 17. Final acceptance
+- [x] 1. Контекст и подтверждённые факты
+- [x] 2. Цели и не-цели
+- [x] 3. TypeScript-модели envelope
+- [x] 4. Parser / normalizer
+- [x] 5. Сервис ошибок и хранение
+- [x] 6. Inline-подсветка строк
+- [x] 7. Подсчёт строк в toast
+- [x] 8. Toast для operation-level ошибок
+- [x] 9. Scroll / focus
+- [x] 10. Очистка групповых ошибок
+- [x] 11. a11y
+- [x] 12. Неизвестные коды
+- [x] 13. Unit-тесты
+- [x] 14. Playwright-сценарии
+- [x] 15. Стенд smoke
+- [x] 16. Документация
+- [x] 17. Final acceptance
 
 ## Check Rules
 

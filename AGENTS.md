@@ -66,7 +66,7 @@ This workspace contains one authoritative backend, one active web client, one hi
 
 - `SyncServer/`: run `python -m pytest` after backend changes. For migrations, also run `python -m alembic upgrade head` against a safe database.
 - `Warehouse_web/`: run `python manage.py test` after Django changes.
-- `Warehouse_frontend/`: run `npm run build` after frontend changes. For Docker-backed browser flow or CI parity, run `make test-e2e` from the workspace root.
+- `Warehouse_frontend/`: run `npm run build` and `npm run test:unit` (`npx ng test --watch=false`, the `@angular/build:unit-test` builder on top of vitest — single canonical unit-test runner, see ADR-0024) after frontend changes. For Docker-backed browser flow or CI parity, run `make test-e2e` from the workspace root.
 - `Warehouse_client_core/`: run `cargo fmt --all -- --check`, `cargo clippy --workspace --all-targets -- -D warnings`, and `cargo test --workspace` once Rust workspace exists.
 - `WarehouseDesktop/`: run `dotnet test WarehouseDesktop.sln` only when this client is touched.
 - `WarehouseMobile/`: run `gradlew.bat test` when Android code is touched.

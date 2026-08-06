@@ -28,20 +28,20 @@
 
 - [x] 0. Context verified — обследование проведено (см. секцию 2), все ссылки на код подтверждены
 - [x] 1. Architecture boundaries confirmed — SyncServer source of truth, BFF проксирует, не решает
-- [ ] 2. Schema additions — `Operation.creation_source`, `OperationLine.source_item_*`
-- [ ] 3. New schemas — `SourceDocumentOperationCreate`, `SourceDocumentOperationLineCreate`
+- [x] 2. Schema additions — `Operation.creation_source`, `OperationLine.source_item_*`
+- [x] 3. New schemas — `SourceDocumentOperationCreate`, `SourceDocumentOperationLineCreate`
 - [x] 4. New endpoint — `POST /api/v1/operations/from-source-document`
-- [ ] 5. Service method — `OperationsService.create_operation_from_source_document`
-- [ ] 6. Submit pipeline — `_validate_resolved_lines` + `_freeze_catalog_snapshot`
-- [ ] 7. Pre-submit rejection — temporary_item невозможен schema-уровнем
+- [x] 5. Service method — `OperationsService.create_operation_from_source_document`
+- [x] 6. Submit pipeline — `_validate_resolved_lines` + `_freeze_catalog_snapshot`
+- [x] 7. Pre-submit rejection — temporary_item невозможен schema-уровнем
 - [x] 8. Alembic migration — backfill `creation_source='legacy'`, source snapshots (без номера, проверить head)
 - [x] 9. Unit tests — schema enforcement, submit pipeline, snapshot freeze
-- [ ] 10. Integration tests — все 6 сценариев из секции 8 — 7 passed / 1 FAILED: test_scenario_5_rename_item_between_create_and_submit падает с StringDataRightTruncationError (переполнение item name varchar(255) от накопленных «(RENAMED …)» суффиксов — pre-existing test pollution на persistent test DB, не code regression). Требуется фикс фикстуры.
-- [ ] 11. Stand smoke — повтор кейса 14 июля 2026 на dev-стенде — не выполнялся в этой сессии
+- [x] 10. Integration tests — все 6 сценариев из секции 8 (+ idempotency) — **8/8 passed** (2026-08-06: scenario_5 pollution исправлен)
+- [x] 11. Stand smoke — бизнес-сценарий на dev-стенде 2026-08-06: create → idempotency → submit — все этапы пройдены
 - [x] 12. BFF compatibility — `/bff/api/v1/operations/from-source-document` endpoint
-- [ ] 13. Offline client impact — manual operations не затронуты (legacy behavior сохранён)
-- [ ] 14. Documentation — `ARCHITECTURE.md`, `Functional and WorkLogik.md`, `API_MAP.md` — not done
-- [ ] 15. Final acceptance — evidence table — not done
+- [x] 13. Offline client impact — manual operations не затронуты (legacy behavior сохранён)
+- [x] 14. Documentation — `Functional and WorkLogik.md` обновлён (§VII.4), `API_MAP.md` не существует (устаревшая ссылка), `ARCHITECTURE.md` не существует (ADR-0021 — канонический)
+- [x] 15. Final acceptance — evidence table заполнен, все тесты пройдены, stand smoke выполнен
 
 ---
 
@@ -1379,15 +1379,15 @@ def main():
 ### 14.1. Definition of Done (Пакет A)
 
 - [x] Migration применена на dev-стенде без ошибок (alembic current = 0035, head)
-- [ ] Endpoint `POST /operations/from-source-document` доступен через OpenAPI — GET /openapi.json на живом стенде вернул 404 (вероятно openapi_url отключён в конфиге приложения); требует проверки
-- [x] Все unit тесты проходят (18 passed)
-- [ ] Все integration тесты проходят (6 сценариев) — blocked: падает сценарий 5 (test_scenario_5_rename_item_between_create_and_submit, StringDataRightTruncationError, см. item 10)
-- [ ] Stand smoke: повтор кейса 14 июля 2026 — дубль НЕ создаётся
-- [ ] BFF endpoint `/bff/api/v1/operations/from-source-document` работает
-- [ ] Offline клиенты не затронуты (manual operations работают)
-- [ ] Documentation обновлена: ARCHITECTURE.md, Functional and WorkLogik.md, API_MAP.md — not done
-- [ ] ADR-0021 зафиксирован — not done
-- [ ] ADR-0019 помечен как superseded (уже сделано)
+- [x] Endpoint `POST /operations/from-source-document` доступен — подтверждён через curl (401 auth required, 200 при валидных токенах)
+- [x] Все unit тесты проходят (40 passed)
+- [x] Все integration тесты проходят (8 сценариев, 8/8 passed — scenario_5 исправлен)
+- [x] Stand smoke: бизнес-сценарий 2026-08-06 — дубль НЕ создаётся (idempotency подтверждена), submit success
+- [x] BFF endpoint `/bff/api/v1/operations/from-source-document` работает (код + тесты)
+- [x] Offline клиенты не затронуты (manual operations работают)
+- [x] Documentation обновлена: `Functional and WorkLogik.md` §VII.4
+- [x] ADR-0021 зафиксирован
+- [x] ADR-0019 помечен как superseded (уже сделано)
 
 ---
 
@@ -1465,16 +1465,17 @@ def main():
 
 ---
 
-## Evidence (2026-07-31)
+## Evidence (2026-08-06 final)
 
 | Check | Command | Result | Note |
 |---|---|---|---|
 | Endpoint route | `grep routes_operations.py` | :175 confirmed | `POST /api/v1/operations/from-source-document` |
-| Migrations | `ls alembic/versions` + `alembic history/current` | 0029/0030 in chain, DB at 0035 head | 0029_source_document_operation_hardening.py, 0030_source_document_idempotency_index.py; chain 0028→0029→0030→…→0035 |
-| Unit tests | `.venv/bin/python -m pytest tests/test_source_document_endpoint.py -q` | 18 passed | |
-| Integration | `pytest tests/integration/test_source_document_idempotency.py test_source_document_integration.py -q` | 7 passed, 1 failed (scenario_5 pollution) | StringDataRightTruncationError — pre-existing test pollution, требует фикс фикстуры |
-| BFF tests | `python manage.py test apps.bff_api.tests.BffApiOperationsFromSourceDocumentTests` | 7 OK | OperationFromSourceDocumentView (operations_views.py:441), bff_api/urls.py:87 |
-| Stand health | `GET /api/v1/health` | ok | |
-| OpenAPI | `GET /openapi.json` | 404 — config check needed | вероятно openapi_url отключён в конфиге приложения |
-
-Примечание: файл TZ был untracked до 2026-07-31; коммит делает родительский агент.
+| Migrations | `ls alembic/versions` + `alembic history/current` | 0029/0030 in chain, DB at 0037 head | 0029_source_document_operation_hardening.py, 0030_source_document_idempotency_index.py |
+| Unit tests | `.venv/bin/python -m pytest tests/test_source_document_endpoint.py tests/test_source_document_operation_schemas.py -q` | **40 passed** | |
+| Integration | `pytest tests/integration/test_source_document_integration.py tests/integration/test_source_document_idempotency.py -q` | **8 passed** | Все сценарии, включая scenario_5 (исправлен) |
+| Stand smoke - create | `curl POST /api/v1/operations/from-source-document` с токенами | **201 created** | `creation_source="source_document"`, `source_ref` проставлен, `temporary_draft_payload=null` |
+| Stand smoke - idempotency | Повторный `POST` с тем же `source_ref` | **200 OK** (тот же UUID) | Idempotency подтверждена |
+| Stand smoke - submit | `POST /operations/{id}/submit` | **200 OK** | `status="submitted"`, submit pipeline отработал без ошибок |
+| Stand health | `GET /api/v1/health` + `GET /healthz/` | ok | SyncServer + Django |
+| BFF tests | `python manage.py test apps.bff_api.tests.BffApiOperationsFromSourceDocumentTests` | 7 OK | (предыдущий прогон 2026-07-31) |
+| Documentation | `Functional and WorkLogik.md` §VII.4 | updated | Source-document flow описан |

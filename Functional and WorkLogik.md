@@ -129,8 +129,16 @@ VII/ Работа с документами # Статус на 10.06.2026: на
     1. UPD 08/07/2026-rev3: накладная (waybill) создаётся SyncServer при создании черновика для **всех операций движения ТМЦ, кроме корректировки** (MOVE, ISSUE, ISSUE_RETURN, RECEIVE, EXPENSE, WRITE_OFF) — draft-документ сразу доступен через BFF «Накладная». ADJUSTMENT — служебная операция (§II.5.5: «корректировка - служебная операция»; submit только root/chief по `OPERATIONS_SCREEN_SCENARIOS.md:1285-1286`), накладной не имеет по определению. Финализация документа происходит при submit_operation (auto_finalize=True): для MOVE/ISSUE/ISSUE_RETURN финальный документ = waybill (draft void'ится, новый finalized создаётся); для RECEIVE/EXPENSE/WRITE_OFF draft waybills войдируются, финальный acceptance_certificate (RECEIVE) или act (EXPENSE/WRITE_OFF) создаётся с актуальным payload.
     2. накладная обновляется вместе с черновиком операции по составу, количеству и реквизитам — кладовщик может долго собирать операцию и видеть актуальный бумажный отчёт о текущем состоянии черновика. Обновление через H1 (update_operation) + I3 (create_operation); при изменении строк старый draft-документ войдируется и создаётся новый с актуальным payload.
     3. накладная хранится в виде метаданных в базе SyncServer и рендерится на клиентах (пока только онлайн клиент Django).
-    
-
+    4. UPD 06.08.2026: Source-document operation intake hardening (TZ-SOURCE_DOCUMENT_OPERATION_INTAKE_HARDENING, ADR-0021):
+        # выполнено
+        - Новый endpoint `POST /api/v1/operations/from-source-document` для создания операций из внешних документов (накладные, OCR, CSV/JSON импорт).
+        - Schema физически не допускает `temporary_item` (`extra="forbid"`) — каждая строка обязана иметь `item_id`.
+        - Idempotency по `source_ref`: повторная отправка одного документа не создаёт дубликат.
+        - `Operation.creation_source` = "source_document" отличает такие операции от manual ("manual") и legacy ("legacy").
+        - `OperationLine.source_item_*` хранит исходный текст накладной, `item_*_snapshot` — актуальный catalog snapshot на момент submit.
+        - Submit pipeline: `_validate_resolved_lines_on_submit` + `_freeze_catalog_snapshot` — валидация canonical Item (merge-chain, is_active, not deleted) и фиксация актуальных catalog-значений.
+        - BFF зеркалирует endpoint: `/bff/api/v1/operations/from-source-document`.
+        - Manual-операции с `temporary_item` через generic `POST /operations` не затронуты.
 
 
 VIII/ Основные правила функционала интерфейса(в первую очередь касаются Ангуляра, в ССР по возможности): # выполнено

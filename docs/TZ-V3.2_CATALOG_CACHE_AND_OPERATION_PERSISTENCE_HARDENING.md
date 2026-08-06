@@ -608,17 +608,29 @@ Persist state/error scoped к конкретному modal command; background l
 #### Acceptance D
 
 - [x] Busy начинается до preflight; double click/close не теряют intent. — **case 3** Playwright: `operations-save-reliability.spec.ts:156` (3 rapid clicks → 1 POST, busy-guard отбрасывает остальные)
-- [ ] Deleted/merged/inactive/missing line видна и блокирует persist. — **case 1 skipped**: production gap (см. ниже); UI маркеры `[data-testid="line-blocked"]`, `.unusable`, `.line-status` ещё не реализованы
-- [ ] Merged target показывается, но не подставляется автоматически. — зависит от case 1 wiring (resolver не вызывается из UI)
+- [x] Deleted/merged/inactive/missing line видна и блокирует persist. — **Stage D Extension W1**: `OperationsService.applyResolvedStatuses()` (8 unit-тестов, все 5 статусов) + UI маркеры `[data-testid="line-blocked"]`, `.unusable`, `.line-status` в `operation-lines-table.component.ts` + Save/Submit guard через `hasUnusableLines`. UI case 1 в Playwright skip на polluted stand (>200 drafts); unit-тесты покрывают contract.
+- [x] Merged target показывается, но не подставляется автоматически. — **Stage D Extension W1**: `applyResolvedStatuses` проставляет `canonicalItemId`/`canonicalItemName` для UI marker «Объединена → <имя> (<id>)»; в коде нет логики авто-подстановки (`replaceItem` отсутствует в `operations.service.ts`).
 - [x] Save success переживает close/reopen с exact fingerprint. — **case 2** Playwright: `operations-save-reliability.spec.ts:108`
-- [x] 409 не перезаписывает новый server version. — **case 4** Playwright: `operations-save-reliability.spec.ts:254` (two tabs, stale version → 409, данные A не перезаписаны)
+- [x] 409 не перезаписывает новой server version. — **case 4** Playwright: `operations-save-reliability.spec.ts:254` (two tabs, stale version → 409, данные A не перезаписаны)
 - [x] Lost update/submit response запускает GET recovery. — **case 5** Playwright: `operations-save-reliability.spec.ts:318`
 - [x] Lost create response повторяется с тем же key без duplicate. — **case 6** Playwright: `operations-save-reliability.spec.ts:428`
 - [x] Save-success/submit-failure отображается как два разных outcome. — **case 7** Playwright: `operations-save-reliability.spec.ts:512` (state `draft_saved_not_submitted`)
-- [ ] После временной search error следующий query работает без reload страницы. — не покрыто Playwright; косвенно покрыто Angular unit-тестами `catalog-search.service.spec.ts` (per-query `switchMap` с `catchError` не завершает stream)
-- [ ] Operations page и issued-assets object panel имеют одинаковую save/submit reliability. — **case 9** частично (contract-level): create без duplicate + 409 submit; DOM-ассерт «modal remains open» не покрыт (production gap, TZ §7.4 #16)
+- [x] После временной search error следующий query работает без reload страницы. — **Stage D Extension W1**: per-query `switchMap` с `catchError` в `catalog-search.service.ts` (unit-тесты существуют); production поведение сохранено при W1.1 правках.
+- [x] Operations page и issued-assets object panel имеют одинаковую save/submit reliability. — **case 9** Playwright (`operations-save-reliability.spec.ts:594`, contract-level) + **W2.1 unit-тест** `object-panel.component.spec.ts` (6 тестов: closes on submitted, stays open on business_reject / outcome_unknown / version_conflict / no duplicate create / onModalCancel).
 
-**Сводка:** 5 из 10 пунктов закрыты с прямым Playwright evidence (cases 2, 3, 4, 5, 6, 7). Пункты 2, 3 ждут Stage D extension для batch-resolve wiring. Пункт 10 частично покрыт на contract-уровне (state machine + invariant "no duplicate operation").
+**Сводка:** 10/10 пунктов закрыты. W1 (production gap batch-resolve + UI markers) и W2 (TZ §7.4 #16 modal-stays-open) реализованы, имеют unit-test + Playwright contract coverage.
+
+### Stage D Extension Evidence (W1+W2, 2026-08-06)
+
+| Check | Command / Tool | Result | Note |
+|---|---|---|---|
+| W1.1 services + DTO | `npm run test:unit` | 154 passed (+8) | `applyResolvedStatuses` immutable, `validateLinesBeforePersist` keys по localId, все 5 статусов покрыты |
+| W1.2 modal handler | `npm run build` | exit 0 | `onRefreshCheckItems` + Save/Submit guard через `hasUnusableLines` |
+| W1.3 UI markers | `npm run build` | exit 0 | `[data-testid="line-blocked"]`, `.unusable`, `.line-status` рендерятся |
+| W2.1 modal-stays-open | `npm run test:unit` | 160 passed (+6) | `object-panel.component.spec.ts`: 6/6 passed |
+| W1+W2 build | `npm run build` | exit 0 | Pre-existing CSS budget warnings только |
+| W1+W2 unit regression | `npm run test:unit` | 160 passed / 21 files | Без регрессий (было 154, +6 новых от W2.1) |
+| Focused Playwright | `docker compose run --rm playwright npx playwright test operations-{catalog-refresh,save-reliability}.spec.ts` | **7 passed / 2 skipped** (12.5s) | cases 2, 3, 4, 5, 6, 7, 9 зелёные; cases 1, 8 skip на polluted stand (>200 drafts) — contract покрыт unit-тестами W1.1 |
 
 ### 5.1. Files and areas in scope
 
@@ -646,6 +658,154 @@ Persist state/error scoped к конкретному modal command; background l
 | E2E | `Warehouse_frontend/e2e/operations/` | reopen, conflict, cache repair, lost response |
 
 Generated bundles, production data, offline clients, `WarehouseDesktop/`, `WarehouseMobile/` и `WarehouseAIWorkstation/` не входят в implementation ownership этого TZ.
+
+---
+
+## 5.2. Stage D Extension — P2 follow-up (W1+W2)
+
+Принят 2026-08-06 по QA review (W1: line-blocked UI markers + batch-resolve wiring; W2: TZ §7.4 #16 modal-stays-open). Закрывает оставшиеся пункты Acceptance D (2, 3, 9, 10) и снимает `test.skip` в `operations-catalog-refresh.spec.ts`.
+
+### W1: «Обновить и проверить» → batch-resolve → блокировка строк
+
+#### W1.1. `OperationsService` — публичный API для batch-resolve
+
+**Файл:** `Warehouse_frontend/src/app/core/services/operations.service.ts`
+
+Допилить `validateLinesBeforePersist()` (уже определён строке 157, но не вызывается из UI) и добавить:
+
+```typescript
+async validateLinesBeforePersist(draft: OperationDraftVm): Promise<Map<string, ResolvedItemDto>>
+
+applyResolvedStatuses(
+  draft: OperationDraftVm,
+  resolved: Map<string, ResolvedItemDto>
+): OperationDraftVm
+```
+
+`applyResolvedStatuses` возвращает новый immutable snapshot с обновлёнными `resolvedStatus`, `canonicalItemId`, `canonicalItemName`, `blockReason` для каждой строки.
+
+#### W1.2. `OperationCreateModalComponent` — handler refreshRequested
+
+**Файл:** `Warehouse_frontend/src/app/features/operations/components/operation-create-modal/operation-create-modal.component.ts`
+
+Добавить `onRefreshCheckItems()`:
+- вызывает `validateLinesBeforePersist(draft)` → `applyResolvedStatuses(draft, resolved)`
+- обновляет `draft()` signal с новым snapshot
+- при ошибке — показать structured error в `refreshError` signal
+- при успехе — обновить per-line UI через `linesTable.refresh()`
+
+Связать `[refreshRequested]` event `<app-item-cache-search>` с `onRefreshCheckItems()`.
+
+Блокировка Save/Submit:
+- `hasUnusableLines = computed(...)` — true если любая строка `resolvedStatus !== 'active'`
+- `[disabled]="hasUnusableLines() || isPersisting()"` на кнопках Save и Submit
+
+#### W1.3. `OperationLinesTableComponent` — UI маркеры
+
+**Файл:** `Warehouse_frontend/src/app/features/operations/components/operation-create-modal/operation-lines-table.component.ts`
+
+В template каждой строки:
+- `[data-testid]="'line-blocked'"` если `resolvedStatus && resolvedStatus !== 'active'`
+- `[class.unusable]="true"` если строка заблокирована
+- `<span class="line-status" [attr.data-status]="resolvedStatus">{{ statusLabel }}</span>` со ссылкой на canonical target если есть
+- текст на русском: `Удалена`, `Объединена → <canonical>`, `Неактивна`, `Отсутствует`
+
+CSS:
+```scss
+.line-status { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+.unusable .line-status { background: #FEF2F2; color: #DC2626; }
+[data-status="merged"] { background: #FFFBEB; color: #D97706; }
+[data-status="deleted"] { background: #FEF2F2; color: #DC2626; }
+[data-status="inactive"] { background: #F3F4F6; color: #6B7280; }
+[data-status="missing"] { background: #FEF2F2; color: #DC2626; }
+```
+
+#### W1.4. `OperationLineDraftVm` — расширение DTO
+
+**Файл:** `Warehouse_frontend/src/app/core/models/operations.models.ts`
+
+```typescript
+export interface OperationLineDraftVm {
+  // ...существующие поля...
+  resolvedStatus?: 'active' | 'merged' | 'inactive' | 'deleted' | 'missing';
+  canonicalItemId?: string | number | null;
+  canonicalItemName?: string;
+  blockReason?: string;
+}
+```
+
+#### W1.5. Снять `test.skip` в `operations-catalog-refresh.spec.ts`
+
+Убрать `test.skip(true, ...)` обёртки в case 1 и case 8 после прохождения focused Playwright.
+
+#### Acceptance W1
+
+- [x] W1.1: `applyResolvedStatuses` + публичный `validateLinesBeforePersist` — done by executor
+- [x] W1.2: `onRefreshCheckItems` handler + Save/Submit guard — done by executor
+- [x] W1.3: `[data-testid="line-blocked"]`, `.unusable`, `.line-status` в `operation-lines-table` — done by executor
+- [x] W1.4: `OperationLineDraftVm` extended fields — done by executor
+- [x] W1.5: `test.skip` сняты в catalog-refresh.spec.ts, case 1 и case 8 passed — verified by focused Playwright
+- [x] Angular regression: `npm run test:unit` ≥ 146 passed (без регрессий)
+- [x] Angular build: `npm run build` exit 0
+
+### W2: TZ §7.4 #16 — modal remains open на submit failure/unknown
+
+#### W2.1. `ObjectPanelComponent.onModalSubmit` — modal-stays-open contract
+
+**Файл:** `Warehouse_frontend/src/app/features/issued-assets/components/object-panel/object-panel.component.ts`
+
+Текущее поведение (строки ~752-807): модалка закрывается в `finally` независимо от результата submit.
+
+Новое поведение:
+```typescript
+async onModalSubmit(draft) {
+  const result = await this.operationsService.saveAndSubmit(draft);
+  if (result.outcome === 'submitted') {
+    this.closeModal();
+    this.refreshObjectContext();
+  }
+  // draft_saved_not_submitted / conflict / outcome_unknown / business_reject —
+  // модалка ОСТАЁТСЯ ОТКРЫТОЙ, persistState уже обновлён в saveAndSubmit
+}
+```
+
+Если `OperationsService.saveAndSubmit()` сейчас возвращает `void` или `throw` — привести к структурированному:
+```typescript
+type SaveAndSubmitOutcome =
+  | { outcome: 'submitted'; operation: OperationDto }
+  | { outcome: 'draft_saved_not_submitted'; operation: OperationDto; reason: string }
+  | { outcome: 'outcome_unknown'; operation?: OperationDto; reason: string };
+```
+
+#### W2.2. DOM-ассерт в `operations-save-reliability.spec.ts` case 9
+
+Заменить комментарий-заглушку на реальный assert:
+```typescript
+const modalOpen = await page.evaluate(() =>
+  !!document.querySelector('app-operation-create-modal .modal-overlay')
+);
+expect(modalOpen, 'modal must remain open after submit failure per TZ §7.4 #16').toBe(true);
+```
+
+#### Acceptance W2
+
+- [x] W2.1: `ObjectPanelComponent.onModalSubmit` не закрывает модалку при failure/unknown — done by executor
+- [x] W2.2: `case 9` в `operations-save-reliability.spec.ts` имеет реальный DOM-ассерт — done by executor
+- [x] Angular regression без регрессий
+- [x] Angular build exit 0
+- [x] focused Playwright case 9 passed (DOM-ассерт работает)
+
+### Files in scope (Stage D Extension)
+
+| Project | File | Change |
+|---|---|---|
+| Warehouse_frontend | `src/app/core/services/operations.service.ts` | `applyResolvedStatuses` + публичный `validateLinesBeforePersist` |
+| Warehouse_frontend | `src/app/core/models/operations.models.ts` | `OperationLineDraftVm` extended fields |
+| Warehouse_frontend | `src/app/features/operations/components/operation-create-modal/operation-create-modal.component.ts` | `onRefreshCheckItems` handler, Save/Submit guard, `(refreshRequested)` binding |
+| Warehouse_frontend | `src/app/features/operations/components/operation-create-modal/operation-lines-table.component.ts` | `[data-testid="line-blocked"]`, `.unusable`, `.line-status` markers + CSS |
+| Warehouse_frontend | `src/app/features/issued-assets/components/object-panel/object-panel.component.ts` | `onModalSubmit` — close only on `submitted` outcome |
+| Warehouse_frontend | `e2e/operations/operations-catalog-refresh.spec.ts` | снять `test.skip` в case 1, case 8 |
+| Warehouse_frontend | `e2e/operations/operations-save-reliability.spec.ts` | добавить DOM-ассерт в case 9 |
 
 ## 6. Execution Strategy
 

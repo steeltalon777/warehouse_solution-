@@ -17,6 +17,8 @@
 | Backend routes | `SyncServer/app/api/` |
 | Backend services | `SyncServer/app/services/` |
 | Backend tests | `SyncServer/tests/` |
+| Historical integrity active status | `docs/audit/HISTORICAL_INTEGRITY_STATUS.md` |
+| Historical integrity Stage A | `docs/adr/0028-historical-integrity-stage-a.md` + `docs/TZ-HISTORICAL_INTEGRITY_STAGE_A.md` |
 | Django CLI | `Warehouse_web/manage.py` |
 | Django URLs | `Warehouse_web/config/urls.py` |
 | Django SyncServer client | `Warehouse_web/apps/sync_client/` |
@@ -58,9 +60,12 @@
 
 - `docs/adr/0011-django-syncserver-internal-transport-hardening.md` - Warehouse 3.0 transport decision.
 - `docs/adr/0012-deprecate-temporary-items-review-flow.md` - Temporary items → review flow deprecation.
+- `docs/adr/0018-audit-architecture.md` - append-only audit journal and item effects.
+- `docs/adr/0028-historical-integrity-stage-a.md` - **Accepted; implementation pending:** Stage A guards, effect-time, diagnostics.
 
 ### Active Technical Assignments
 
+- `docs/TZ-HISTORICAL_INTEGRITY_STAGE_A.md` - **Ready for execution; implementation not started:** historical-integrity Stage A.
 - `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md` - internal transport hardening.
 - `docs/TZ-NOMENCLATURE_BATCH_CATALOG_CRUD.md` - batch catalog CRUD.
 - `docs/TZ-B_OPERATIONS_DELETE_CONTRACT.md` - operations delete contract.
@@ -73,11 +78,13 @@
 - `docs/TZ-ISSUED_REPOSITORY_FRONTEND_WORKSPACE.md` - 40/60 repository workspace, sidebar entry, operation modal prefill.
 - `docs/TZ-DOCUMENT_PDF_RENDERING_AND_UI.md` - PDF rendering.
 - `docs/TZ-DJANGO_ADMIN_PREDEPLOY_HARDENING.md` - ✅ реализовано (2026-07-11): admin security, credential redaction, sync saga, audit, Playwright.
+- `docs/TZ-OPERATION_MODAL_BALANCES_MANUAL_REFRESH.md` - ✅ реализовано (2026-08-07): ручное обновление остатков в окне операций — убран автосинк перед save/submit, смена склада и добавление ТМЦ дают ровно один автозапрос, добавлена кнопка «Обновить всё», скрыт остаток в выпадашке поиска ТМЦ.
 - `docs/TZ-V3.1G_OPERATIONS_UX_HARDENING.md` - operations UX hardening (submit errors, field-level propagation, PDF verification).
 - [TZ-V3.1I — Waybill Pagination & Draft Sync Hardening](TZ-V3.1I_WAYBILL_PAGINATION_AND_SYNC_HARDENING.md) (rev. 4, 2026-07-08) — 4 архитектурных дефекта накладной, план из 10 этапов. **rev. 4 активировал plan B (exact-rows) после того, как WeasyPrint flexbox не закрепил подпись внизу первой страницы** (баг 08.07.2026). 3 разных layout (first/middle/last), MOVE = 4 подписи.
 
 ### Architecture Reviews
 
+- `docs/reviews/architecture-review-historical-integrity-stage-a.md` - Stage A self-review and release gate.
 - [Architecture review — V3.1I waybill pagination](reviews/architecture-review-v3.1i-waybill-pagination.md) (2026-07-08) — ревью TZ-V3.1I rev. 1, 1 blocker + 11 warnings + 2 notes.
 - [Architecture review — Django Admin pre-deploy hardening](docs/reviews/architecture-review-django-admin-predeploy-hardening.md) (2026-07-11) — approved with conditions; deployment remains NO-GO until security and consistency evidence is complete.
 

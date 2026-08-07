@@ -11,6 +11,8 @@ Stable facts about the Warehouse Solution workspace.
 - `Warehouse_client_core` is planned as a Rust offline-first runtime for future desktop and mobile clients.
 - `WarehouseDesktop` and `WarehouseMobile` should be rebuilt around `Warehouse_client_core` instead of growing separate offline runtimes.
 - `WarehouseAIWorkstation` is paused until the user explicitly asks to resume it.
+- Historical-integrity audit is complete; ADR-0028 and `TZ-HISTORICAL_INTEGRITY_STAGE_A.md` are issued and Stage A-wide runtime is implemented as of 2026-08-06 (final QA acceptance pending).
+- Operation modal balance refresh is manual and explicit as of 2026-08-07 (`docs/TZ-OPERATION_MODAL_BALANCES_MANUAL_REFRESH.md`): warehouse switch and item add trigger a single targeted auto-request, Save/Submit do not, and a «Обновить всё» button refreshes all line balances on demand; search dropdown no longer shows «на складе: X» and does not request `include_balance`.
 
 ## Domain Ownership
 
@@ -21,6 +23,7 @@ Stable facts about the Warehouse Solution workspace.
 ## Critical Rules
 
 - All warehouse mutations go through SyncServer services and UnitOfWork.
+- Historical-integrity risks are closed only after implementation evidence/QA; ADR/TZ publication alone does not close R-01…R-40.
 - Clients never connect directly to the SyncServer database.
 - Django catalog app has no local warehouse-domain ORM models.
 - `Warehouse_web/apps/sync_client/` is the canonical Django integration layer.

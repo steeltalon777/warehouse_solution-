@@ -1,6 +1,6 @@
 # Git State
 
-Generated at: `2026-06-18T13:51`
+Generated at: `2026-08-07T14:36`
 Root: `/home/makc/AI_sandbox/warehouse_solution`
 Fetch before scan: `no`
 
@@ -8,11 +8,12 @@ Fetch before scan: `no`
 
 | Repo | Branch | Upstream | Ahead | Behind | Dirty | HEAD | Last commit |
 |---|---|---|---:|---:|---|---|---|
-| `SyncServer` | `dev` | `origin/dev` | 0 | 0 | YES | `889f40b` | feat: add CLI audit query script (query_audit.py) |
-| `Warehouse_client_core` | `dev` | `origin/dev` | 0 | 0 | no | `436d370` | review: accepted TZ-CORE_CATCH_UP_TO_ONLINE_CLIENT — archive completed TZ |
-| `Warehouse_frontend` | `dev` | `origin/dev` | 0 | 0 | YES | `60a875e` | V3.1: angular — add line numbers (# col) and total quantity to operation create modal |
-| `Warehouse_web` | `dev` | `origin/dev` | 0 | 0 | YES | `0d21415` | feat: password self-service page with profile view, navbar link, admin clean_password |
+| `SyncServer` | `dev` | `origin/dev` | 0 | 0 | no | `b24bac4` | feat(roles): agent domain role (ADR-0030, TZ-AGENT-ROLE-SYNCSERVER rev.2) |
+| `Warehouse_client_core` | `dev` | `origin/dev` | 0 | 0 | YES | `9b6ccbe` | TZ-V3.1_SYNC_AND_DEVICE_MANAGEMENT: Stage 3 — Rust core gaps (payload_hash SHA-256, write_operations docs, E2E tests) |
+| `Warehouse_frontend` | `dev` | `origin/dev` | 0 | 0 | YES | `22d8599` | test(e2e): add poppler-utils/pdftotext to playwright image |
+| `Warehouse_web` | `dev` | `origin/dev` | 0 | 0 | YES | `832745c` | test: fix root nomenclature SPA test: require is_superuser for is_root() |
 | `WarehouseAIWorkstation` | `dev` | `-` | 0 | 0 | no | `981edf7` | stage5 |
+| `WarehouseWorkstation` | `main` | `origin/main` | 0 | 0 | YES | `1e11a9a` | to devstand migrate |
 
 ## Details
 
@@ -22,20 +23,21 @@ Fetch before scan: `no`
 - Current branch: `dev`
 - Upstream: `origin/dev`
 - Ahead/behind: `0 / 0`
-- Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 6 / 0`
-- HEAD: `889f40b`
-- HEAD subject: feat: add CLI audit query script (query_audit.py)
-- HEAD author/date: `makc / 2026-06-18 13:46:59 +0900`
+- Dirty: `no`
+- Staged / unstaged / untracked: `0 / 0 / 0`
+- HEAD: `b24bac4`
+- HEAD subject: feat(roles): agent domain role (ADR-0030, TZ-AGENT-ROLE-SYNCSERVER rev.2)
+- HEAD author/date: `makc / 2026-08-07 14:22:30 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
 
-- `origin`: `https://github.com/steeltalon777/SyncServer.git`
+- `origin`: `git@github.com:steeltalon777/SyncServer.git`
 
 #### Local branches
 
 - `dev` ← current
+- `feat/operation-submit-domain-errors`
 - `main`
 
 #### Remote branches
@@ -58,22 +60,17 @@ Fetch before scan: `no`
 #### Working tree status
 
 ```text
- M docs/API_REFERENCE.md
- M tests/test_lost_assets_api.py
- M tests/test_operations_issue_semantics.py
- M tests/test_operations_service_delete.py
- M tests/test_operations_service_inventory_subject_write_path.py
- M tests/test_reports_read_model.py
+clean
 ```
 
 #### Recent commits
 
 ```text
-889f40b | 2026-06-18 13:46:59 +0900 | makc | feat: add CLI audit query script (query_audit.py)
-df325e5 | 2026-06-18 12:16:39 +0900 | makc | fix(SyncServer): migration 0018 — make item_id nullable in issued_asset_balances and balances
-0a24899 | 2026-06-16 15:20:29 +0900 | makc | V3.1: sync — remove read scope, add observer create draft, add CREATE_DRAFT_ROLES
-a97f5db | 2026-06-16 14:51:41 +0900 | makc | review: accepted TZs V3.1 — logging (A) + audit journal (V)
-ea13de7 | 2026-06-16 10:59:33 +0900 | makc | 3.0.1: SyncServer logging + stale-balance regression
+b24bac4 | 2026-08-07 14:22:30 +0900 | makc | feat(roles): agent domain role (ADR-0030, TZ-AGENT-ROLE-SYNCSERVER rev.2)
+2e41b7c | 2026-08-07 13:12:20 +0900 | makc | docs(syncserver): TZ + ADR-0030 rev.2 for agent domain role (Issue #18)
+88458d6 | 2026-08-07 12:53:11 +0900 | makc | 3.3 pre ready
+a8f713f | 2026-08-07 12:52:33 +0900 | makc | docs(syncserver): TZ + ADR-0030 for agent domain role (Issue #18)
+e019c17 | 2026-08-06 15:31:35 +0900 | makc | TZ-V3.3: гарантированный порядок строк операции по line_number
 ```
 
 ### Warehouse_client_core
@@ -82,11 +79,11 @@ ea13de7 | 2026-06-16 10:59:33 +0900 | makc | 3.0.1: SyncServer logging + stale-b
 - Current branch: `dev`
 - Upstream: `origin/dev`
 - Ahead/behind: `0 / 0`
-- Dirty: `no`
-- Staged / unstaged / untracked: `0 / 0 / 0`
-- HEAD: `436d370`
-- HEAD subject: review: accepted TZ-CORE_CATCH_UP_TO_ONLINE_CLIENT — archive completed TZ
-- HEAD author/date: `makc / 2026-06-05 15:17:24 +0900`
+- Dirty: `yes`
+- Staged / unstaged / untracked: `0 / 2 / 0`
+- HEAD: `9b6ccbe`
+- HEAD subject: TZ-V3.1_SYNC_AND_DEVICE_MANAGEMENT: Stage 3 — Rust core gaps (payload_hash SHA-256, write_operations docs, E2E tests)
+- HEAD author/date: `makc / 2026-07-01 18:01:45 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
@@ -106,17 +103,18 @@ ea13de7 | 2026-06-16 10:59:33 +0900 | makc | 3.0.1: SyncServer logging + stale-b
 #### Working tree status
 
 ```text
-clean
+ M README.md
+ M crates/warehouse_ffi/src/lib.rs
 ```
 
 #### Recent commits
 
 ```text
+9b6ccbe | 2026-07-01 18:01:45 +0900 | makc | TZ-V3.1_SYNC_AND_DEVICE_MANAGEMENT: Stage 3 — Rust core gaps (payload_hash SHA-256, write_operations docs, E2E tests)
 436d370 | 2026-06-05 15:17:24 +0900 | makc | review: accepted TZ-CORE_CATCH_UP_TO_ONLINE_CLIENT — archive completed TZ
 61e4901 | 2026-06-05 13:40:27 +0900 | makc | docs: update archived TZ checklist — mark Levels 10-12 done
 90c56d6 | 2026-06-05 13:40:09 +0900 | makc | docs: mark TZ CORE CATCH UP checklist complete — all 17/18 items verified
 97e11fc | 2026-06-04 13:39:29 +0900 | makc | fix(core): add catalog audit fields persistence (migration v8 + snapshot_writer)
-54a6836 | 2026-06-04 13:35:41 +0900 | makc | feat(core): add documents_create_for_operation POST method
 ```
 
 ### Warehouse_frontend
@@ -126,10 +124,10 @@ clean
 - Upstream: `origin/dev`
 - Ahead/behind: `0 / 0`
 - Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 0 / 1`
-- HEAD: `60a875e`
-- HEAD subject: V3.1: angular — add line numbers (# col) and total quantity to operation create modal
-- HEAD author/date: `makc / 2026-06-18 10:40:02 +0900`
+- Staged / unstaged / untracked: `0 / 4 / 3`
+- HEAD: `22d8599`
+- HEAD subject: test(e2e): add poppler-utils/pdftotext to playwright image
+- HEAD author/date: `makc / 2026-08-07 10:44:37 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
@@ -139,6 +137,7 @@ clean
 #### Local branches
 
 - `dev` ← current
+- `feat/operation-submit-domain-errors`
 - `main`
 
 #### Remote branches
@@ -149,17 +148,23 @@ clean
 #### Working tree status
 
 ```text
-?? test-results-old/
+ M src/app/features/operations/components/item-cache-search/item-cache-search.component.ts
+ M src/app/features/operations/components/operation-create-modal/operation-create-modal.component.ts
+ M src/app/features/operations/components/operation-create-modal/operation-lines-table.component.ts
+ M src/app/features/operations/components/operation-create-modal/operation-lines-table.spec.ts
+?? e2e/operations/operations-balances-manual.spec.ts
+?? src/app/features/operations/components/item-cache-search/item-cache-search.component.spec.ts
+?? src/app/features/operations/components/operation-create-modal/operation-create-modal.component.spec.ts
 ```
 
 #### Recent commits
 
 ```text
-60a875e | 2026-06-18 10:40:02 +0900 | makc | V3.1: angular — add line numbers (# col) and total quantity to operation create modal
-5b602dc | 2026-06-16 15:20:31 +0900 | makc | V3.1: angular — add catalog write guard, update observer can edit draft, canWriteCatalog from role
-27befc2 | 2026-06-16 14:51:44 +0900 | makc | review: accepted TZ-V3.1_LOGGING — Angular error infrastructure
-7ad29fb | 2026-06-16 10:59:24 +0900 | makc | 3.0.1: Angular UI quick fixes
-e7b05fe | 2026-06-12 13:33:23 +0900 | makc | fix(operations): exclude adjustments by default, tighten table layout, fallback comment from notes
+22d8599 | 2026-08-07 10:44:37 +0900 | makc | test(e2e): add poppler-utils/pdftotext to playwright image
+84d0066 | 2026-08-07 10:44:20 +0900 | makc | fix(operations): await auth context before mapping permissions
+48c2071 | 2026-08-06 16:56:54 +0900 | makc | feat(v3.2): Stage D Extension (W1+W2) — batch-resolve + modal-stays-open
+db4ea93 | 2026-08-06 16:08:58 +0900 | makc | test(v3.2): TZ §7.5 Playwright coverage — catalog refresh + save reliability
+6af39d5 | 2026-07-31 17:28:24 +0900 | makc | fix(acceptance): localize 403 to Russian for structured BFF errors
 ```
 
 ### Warehouse_web
@@ -169,10 +174,10 @@ e7b05fe | 2026-06-12 13:33:23 +0900 | makc | fix(operations): exclude adjustment
 - Upstream: `origin/dev`
 - Ahead/behind: `0 / 0`
 - Dirty: `yes`
-- Staged / unstaged / untracked: `0 / 3 / 2`
-- HEAD: `0d21415`
-- HEAD subject: feat: password self-service page with profile view, navbar link, admin clean_password
-- HEAD author/date: `makc / 2026-06-18 11:31:19 +0900`
+- Staged / unstaged / untracked: `0 / 1 / 1`
+- HEAD: `832745c`
+- HEAD subject: test: fix root nomenclature SPA test: require is_superuser for is_root()
+- HEAD author/date: `makc / 2026-07-31 17:28:16 +0900`
 - Tags at HEAD: `-`
 
 #### Remotes
@@ -182,6 +187,7 @@ e7b05fe | 2026-06-12 13:33:23 +0900 | makc | fix(operations): exclude adjustment
 #### Local branches
 
 - `dev` ← current
+- `feat/operation-submit-domain-errors`
 - `main`
 
 #### Remote branches
@@ -207,21 +213,18 @@ e7b05fe | 2026-06-12 13:33:23 +0900 | makc | fix(operations): exclude adjustment
 #### Working tree status
 
 ```text
- M static/css/app.css
- M templates/base.html
- M templates/registration/login.html
-?? media/documents/pdf/nakladnaya_2_1453_110626.pdf
-?? media/documents/pdf/nakladnaya_4_0820_040626.pdf
+ M apps/bff_api/reports_views.py
+?? apps/bff_api/tests_reports.py
 ```
 
 #### Recent commits
 
 ```text
-0d21415 | 2026-06-18 11:31:19 +0900 | makc | feat: password self-service page with profile view, navbar link, admin clean_password
-2425148 | 2026-06-17 13:25:20 +0900 | makc | V3.1: django — unblock observer in legacy SSR views (dashboard, balances, operations, catalog)
-96145ed | 2026-06-16 15:20:30 +0900 | makc | V3.1: django — remove storekeeper forced balance site filter
-25fa643 | 2026-06-16 14:51:43 +0900 | makc | review: accepted TZs V3.1 — logging (A) + audit journal (V)
-143bb29 | 2026-06-16 10:59:29 +0900 | makc | 3.0.1: Django SyncServer users import
+832745c | 2026-07-31 17:28:16 +0900 | makc | test: fix root nomenclature SPA test: require is_superuser for is_root()
+36f1fec | 2026-07-31 16:37:05 +0900 | makc | feat(bff): api_error_response structured proxy for submit endpoint (WIP)
+2d0dff9 | 2026-07-23 14:27:50 +0900 | makc | test(bff): add tests for /bff/api/v1/operations/from-source-document
+efe500a | 2026-07-23 13:22:01 +0900 | makc | feat(bff): add POST /bff/api/v1/operations/from-source-document proxy endpoint
+23db903 | 2026-07-15 15:42:30 +0900 | makc | feat(bff): UI diagnostics proxy endpoint (TZ Stage 3, WP-1)
 ```
 
 ### WarehouseAIWorkstation
@@ -265,6 +268,47 @@ f414330 | 2026-04-12 22:53:15 +0900 | Maksim Kuzmin | fix(stage5): close Directo
 2ed7442 | 2026-04-11 23:17:28 +0900 | Maksim Kuzmin | Harden bootstrap login flow and add stage 4 spec
 27a9ede | 2026-04-11 22:50:11 +0900 | Maksim Kuzmin | fix(stage3): close remaining gaps — root setup visibility, logout flow, user management UI
 fbd1bf7 | 2026-04-11 22:34:37 +0900 | Maksim Kuzmin | fix: align bootstrap sync client with real server contract + live smoke verified
+```
+
+### WarehouseWorkstation
+
+- Path: `WarehouseWorkstation`
+- Current branch: `main`
+- Upstream: `origin/main`
+- Ahead/behind: `0 / 0`
+- Dirty: `yes`
+- Staged / unstaged / untracked: `0 / 1 / 0`
+- HEAD: `1e11a9a`
+- HEAD subject: to devstand migrate
+- HEAD author/date: `Maksim Kuzmin / 2026-06-19 17:28:54 +0900`
+- Tags at HEAD: `-`
+
+#### Remotes
+
+- `origin`: `https://github.com/steeltalon777/WarehouseWorkstation.git`
+
+#### Local branches
+
+- `main` ← current
+
+#### Remote branches
+
+- `origin/main`
+
+#### Working tree status
+
+```text
+ M README.md
+```
+
+#### Recent commits
+
+```text
+1e11a9a | 2026-06-19 17:28:54 +0900 | Maksim Kuzmin | to devstand migrate
+04daeae | 2026-05-02 10:40:42 +0900 | Maksim Kuzmin | Bootstrap ready
+981edf7 | 2026-04-12 22:54:27 +0900 | Maksim Kuzmin | stage5
+f414330 | 2026-04-12 22:53:15 +0900 | Maksim Kuzmin | fix(stage5): close Directory workspace runtime defects and add smoke gate\n\n- Add missing theme resources (BrushTextSecondary, BrushError, BrushWarning, BrushSuccess)\n- Fix XAML command bindings to match actual ViewModel command names (NewItemCommand, SaveSelectedCommand, etc.)\n- Remove unsafe Task.Run initialization; move to Loaded event handler on UI thread\n- Complete detail panels with all business fields (Description, Code, SortOrder, IsActive)\n- Render AI flags as read-only (TextBlock with muted styling, not editable TextBox)\n- Normalize contract matrix auth format to X-User-Token (role: ...)\n- Add WPF smoke tests for Row ViewModel round-trips and flag formatting\n- Add Presentation reference to UnitTests project (net8.0-windows)\n\nBuild: 0 warnings, 0 errors. Tests: 73 passed.
+2ed7442 | 2026-04-11 23:17:28 +0900 | Maksim Kuzmin | Harden bootstrap login flow and add stage 4 spec
 ```
 
 ## Notes for agents

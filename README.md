@@ -97,5 +97,10 @@ plans/                  Working plans
 - [.github/workflows/e2e-tests.yml](.github/workflows/e2e-tests.yml) - GitHub Actions Playwright E2E pipeline
 - [API_MAP.md](API_MAP.md) - SyncServer endpoint map
 - [SOLUTION_ROADMAP.md](SOLUTION_ROADMAP.md) - priority roadmap
+- [docs/audit/HISTORICAL_INTEGRITY_STATUS.md](docs/audit/HISTORICAL_INTEGRITY_STATUS.md) - active historical-integrity status
+- [docs/adr/0028-historical-integrity-stage-a.md](docs/adr/0028-historical-integrity-stage-a.md) - accepted Stage A decision (implementation pending)
+- [docs/TZ-HISTORICAL_INTEGRITY_STAGE_A.md](docs/TZ-HISTORICAL_INTEGRITY_STAGE_A.md) - executable Stage A assignment
+- [docs/adr/0027-operation-cancel-domain-errors.md](docs/adr/0027-operation-cancel-domain-errors.md) - cancel-flow domain errors reuse the submit problem envelope
+- [docs/TZ-OPERATION_CANCEL_DOMAIN_ERRORS.md](docs/TZ-OPERATION_CANCEL_DOMAIN_ERRORS.md) - executable cancel-flow envelope assignment
 - [docs/adr/0011-django-syncserver-internal-transport-hardening.md](docs/adr/0011-django-syncserver-internal-transport-hardening.md) - Warehouse 3.0 internal transport decision
 - [docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md](docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md) - executable transport hardening specification

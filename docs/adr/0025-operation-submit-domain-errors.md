@@ -222,6 +222,8 @@ _ensure_sufficient_issued_balance    │
 
 Helper применяется **только** к submit-flow BFF endpoint (`submit_operation_view`). Все остальные BFF endpoints остаются на `_error` и не затрагиваются этой итерацией — изменение `_error` задним числом сломало бы контракт каталога и других доменов.
 
+> **ADR-0027 (cancel-flow):** Helper `api_error_response(exc)` применяется к submit-flow и cancel-flow BFF endpoints (`OperationSubmitView`, `OperationCancelView`). Все остальные BFF endpoints остаются на `_handle_sync_error` и не затрагиваются этой итерацией.
+
 ### 9. Что не делается в этой итерации
 
 * `corrections_service.py:912` (`correction_insufficient_balance`) — оставляем как есть. Это другой flow (корректировки), миграция на тот же envelope — отдельный ADR.

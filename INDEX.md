@@ -23,6 +23,7 @@
 | Django URLs | `Warehouse_web/config/urls.py` |
 | Django SyncServer client | `Warehouse_web/apps/sync_client/` |
 | Django -> SyncServer transport hardening | `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md` |
+| Operation domain errors (submit + cancel) | `docs/adr/0025-operation-submit-domain-errors.md` + `docs/adr/0027-operation-cancel-domain-errors.md` + `docs/TZ-OPERATION_CANCEL_DOMAIN_ERRORS.md` |
 | Django catalog/BFF work | `Warehouse_web/apps/catalog/` |
 | Django BFF endpoints | `Warehouse_web/apps/bff_api/` |
 | Angular shell | `Warehouse_frontend/` |
@@ -62,10 +63,12 @@
 - `docs/adr/0012-deprecate-temporary-items-review-flow.md` - Temporary items → review flow deprecation.
 - `docs/adr/0018-audit-architecture.md` - append-only audit journal and item effects.
 - `docs/adr/0028-historical-integrity-stage-a.md` - **Accepted; implementation pending:** Stage A guards, effect-time, diagnostics.
+- `docs/adr/0027-operation-cancel-domain-errors.md` - **Accepted; implemented:** cancel-flow domain errors reuse the submit envelope (`operation-cancel-rejected`).
 
 ### Active Technical Assignments
 
 - `docs/TZ-HISTORICAL_INTEGRITY_STAGE_A.md` - **Ready for execution; implementation not started:** historical-integrity Stage A.
+- `docs/TZ-OPERATION_CANCEL_DOMAIN_ERRORS.md` - ✅ реализовано (2026-08-07): cancel-flow доменные ошибки в формате envelope ADR-0025 (type urn:warehouse:problem:operation-cancel-rejected, code operation_cancel_rejected), двухфазный pre-check `_check_cancel_balance_sufficiency`, workflow/authz-политики → доменные исключения, BFF `OperationCancelView` → `api_error_response`, Angular баннер cancel-ошибок + toasts, DB-backed envelope/конкурентные тесты, e2e `operations-cancel.spec.ts`.
 - `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md` - internal transport hardening.
 - `docs/TZ-NOMENCLATURE_BATCH_CATALOG_CRUD.md` - batch catalog CRUD.
 - `docs/TZ-B_OPERATIONS_DELETE_CONTRACT.md` - operations delete contract.

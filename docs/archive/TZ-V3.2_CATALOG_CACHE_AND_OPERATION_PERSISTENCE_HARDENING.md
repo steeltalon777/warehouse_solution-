@@ -12,7 +12,7 @@
 - [x] 7. DB-backed integration tests завершены (Stage B: full suite passes 546/2/7; Stage C DDL: unit_id applied on stand)
 - [x] 8. Реальный stand smoke завершён (A: resolver, B: idempotency/version, C: BFF search/consistency/resolver, D: structured errors chain)
 - [x] 9. Playwright и пользовательские сценарии завершены (TZ §7.5: 7 passed / 2 skipped on P2 follow-up — см. Evidence ниже)
-- [ ] 10. Regression, документация и финальная приёмка завершены (QA verifier)
+- [x] 10. Regression, документация и финальная приёмка завершены (QA verifier) — Stage D Extension (W1+W2) принят 2026-08-06 по QA review: Acceptance D 10/10 закрыта, W1/W2 production gaps устранены, unit 160p, build exit 0, focused Playwright 7p/2s. Cases 1, 8 — conditional `test.skip` на polluted dev-стенде (>200 drafts; TZ §8.6 запрещает clean). Контракт покрыт unit-тестами W1.1.
 
 ## Check Rules
 
@@ -27,7 +27,7 @@
 | Поле | Значение |
 |---|---|
 | Target release | Warehouse 3.2 |
-| Status | Ready for execution |
+| Status | Accepted 2026-08-06 (QA verifier); archived to docs/archive/ |
 | Date | 2026-07-13 |
 | Source review | `docs/reviews/architecture-review-angular-tmc-cache.md`, revision 4 |
 | Decision authority | Это TZ является implementation authority для Warehouse 3.2; ADR-0018/0019 рекомендованы как последующая фиксация, но не блокируют Stage A |

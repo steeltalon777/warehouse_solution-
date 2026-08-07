@@ -32,7 +32,7 @@
 - [x] 7. Static checks (docker compose config, npm run build) — `docker compose config -q` OK; `npm run build` exit 0 (только pre-existing CSS budget warnings)
 - [x] 8. Stand smoke tests (make test-e2e в Docker) — Stand healthy, `make status` показал все 5 контейнеров + Postgres healthy + endpoints HTTP 200/302
 - [x] 9. UI automation tests (Playwright report) — HTML отчёт генерируется в `playwright-tz-report/` (TZ-отчёт); новые 2 spec (`operations-catalog-refresh`, `operations-save-reliability`) прошли 7/9 (2 skipped on documented production gap)
-- [ ] 10. Final acceptance review — (ожидает QA verifier после починки pre-existing UI drift в operations-journal/submit-errors/waybill-pagination)
+- [x] 10. Final acceptance review — QA verifier 2026-08-07 закрыт: 3 pre-existing UI-drift failures устранены инфраструктурно — (1) DisallowedHost на underscore hostname: добавлен network alias `warehouse-web` (RFC 1034/1035) + ALLOWED_HOSTS expanded (root commit `02b2645`); (2) OperationsService race condition (/auth/me против mapToRowVm): loadList() теперь awaits authContextService.load() перед permission mapping (Warehouse_frontend commit `84d0066`); (3) missing pdftotext в playwright image: Dockerfile.playwright с poppler-utils + build-time smoke (Warehouse_frontend commit `22d8599`, root commit `02b2645`). Final targeted suite: 18 passed / 0 failed / 0 flaky (25.0s) на dev-стенде.
 
 ---
 

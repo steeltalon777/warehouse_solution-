@@ -13,6 +13,7 @@ Stable facts about the Warehouse Solution workspace.
 - `WarehouseAIWorkstation` is paused until the user explicitly asks to resume it.
 - Historical-integrity audit is complete; ADR-0028 and `TZ-HISTORICAL_INTEGRITY_STAGE_A.md` are issued and Stage A-wide runtime is implemented as of 2026-08-06 (final QA acceptance pending).
 - Operation modal balance refresh is manual and explicit as of 2026-08-07 (`docs/TZ-OPERATION_MODAL_BALANCES_MANUAL_REFRESH.md`): warehouse switch and item add trigger a single targeted auto-request, Save/Submit do not, and a «Обновить всё» button refreshes all line balances on demand; search dropdown no longer shows «на складе: X» and does not request `include_balance`.
+- Django admin can assign the fifth domain role `agent` (LLM) as of 2026-08-07 (`docs/TZ-AGENT_ROLE_ADMIN_UI.md`, ADR-0030, SyncServer TZ-AGENT-ROLE-SYNCSERVER rev.2): `Role.AGENT` is exposed in `MANAGED_ROLE_CHOICES`, the admin form accepts empty `site_ids` for agent, and the binding syncs to SyncServer with `default_site_id=null` and `scopes=[]`. `apps/common/permissions.py::is_agent` is the Django-side helper (superuser is root, NOT agent).
 
 ## Domain Ownership
 

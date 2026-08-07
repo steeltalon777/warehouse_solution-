@@ -1425,7 +1425,7 @@ def main():
 | Check | Command / Tool | Result | Evidence |
 |---|---|---|---|
 | Migration apply | `python -m alembic upgrade head` | pass/fail | migration log |
-| Endpoint openapi | `curl http://localhost:8000/openapi.json` | pass/fail | endpoint listing |
+| Endpoint openapi | `curl http://localhost:8000/api/openapi.json` | pass/fail | endpoint listing |
 | Schema no temporary_item | `inspect(SourceDocumentOperationLineCreate)` | pass/fail | field listing |
 | Backfill creation_source | `SELECT COUNT(*) FROM operations WHERE creation_source IS NULL` | 0 rows | query result |
 | Source-document smoke | `curl POST /operations/from-source-document с реальной накладной` | pass | response |

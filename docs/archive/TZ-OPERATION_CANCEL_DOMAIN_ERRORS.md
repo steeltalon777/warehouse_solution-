@@ -45,7 +45,7 @@
 - [x] 29. User scenario: «root отменяет MOVE, у которого destination пуст, видит человеческий текст с item/site/qty»
 - [x] 30. Regression: submit-flow envelope не сломан (snapshot + happy-path submit)
 - [x] 31. Документация: ADR-0025 §8 обновить, README/INDEX ссылка
-- [ ] 32. Final acceptance (QA verifier)
+- [x] 32. Final acceptance (QA verifier) — принято пользователем 2026-08-07, cancel-flow ProblemEnvelope на всех 4 репозиториях, e2e 108 passed, ТЗ архивировано
 
 ## Check Rules
 

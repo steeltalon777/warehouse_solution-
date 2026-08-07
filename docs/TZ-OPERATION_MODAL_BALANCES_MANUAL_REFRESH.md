@@ -16,26 +16,26 @@
 ## 0. Execution Checklist
 
 ### Implementation
-- [ ] 0. Контекст verified (SCOPE §Проблема + Investigation §6.1 прочитан)
-- [ ] 1. `OperationCreateModalComponent` — убрать `effect()` на `relevantSiteId()` (строки 1175-1214) и заменить на фокусный автозапрос
-- [ ] 2. `OperationCreateModalComponent` — убрать `refreshBeforePersist()` (строки 1317-1330) и его вызовы из `onSave()` (1611), `onSubmit()` (1659)
-- [ ] 3. `OperationCreateModalComponent` — добавить `onRefreshAllBalances()` для новой кнопки (использует тот же `loadBalances + refreshSourceQuantities` без race)
-- [ ] 4. `OperationLinesTableComponent` — добавить кнопку «Обновить всё» в шапку таблицы + output `refreshAllBalances` + вход `isRefreshing` уже есть
-- [ ] 5. `ItemCacheSearchComponent` — убрать `<span class="option-stock">на складе: {{ item.source_site_qty }}</span>` (строки 72-74) и связанные стили
-- [ ] 6. `ItemCacheSearchComponent` — передавать `include_balance=false` в `searchItemsOnce` (строка 240)
+- [x] 0. Контекст verified (SCOPE §Проблема + Investigation §6.1 прочитан)
+- [x] 1. `OperationCreateModalComponent` — убрать `effect()` на `relevantSiteId()` (строки 1175-1214) и заменить на фокусный автозапрос
+- [x] 2. `OperationCreateModalComponent` — убрать `refreshBeforePersist()` (строки 1317-1330) и его вызовы из `onSave()` (1611), `onSubmit()` (1659)
+- [x] 3. `OperationCreateModalComponent` — добавить `onRefreshAllBalances()` для новой кнопки (использует тот же `loadBalances + refreshSourceQuantities` без race)
+- [x] 4. `OperationLinesTableComponent` — добавить кнопку «Обновить всё» в шапку таблицы + output `refreshAllBalances` + вход `isRefreshing` уже есть
+- [x] 5. `ItemCacheSearchComponent` — убрать `<span class="option-stock">на складе: {{ item.source_site_qty }}</span>` (строки 72-74) и связанные стили
+- [x] 6. `ItemCacheSearchComponent` — передавать `include_balance=false` в `searchItemsOnce` (строка 240)
 
 ### Tests
-- [ ] 7. Static checks: `npm run build` (Angular) + `npx tsc --noEmit` (типы)
-- [ ] 8. Unit/component test `operation-lines-table.spec.ts` — кнопка «Обновить всё» рендерится и эмитит `refreshAllBalances`; при `isRefreshing=true` → `disabled` + спиннер
-- [ ] 9. Component test `item-cache-search.spec.ts` (новый файл) — span «на складе: X» не рендерится; `searchItemsOnce` вызван с `include_balance=false`
-- [ ] 10. Component test `operation-create-modal.spec.ts` (новый файл) — смена `relevantSiteId` вызывает `loadBalances(siteId)` ровно один раз без race; добавление ТМЦ вызывает `getBalanceForItem` ровно один раз; `onSave`/`onSubmit` НЕ вызывают `loadBalances`
-- [ ] 11. Stand smoke: `make status` → стенд healthy → ручной сценарий через Playwright MCP
-- [ ] 12. UI automation: новый `e2e/operations/operations-balances-manual.spec.ts` — сценарий A (смена склада) + сценарий B (refresh all) + сценарий C (search dropdown без остатков)
-- [ ] 13. User scenario: «кладовщик открывает черновик RECEIVE, добавляет 2 ТМЦ, переключает склад → остатки реактивно обновляются; жмёт «Обновить всё» → остатки подтягиваются с сервера; в выпадашке поиска нет поля «на складе: X»; submit не вызывает фонового обновления»
-- [ ] 14. Regression: existing e2e `operations-create-modal.spec.ts` (save/confirm/validation) не сломан
-- [ ] 15. Regression: existing e2e `operations-save-reliability.spec.ts` (save flow) не сломан
-- [ ] 16. Regression: existing e2e `operations-submit.spec.ts` (submit) не сломан
-- [ ] 17. Documentation: `MEMORY.md` / `GIT_STATE.md` обновлены, `SCOPE-ops-balances-manual.md` помечен как «реализован», ссылка на этот TZ в `INDEX.md`
+- [x] 7. Static checks: `npm run build` (Angular) + `npx tsc --noEmit` (типы)
+- [x] 8. Unit/component test `operation-lines-table.spec.ts` — кнопка «Обновить всё» рендерится и эмитит `refreshAllBalances`; при `isRefreshing=true` → `disabled` + спиннер
+- [x] 9. Component test `item-cache-search.spec.ts` (новый файл) — span «на складе: X» не рендерится; `searchItemsOnce` вызван с `include_balance=false`
+- [x] 10. Component test `operation-create-modal.spec.ts` (новый файл) — смена `relevantSiteId` вызывает `loadBalances(siteId)` ровно один раз без race; добавление ТМЦ вызывает `getBalanceForItem` ровно один раз; `onSave`/`onSubmit` НЕ вызывают `loadBalances`
+- [x] 11. Stand smoke: `make status` → стенд healthy → ручной сценарий через Playwright MCP
+- [x] 12. UI automation: новый `e2e/operations/operations-balances-manual.spec.ts` — сценарий A (смена склада) + сценарий B (refresh all) + сценарий C (search dropdown без остатков)
+- [x] 13. User scenario: «кладовщик открывает черновик RECEIVE, добавляет 2 ТМЦ, переключает склад → остатки реактивно обновляются; жмёт «Обновить всё» → остатки подтягиваются с сервера; в выпадашке поиска нет поля «на складе: X»; submit не вызывает фонового обновления»
+- [x] 14. Regression: existing e2e `operations-create-modal.spec.ts` (save/confirm/validation) не сломан
+- [x] 15. Regression: existing e2e `operations-save-reliability.spec.ts` (save flow) не сломан
+- [x] 16. Regression: existing e2e `operations-submit.spec.ts` (submit) не сломан (5 тестов скипнуты штатными `test.skip(true, ...)` в файле — не связаны с данной правкой)
+- [x] 17. Documentation: `MEMORY.md` / `GIT_STATE.md` обновлены, `SCOPE-ops-balances-manual.md` помечен как «реализован», ссылка на этот TZ в `INDEX.md`
 
 ### Final
 - [ ] 18. Final acceptance (QA verifier)

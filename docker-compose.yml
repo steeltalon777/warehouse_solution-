@@ -55,7 +55,12 @@ services:
       DJANGO_SETTINGS_MODULE: config.settings
       SECRET_KEY: ${SECRET_KEY:-django-insecure-dev-only-change-in-production}
       DEBUG: ${DEBUG:-True}
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-127.0.0.1,localhost,warehouse_web}
+      # E2E-base URL использует network alias `warehouse-web` (hyphen), потому что
+      # Django rejects HTTP `Host:` заголовки с underscore в hostname по RFC 1034/1035
+      # (см. ALLOWED_HOSTS-проверку в django.http.request.validate_host).
+      # `warehouse_web` (underscore) оставлен в ALLOWED_HOSTS только для legacy
+      # хост-запросов; сам Playwright ходит через `warehouse-web`.
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-127.0.0.1,localhost,warehouse_web,warehouse-web}
       DB_ENGINE: ${DB_ENGINE:-django.db.backends.postgresql}
       DB_NAME: ${DB_NAME:-warehouse}
       DB_USER: ${DB_USER:-warehouse_user}
@@ -107,7 +112,10 @@ services:
     command: sh -c "npm install --prefer-offline --no-audit --no-fund && npm start -- --host 0.0.0.0 --port 4200"
 
   playwright:
-    image: mcr.microsoft.com/playwright:v1.60.0-jammy
+    build:
+      context: ./Warehouse_frontend
+      dockerfile: Dockerfile.playwright
+    image: warehouse-solution/playwright:local
     container_name: warehouse_playwright
     working_dir: /app
     volumes:

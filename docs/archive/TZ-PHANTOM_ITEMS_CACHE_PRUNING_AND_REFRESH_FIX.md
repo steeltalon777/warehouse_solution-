@@ -48,7 +48,7 @@
 
 ### Final
 - [x] F1. Documentation: чек-лист этого TZ закрыт с Evidence; при изменении entry points — обновить `AI_CONTEXT.md`/`AI_ENTRY_POINTS.md` (не ожидается)
-- [ ] F2. Final acceptance (QA verifier)
+- [x] F2. Final acceptance (QA verifier)
 
 ## Check Rules
 

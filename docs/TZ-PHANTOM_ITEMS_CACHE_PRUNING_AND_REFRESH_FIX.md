@@ -15,39 +15,39 @@
 ## 0. Execution Checklist
 
 ### Implementation — WP-A: Django, targeted авто-прунинг кэша (приоритет 1)
-- [ ] A1. `Warehouse_web/apps/bff_api/catalog_views.py` — в `CatalogItemsResolveView.post` после успешного `resolve_items()` добавить best-effort пруннинг `CatalogCacheItem` по статусам `missing/deleted/inactive/merged` через существующий `CatalogCacheSyncService.deactivate_item()`
-- [ ] A2. Прунинг не должен ломать ответ resolve: любой exception пруннинга логируется и проглатывается; ответ клиенту всегда содержит результаты resolve
-- [ ] A3. Логирование: INFO-строка с числом деактивированных записей (только когда > 0)
+- [x] A1. `Warehouse_web/apps/bff_api/catalog_views.py` — в `CatalogItemsResolveView.post` после успешного `resolve_items()` добавить best-effort пруннинг `CatalogCacheItem` по статусам `missing/deleted/inactive/merged` через существующий `CatalogCacheSyncService.deactivate_item()`
+- [x] A2. Прунинг не должен ломать ответ resolve: любой exception пруннинга логируется и проглатывается; ответ клиенту всегда содержит результаты resolve
+- [x] A3. Логирование: INFO-строка с числом деактивированных записей (только когда > 0)
 
 ### Implementation — WP-B: Angular, авто-валидация и починка «Обновить всё» (приоритет 1)
-- [ ] B1. `operation-create-modal.component.ts` — выделить ядро `onRefreshCheckItems()` в переиспользуемый метод `validateAndApplyLineStatuses()`; `onRefreshCheckItems()` продолжает работать через него (поведение кнопки «Обновить и проверить» не меняется)
-- [ ] B2. `onSave()` и `onSubmit()` — перед emit вызывать `validateAndApplyLineStatuses()`; если после apply есть unusable-строки (`hasUnusableLines()`) или резолвер недоступен — НЕ эмитить, показать тост через существующий `toasts` signal
-- [ ] B3. `onRefreshAllBalances()` — убрать молчаливые no-op return'ы: валидация ТМЦ выполняется ВСЕГДА; обновление остатков только когда применимо (`shouldUseWarehouseBalances()` и выбран склад), иначе инфо-тост вместо тишины
-- [ ] B4. `operations.service.ts` `loadBalances()` — заменить молчаливое `catch → balances.set([])` на установку публичного signal `balanceLoadError` (баланс при этом всё равно `[]` — консервативно); на старте успешной загрузки сигнал сбрасывается
-- [ ] B5. Модалка: effect смены склада (~строки 1190-1191) — добавить обработку ошибки `loadBalances` (без падения, через `balanceLoadError`); `onRefreshAllBalances` показывает тост при ошибке остатков
-- [ ] B6. Быстрый путь: если в черновике нет не-temporary не-inline строк — валидация не делает сетевых вызовов
+- [x] B1. `operation-create-modal.component.ts` — выделить ядро `onRefreshCheckItems()` в переиспользуемый метод `validateAndApplyLineStatuses()`; `onRefreshCheckItems()` продолжает работать через него (поведение кнопки «Обновить и проверить» не меняется)
+- [x] B2. `onSave()` и `onSubmit()` — перед emit вызывать `validateAndApplyLineStatuses()`; если после apply есть unusable-строки (`hasUnusableLines()`) или резолвер недоступен — НЕ эмитить, показать тост через существующий `toasts` signal
+- [x] B3. `onRefreshAllBalances()` — убрать молчаливые no-op return'ы: валидация ТМЦ выполняется ВСЕГДА; обновление остатков только когда применимо (`shouldUseWarehouseBalances()` и выбран склад), иначе инфо-тост вместо тишины
+- [x] B4. `operations.service.ts` `loadBalances()` — заменить молчаливое `catch → balances.set([])` на установку публичного signal `balanceLoadError` (баланс при этом всё равно `[]` — консервативно); на старте успешной загрузки сигнал сбрасывается
+- [x] B5. Модалка: effect смены склада (~строки 1190-1191) — добавить обработку ошибки `loadBalances` (без падения, через `balanceLoadError`); `onRefreshAllBalances` показывает тост при ошибке остатков
+- [x] B6. Быстрый путь: если в черновике нет не-temporary не-inline строк — валидация не делает сетевых вызовов
 
 ### Implementation — WP-C: периодическая полная сверка кэша (приоритет 2)
-- [ ] C1. Корневой `Makefile` — аддитивный target `sync-catalog-cache` (`docker compose exec warehouse_web python manage.py sync_catalog_cache`)
-- [ ] C2. `Warehouse_web/DEPLOYMENT.md` — секция с рекомендуемым cron/systemd-timer (интервал: ежечасно) и обоснованием
+- [x] C1. Корневой `Makefile` — аддитивный target `sync-catalog-cache` (`docker compose exec warehouse_web python manage.py sync_catalog_cache`)
+- [x] C2. `Warehouse_web/DEPLOYMENT.md` — секция с рекомендуемым cron/systemd-timer (интервал: ежечасно) и обоснованием
 
 ### Tests
-- [ ] T1. Static: `npm run build` (Angular) зелёный
-- [ ] T2. Static: `python manage.py check` (Django) без ошибок; `python manage.py makemigrations --check --dry-run` — новых миграций НЕТ (модели не меняются)
-- [ ] T3. Unit/component (vitest): `onSave`/`onSubmit` с фантомной строкой НЕ эмитят и показывают тост; с чистой строкой — эмитят; резолвер недоступен → save заблокирован с сообщением
-- [ ] T4. Unit/component (vitest): «Обновить всё» на объектном flow (ISSUE_RETURN/WRITE_OFF с объектом) выполняет валидацию ТМЦ и НЕ вызывает `loadBalances`; без склада — валидация + инфо-тост
-- [ ] T5. Unit/component (vitest): ошибка `loadBalances` → `balanceLoadError` установлен, баланс `[]`, тост при ручном refresh; существующие 15 тестов manual-refresh остаются зелёными (включая «onSave/onSubmit НЕ вызывают loadBalances» — валидация это resolve, не баланс)
-- [ ] T6. Django tests: resolve-view пруннинг — статусы missing/deleted/inactive/merged деактивируют кэш-запись; active не трогает; неизвестный id безопасен; exception пруннинга не ломает 200-ответ; 400-валидации view не сломаны
-- [ ] T7. Django integration (test DB): деактивированный `CatalogCacheItem` исключается из fast-поиска `CatalogLookupService.search_items`
-- [ ] T8. Stand smoke: phantom-сценарий через API (seed ТМЦ в SyncServer → warm кэша → удаление ТМЦ в SyncServer мимо Django → resolve → кэш деактивирован → fast-поиск не возвращает фантом)
-- [ ] T9. UI automation: новый `Warehouse_frontend/e2e/operations/operations-phantom-item-block.spec.ts` — фантомная строка блокирует Save с причиной, 404-тост НЕ появляется; после замены строки на валидную сохранение проходит
-- [ ] T10. Regression e2e: `operations-balances-manual.spec.ts`, `operations-catalog-refresh.spec.ts`, `operations-save-reliability.spec.ts`, `operations-create-modal.spec.ts`, `temporary-items.spec.ts`, `issued-assets-layout.spec.ts` (второй потребитель модалки)
-- [ ] T11. Regression Django: тест-сьюты `apps/catalog_cache` и `apps/bff_api` зелёные
-- [ ] T12. User scenario: «кладовщик добавляет в черновик ТМЦ, удалённый в SyncServer вне Django-админки → жмёт Сохранить → строка подсвечена с причиной, сохранение не происходит, понятное сообщение; после исправления строки операция сохраняется»
-- [ ] T13. Stand smoke WP-C: `make sync-catalog-cache` на стенде, stats-запись `complete=true`
+- [x] T1. Static: `npm run build` (Angular) зелёный
+- [x] T2. Static: `python manage.py check` (Django) без ошибок; `python manage.py makemigrations --check --dry-run` — новых миграций НЕТ (модели не меняются)
+- [x] T3. Unit/component (vitest): `onSave`/`onSubmit` с фантомной строкой НЕ эмитят и показывают тост; с чистой строкой — эмитят; резолвер недоступен → save заблокирован с сообщением
+- [x] T4. Unit/component (vitest): «Обновить всё» на объектном flow (ISSUE_RETURN/WRITE_OFF с объектом) выполняет валидацию ТМЦ и НЕ вызывает `loadBalances`; без склада — валидация + инфо-тост
+- [x] T5. Unit/component (vitest): ошибка `loadBalances` → `balanceLoadError` установлен, баланс `[]`, тост при ручном refresh; существующие 15 тестов manual-refresh остаются зелёными (включая «onSave/onSubmit НЕ вызывают loadBalances» — валидация это resolve, не баланс)
+- [x] T6. Django tests: resolve-view пруннинг — статусы missing/deleted/inactive/merged деактивируют кэш-запись; active не трогает; неизвестный id безопасен; exception пруннинга не ломает 200-ответ; 400-валидации view не сломаны
+- [x] T7. Django integration (test DB): деактивированный `CatalogCacheItem` исключается из fast-поиска `CatalogLookupService.search_items`
+- [x] T8. Stand smoke: phantom-сценарий через API (seed ТМЦ в SyncServer → warm кэша → удаление ТМЦ в SyncServer мимо Django → resolve → кэш деактивирован → fast-поиск не возвращает фантом)
+- [x] T9. UI automation: новый `Warehouse_frontend/e2e/operations/operations-phantom-item-block.spec.ts` — фантомная строка блокирует Save с причиной, 404-тост НЕ появляется; после замены строки на валидную сохранение проходит
+- [x] T10. Regression e2e: `operations-balances-manual.spec.ts`, `operations-catalog-refresh.spec.ts`, `operations-save-reliability.spec.ts`, `operations-create-modal.spec.ts`, `temporary-items.spec.ts`, `issued-assets-layout.spec.ts` (второй потребитель модалки)
+- [x] T11. Regression Django: тест-сьюты `apps/catalog_cache` и `apps/bff_api` зелёные
+- [x] T12. User scenario: «кладовщик добавляет в черновик ТМЦ, удалённый в SyncServer вне Django-админки → жмёт Сохранить → строка подсвечена с причиной, сохранение не происходит, понятное сообщение; после исправления строки операция сохраняется»
+- [x] T13. Stand smoke WP-C: `make sync-catalog-cache` на стенде, stats-запись `complete=true`
 
 ### Final
-- [ ] F1. Documentation: чек-лист этого TZ закрыт с Evidence; при изменении entry points — обновить `AI_CONTEXT.md`/`AI_ENTRY_POINTS.md` (не ожидается)
+- [x] F1. Documentation: чек-лист этого TZ закрыт с Evidence; при изменении entry points — обновить `AI_CONTEXT.md`/`AI_ENTRY_POINTS.md` (не ожидается)
 - [ ] F2. Final acceptance (QA verifier)
 
 ## Check Rules
@@ -281,8 +281,8 @@ WPF/FlaUI уровни неприменимы (desktop не затрагивае
 
 | Check | Command / Tool | Result | Evidence |
 |---|---|---|---|
-| Static | `npm run build`, `python manage.py check`, `makemigrations --check --dry-run` | | |
-| Unit/component | `npm run test:unit`, `python manage.py test apps.bff_api apps.catalog_cache` | | |
-| Stand smoke | phantom-сценарий API; `make sync-catalog-cache` | | |
-| UI automation | `make test-e2e` (operations-phantom-item-block.spec.ts) | | |
-| Regression | e2e-пак + Django-сьюты | | |
+| Static | `npm run build`, `python manage.py check`, `makemigrations --check --dry-run` | pass | Angular build успешен (только pre-existing SCSS budget warnings); `check` — 0 issues; миграций нет |
+| Unit/component | `npm run test:unit`, `python manage.py test apps.bff_api apps.catalog_cache` | pass | Angular 23 файла / 202 теста; Django 127 тестов (включая 5×T6 и T7) |
+| Stand smoke | phantom-сценарий API; `make sync-catalog-cache` | pass | T8 PASS (phantom-ТМЦ деактивирован кэш, fast-поиск не возвращает); T13 `Catalog cache sync completed ... deactivated=2 ... complete` |
+| UI automation | `make test-e2e` (operations-phantom-item-block.spec.ts) | pass | T9 e2e прошёл (9s): фантом блокирует Save, 404-тост отсутствует, после замены строки — сохранение OK |
+| Regression | e2e-пак + Django-сьюты | pass | T10: 6 спеков операций — 46 passed / 3 pre-existing skipped / 0 failed; T11: Django apps.bff_api + apps.catalog_cache — 127 passed |

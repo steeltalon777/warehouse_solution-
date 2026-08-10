@@ -99,6 +99,9 @@ migrate-sync-autogen: ## Сгенерировать авто-миграцию Sy
 migrate-web-makemigrations: ## Создать миграции Django
 	docker compose exec warehouse_web python manage.py makemigrations
 
+sync-catalog-cache: ## Полная сверка кэша каталога с SyncServer
+	docker compose exec warehouse_web python manage.py sync_catalog_cache
+
 # ----- SyncServer скрипты -----
 
 bootstrap-root: ## Запустить bootstrap корневого пользователя и Django устройства (SyncServer)

@@ -71,6 +71,18 @@ See `docs/adr/0011-django-syncserver-internal-transport-hardening.md` and `docs/
 
 ## Project Details
 
+### Historical integrity hardening
+
+ADR-0018 defines the append-only audit spine (`audit_events`, `audit_event_resources`, `audit_item_effects`). ADR-0028 accepts Stage A hardening while keeping the operation-driven model and UnitOfWork boundary unchanged:
+
+- submitted/cancelled operation dates become immutable through normal service/API paths;
+- restore, catalog soft-delete, acceptance and lost-resolution gain complete causal audit;
+- target `audit_item_effects.effective_at` records when each concrete balance mutation became effective, while `created_at` remains physical insert time;
+- default item-movement reporting excludes `Operation.origin='system'` without replacing the existing operation/line read model; Django BFF only forwards the optional filter and owns no report rule;
+- integrity diagnostics are read-only; automatic repair and scheduled execution are separate decisions.
+
+Status on 2026-08-05: ADR/TZ issued, runtime implementation not started. See `docs/audit/HISTORICAL_INTEGRITY_STATUS.md`, `docs/adr/0028-historical-integrity-stage-a.md`, and `docs/TZ-HISTORICAL_INTEGRITY_STAGE_A.md`.
+
 ### SyncServer
 
 - Stack: Python, FastAPI, Pydantic v2, SQLAlchemy async, PostgreSQL, Alembic.

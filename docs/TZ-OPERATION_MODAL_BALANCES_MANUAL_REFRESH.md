@@ -38,7 +38,7 @@
 - [x] 17. Documentation: `MEMORY.md` / `GIT_STATE.md` обновлены, `SCOPE-ops-balances-manual.md` помечен как «реализован», ссылка на этот TZ в `INDEX.md`
 
 ### Final
-- [ ] 18. Final acceptance (QA verifier)
+- [x] 18. Final acceptance (QA verifier)
 
 ## Check Rules
 

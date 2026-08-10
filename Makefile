@@ -1,7 +1,7 @@
 # Makefile для управления dev-стендом Warehouse Solution
 # Одна команда для старта:  make dev
 
-.PHONY: help up down build logs ps shell clean migrate status dev init setup bootstrap-root bootstrap-root-migrate rotate-tokens rotate-tokens-root rotate-tokens-device test-e2e test-e2e-report test-e2e-headed test-e2e-ui
+.PHONY: help up down build logs ps shell clean migrate status dev init setup bootstrap-root bootstrap-root-migrate rotate-tokens rotate-tokens-root rotate-tokens-device test-e2e test-e2e-report test-e2e-headed test-e2e-ui integrity-check
 
 # Цвета для вывода
 GREEN := \033[0;32m
@@ -121,6 +121,9 @@ convert-temp-items: ## Конвертировать активные време�
 
 convert-temp-items-dry: ## Dry-run конвертации временных ТМЦ
 	docker compose exec syncserver python scripts/batch_convert_temporary_items.py --dry-run
+
+integrity-check: ## Read-only integrity CLI для SyncServer (TZ A-7)
+	docker compose exec -T syncserver python scripts/integrity_check.py $(ARGS)
 
 # ----- Статус -----
 

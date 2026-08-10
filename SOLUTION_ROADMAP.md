@@ -1,6 +1,6 @@
 # Дорожная карта — Quartermaster
 
-> Последнее обновление: 2026-07-01
+> Последнее обновление: 2026-08-05
 
 ## Стратегическая линия
 
@@ -42,6 +42,19 @@
 | 3.1G Operations UX Hardening: submit error tracebacks, inline-SKU validation | [ ] |
 | 3.1H Waybill PDF Fixes: metadata sync, multi-page rendering, on-demand PDF | [ ] TZ создан |
 | 3.1I Operation Lines Sorting: default sort by lineNumber in modal | ✅ выполнено |
+
+### Cross-release blocker — Historical Integrity
+
+| Deliverable | Status |
+|---|---|
+| Read-only audit + R-01…R-40 register + A→E roadmap | ✅ complete (2026-07-31) |
+| ADR-0028 Historical Integrity Stage A | ✅ Accepted; implementation in place |
+| `TZ-HISTORICAL_INTEGRITY_STAGE_A.md` | ✅ Stage A-wide runtime delivered; final QA acceptance pending |
+| Stage A runtime A-1…A-7 | ✅ implemented; full SyncServer pytest + Django `manage.py test` + `make integrity-check` covered |
+| Shared dev database Alembic head | ✅ `0037_audit_item_effects_effective_at` after backup → clone ladder → schema match |
+| Stage B/C/D architecture packages | Deferred until Stage A QA acceptance and separate authorization |
+
+Active status: `docs/audit/HISTORICAL_INTEGRITY_STATUS.md`. Stage A is a priority SyncServer hardening gate before claiming season-report readiness; the presence of ADR/TZ does not close any risk without implementation evidence.
 
 ### v3.2 — Desktop client migration
 

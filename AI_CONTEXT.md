@@ -11,6 +11,8 @@ This file defines how AI agents should reason about this workspace.
 - `WarehouseDesktop` and `WarehouseMobile` should be rebuilt around `Warehouse_client_core`.
 - `WarehouseAIWorkstation` is paused unless explicitly requested.
 - Warehouse 3.0 keeps Django -> SyncServer on `/api/v1` HTTP/JSON and hardens `Warehouse_web/apps/sync_client/` instead of replacing the boundary.
+- ADR-0028 Historical Integrity Stage A is accepted and implemented under `docs/TZ-HISTORICAL_INTEGRITY_STAGE_A.md`; final QA acceptance remains with the verifier. Active status is `docs/audit/HISTORICAL_INTEGRITY_STATUS.md`.
+- For audit effects, `created_at` is physical insert time; target `effective_at` is cause-specific business time (submit operation date, acceptance action time, cancellation time, or correction application time).
 
 ## Non-Negotiable Rules
 
@@ -28,6 +30,7 @@ This file defines how AI agents should reason about this workspace.
 | Task | Project |
 |---|---|
 | Backend API, business rules, migrations | `SyncServer/` |
+| Historical-integrity guards/effects/diagnostics | `SyncServer/`; only transparent report-param passthrough in `Warehouse_web/`; start from ADR-0028 + Stage A TZ |
 | Django UI, admin, session, BFF endpoints | `Warehouse_web/` |
 | Angular nomenclature shell | `Warehouse_frontend/` |
 | Offline-first runtime design/implementation | `Warehouse_client_core/` |
@@ -54,3 +57,5 @@ This file defines how AI agents should reason about this workspace.
 6. Update active docs when roles, entry points, or verification commands change.
 
 For internal transport work, start from `docs/adr/0011-django-syncserver-internal-transport-hardening.md` and `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md`.
+
+For historical-integrity work, start from `docs/audit/HISTORICAL_INTEGRITY_STATUS.md`, then `docs/adr/0028-historical-integrity-stage-a.md` and `docs/TZ-HISTORICAL_INTEGRITY_STAGE_A.md`. Do not mark risks closed before runtime evidence.

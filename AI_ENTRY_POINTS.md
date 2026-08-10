@@ -8,14 +8,18 @@
 - `.github/workflows/e2e-tests.yml` - GitHub Actions Playwright E2E pipeline.
 - `SOLUTION_ROADMAP.md` - priority roadmap.
 - `Functional and WorkLogik.md` - canonical functional requirements.
+- `docs/audit/HISTORICAL_INTEGRITY_STATUS.md` - active status of historical-integrity work.
 
 ### Key ADRs
 
 - `docs/adr/0011-django-syncserver-internal-transport-hardening.md` - Warehouse 3.0 Django -> SyncServer transport decision.
 - `docs/adr/0012-deprecate-temporary-items-review-flow.md` - Temporary items deprecation.
+- `docs/adr/0018-audit-architecture.md` - audit spine/resources/item effects.
+- `docs/adr/0028-historical-integrity-stage-a.md` - accepted Stage A decision; implementation pending.
 
 ### Active Technical Assignments
 
+- `docs/TZ-HISTORICAL_INTEGRITY_STAGE_A.md` - executable Stage A guard/audit/effect-time/integrity-check scope.
 - `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md` - transport hardening.
 - `docs/TZ-PLAYWRIGHT_PIPELINE_INTEGRATION.md` - Playwright pipeline integration.
 - `docs/TZ-NOMENCLATURE_BATCH_CATALOG_CRUD.md` - batch catalog CRUD.

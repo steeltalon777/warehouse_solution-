@@ -64,7 +64,7 @@ warehouse_solution/
 
 - **QDE `engine_version`** (`qm_engine.__version__`, semver) — независимая ось версионирования.
 - **QDE `engine_contract_version`** — semver, независимо от `engine_version`. Может расширяться backward-compatibly (Phase 2.1: `engine_contract_versions: ["1.0.0"]`).
-- **QDE `backend_version`** — per-backend pin (например `typst: 0.15.1`, `weasyprint: 69.0`).
+- **QDE `backend_version`** — per-backend pin (например `typst: 0.15.1`, `weasyprint: 66.0`).
 - **Warehouse Solution version** — не зависит от `engine_version`. Warehouse_web release notes ссылаются на «QDE engine X.Y.Z + bundled templates A, B, C».
 - **Template packages** — версионируются отдельно (`warehouse-waybill-ru@2.0.0`).
 

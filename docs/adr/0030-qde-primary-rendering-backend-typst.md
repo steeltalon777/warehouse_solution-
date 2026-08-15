@@ -32,7 +32,7 @@ Phase 2 оставил решение «provisional до Windows verification».
 - **Deterministic env**: `TYPST_TIMESTAMP` env + явный CLI-флаг `--creation-timestamp 1700000000` (Phase 2.1.1 close-out M1).
 - **Runtime**: subprocess pinned binary, argv-only, no shell, no network (verified `strace -e trace=network` = 0 syscalls).
 
-### D2. WeasyPrint 69.0 остаётся **legacy/reference backend**
+### D2. WeasyPrint 66.0 остаётся **legacy/reference backend**
 
 - Сохраняется в QDE bundle до момента, пока существуют historical artifacts, требующие воспроизводимости на старом движке.
 - До cutover используется как primary legacy path; после cutover сохраняется только как **явный operator-controlled emergency rollback/fallback path**. Silent fallback при ошибке QDE запрещён; emergency fallback по умолчанию выключен и должен явно маркироваться (см. companion TZ §6).

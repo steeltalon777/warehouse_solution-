@@ -157,7 +157,7 @@ class RenderedDocumentArtifact(models.Model):
     engine = models.CharField(max_length=32)                         # "qde" или "django-legacy"
     engine_version = models.CharField(max_length=32)                 # "0.1.0" / "waybill-pdf-v3"
     backend = models.CharField(max_length=32)                        # "typst" / "weasyprint"
-    backend_version = models.CharField(max_length=32)                # "0.15.1" / "69.0"
+    backend_version = models.CharField(max_length=32)                # "0.15.1" / "66.0"
 
     # --- Status + content ---
     status = models.CharField(max_length=16, choices=Status.choices, default=Status.RENDERING)
@@ -219,7 +219,7 @@ DEFAULT_LEGACY_AXES = {
     "engine": "django-legacy",
     "engine_version": "waybill-pdf-v3",   # fallback if row.renderer_version is empty; data migration copies row.renderer_version otherwise
     "backend": "weasyprint",
-    "backend_version": "69.0",           # читается из Warehouse_web settings
+    "backend_version": "66.0",           # actual legacy Warehouse_web WeasyPrint baseline (requirements: weasyprint>=66,<67)
     "document_contract": "warehouse.operation-document/v2",
     "template_id": "waybill_v1",         # бывший template_name "waybill_v1"
     "template_version": "1.0",           # бывший template_version

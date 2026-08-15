@@ -30,6 +30,10 @@ Warehouse_web/media/
 Warehouse_web/staticfiles/
 Warehouse_web/.codegraph/
 
+# Real secret env files must never enter the Docker build context.
+# Safe example/template files (*.env.example, *.env.template) stay available.
+**/.env
+
 # Unrelated components / local dirs
 WarehouseWorkstation/
 warehouse-storekeeper/

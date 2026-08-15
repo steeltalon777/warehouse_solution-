@@ -36,9 +36,9 @@
 
 Архитектор создаёт checklist; executor проверяет только после реализации и верификации. Не путать со статус-чекбоксами ADRs.
 
-- [ ] 0. Context verified (ADR-0030/0031/0032 прочитаны, ADR-0029 §5/§6/§7/§8/§11 пройдены, AUDIT-2026-08-10 SEC-10 закрыт)
-- [ ] 1. Phase 6A complete — envelope adapter
-- [ ] 2. Phase 6A tests (unit + integration + stand smoke)
+- [x] 0. Context verified (ADR-0030/0031/0032 прочитаны, ADR-0029 §5/§6/§7/§8/§11 пройдены, AUDIT-2026-08-10 SEC-10 закрыт)
+- [x] 1. Phase 6A complete — envelope adapter
+- [x] 2. Phase 6A tests (unit + integration + stand smoke)
 - [ ] 3. Phase 6B complete — RenderedDocumentArtifact v2 + cache key
 - [ ] 4. Phase 6B tests (unit + integration + migration roundtrip + stand smoke)
 - [ ] 5. Phase 6C complete — production Typst waybill template `warehouse-waybill-ru@2.0.0`

@@ -1,0 +1,38 @@
+# Root build context (docker compose builds warehouse_web from workspace root so
+# the image can COPY QuartermasterDocumentEngine per ADR-0032 D7 / TZ §9.1).
+# Keep the context lean: local/generated artifacts must not enter the image.
+
+.git
+**/.git
+**/.venv/
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/.codegraph/
+
+node_modules/
+**/node_modules/
+
+# QDE local spike/build artifacts (runtime download forbidden; binary comes
+# from the pinned, sha256-verified typst-fetch build stage)
+QuartermasterDocumentEngine/.spike/
+QuartermasterDocumentEngine/spike-out/
+QuartermasterDocumentEngine/build/
+QuartermasterDocumentEngine/*.egg-info/
+QuartermasterDocumentEngine/.venv/
+
+# Warehouse_web local state
+Warehouse_web/.venv/
+Warehouse_web/db.sqlite3
+Warehouse_web/media/
+Warehouse_web/staticfiles/
+Warehouse_web/.codegraph/
+
+# Unrelated components / local dirs
+WarehouseWorkstation/
+warehouse-storekeeper/
+backups/
+prod_working/
+.playwright-mcp/

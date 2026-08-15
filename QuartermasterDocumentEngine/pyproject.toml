@@ -48,6 +48,38 @@ qm_cli = "cli/qm_cli"
 [tool.setuptools.package-data]
 qm_engine = ["py.typed"]
 
+# Runtime resources delivered by ``pip install`` (ADR-0032 D7, TZ §6.5/§9.1).
+# Canonical templates, bundled fonts and contract schemas land under
+# ``<sys.prefix>/share/quartermaster_document_engine/<resource>`` and are
+# resolved by ``qm_engine.paths`` (installed share location first, then the
+# bundle root). Spike artifacts (templates/spike-*, .spike/, spike-out/) are
+# intentionally NOT packaged.
+[tool.setuptools.data-files]
+"share/quartermaster_document_engine/fonts" = [
+    "fonts/*.ttf",
+    "fonts/LICENSE",
+    "fonts/manifest.json",
+    "fonts/README.md",
+]
+"share/quartermaster_document_engine/templates/warehouse-waybill-ru/0.1.0" = [
+    "templates/warehouse-waybill-ru/0.1.0/*",
+]
+"share/quartermaster_document_engine/templates/warehouse-waybill-ru/1.0" = [
+    "templates/warehouse-waybill-ru/1.0/*",
+]
+"share/quartermaster_document_engine/contracts/envelope/v1" = [
+    "contracts/envelope/v1/*.json",
+]
+"share/quartermaster_document_engine/contracts/warehouse.operation-document/v2" = [
+    "contracts/warehouse.operation-document/v2/*.json",
+]
+"share/quartermaster_document_engine/contracts/fuel.monthly-report/v1" = [
+    "contracts/fuel.monthly-report/v1/*.json",
+]
+"share/quartermaster_document_engine/contracts/transport.vehicle-route-sheet/v1" = [
+    "contracts/transport.vehicle-route-sheet/v1/*.json",
+]
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"

@@ -43,7 +43,11 @@ services:
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
   warehouse_web:
-    build: ./Warehouse_web
+    build:
+      # Root context so the image can COPY QuartermasterDocumentEngine/
+      # (ADR-0032 D7, TZ §9.1). Root .dockerignore keeps the context lean.
+      context: .
+      dockerfile: Warehouse_web/Dockerfile
     container_name: warehouse_web
     restart: unless-stopped
     ports:

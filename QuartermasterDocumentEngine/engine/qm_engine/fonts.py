@@ -1,7 +1,9 @@
 """Bundled font manifest and integrity checks (TZ-PHASE2-BACKEND-SPIKE §8 T4).
 
-The engine ships its own DejaVu Sans files at ``<bundle>/fonts/`` (see
-``paths.fonts_dir()``). Rendering backends must call
+The engine ships its own DejaVu Sans files under the resolved fonts dir
+(``qm_engine.paths.default_fonts_dir()``: ``QM_FONTS_DIR`` env override,
+then the installed share location, then ``<bundle>/fonts/`` — see
+``paths.py``). Rendering backends must call
 :meth:`ensure_bundled_fonts` before producing output: it loads
 ``manifest.json``, verifies every file is present and that its SHA-256
 matches the pinned value. Any failure raises
@@ -21,8 +23,10 @@ from qm_engine.errors import FontNotAvailableError
 from . import paths
 
 # Re-exported for convenience so call sites can write
-# ``qm_engine.fonts.fonts_dir()`` without importing ``paths``.
-fonts_dir = paths.fonts_dir
+# ``qm_engine.fonts.fonts_dir()`` without importing ``paths``. Points at the
+# *resolved* dir: ``QM_FONTS_DIR`` env var wins, then the installed share
+# location, then the bundle root (ADR-0032 D3/D7).
+fonts_dir = paths.default_fonts_dir
 
 # Pinned default font family. Used by both backends and by future
 # manifest-driven font selection.

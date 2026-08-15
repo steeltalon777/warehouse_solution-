@@ -6,8 +6,9 @@
 2. `Warehouse_web/` - current active Django web client and BFF.
 3. `Warehouse_frontend/` - Angular shell hosted by Django; high priority.
 4. `Warehouse_client_core/` - Rust offline-first core for future desktop/mobile.
-5. `WarehouseDesktop/` and `WarehouseMobile/` - future clients over the core.
-6. `WarehouseAIWorkstation/` - paused until explicitly resumed.
+5. `QuartermasterDocumentEngine/` - standalone document renderer, monorepo component (ADR-0031); Phase 6 integration pending.
+6. `WarehouseDesktop/` and `WarehouseMobile/` - future clients over the core.
+7. `WarehouseAIWorkstation/` - paused until explicitly resumed.
 
 ## Entry Points
 
@@ -29,6 +30,11 @@
 | Angular shell | `Warehouse_frontend/` |
 | Playwright E2E workflow | `.github/workflows/e2e-tests.yml` |
 | Offline core plan | `Warehouse_client_core/docs/Core_plan` |
+| QDE engine source | `QuartermasterDocumentEngine/engine/` |
+| QDE CLI contract | `QuartermasterDocumentEngine/cli/qm_cli/main.py` |
+| QDE backend spike evidence | `QuartermasterDocumentEngine/doc/TZ-PHASE2-BACKEND-SPIKE.md` |
+| QDE integration ADRs | `docs/adr/0029-…` + `docs/adr/0030-…` + `docs/adr/0031-…` + `docs/adr/0032-…` |
+| QDE Phase 6 TZ | `docs/TZ-QDE_INTEGRATION_READINESS.md` |
 | Desktop future client | `WarehouseDesktop/` |
 | Mobile future client | `WarehouseMobile/` |
 
@@ -40,6 +46,7 @@
 | `Warehouse_web/` | `python manage.py test` |
 | `Warehouse_frontend/` | `npm run build`; `make test-e2e` for Docker-backed Playwright E2E |
 | `Warehouse_client_core/` | `cargo test --workspace` once Rust workspace exists |
+| `QuartermasterDocumentEngine/` | `pytest tests/unit`; `pytest tests/integration tests/component`; `pytest -m golden` |
 | `WarehouseDesktop/` | `dotnet test WarehouseDesktop.sln` when touched |
 | `WarehouseMobile/` | `gradlew.bat test` when touched |
 | `WarehouseAIWorkstation/` | `dotnet test WarehouseAIWorkstation.sln` only when explicitly resumed |
@@ -64,10 +71,15 @@
 - `docs/adr/0018-audit-architecture.md` - append-only audit journal and item effects.
 - `docs/adr/0028-historical-integrity-stage-a.md` - **Accepted; implementation pending:** Stage A guards, effect-time, diagnostics.
 - `docs/adr/0027-operation-cancel-domain-errors.md` - **Accepted; implemented:** cancel-flow domain errors reuse the submit envelope (`operation-cancel-rejected`).
+- `docs/adr/0029-quartermaster-document-engine.md` - QDE architecture: envelope, contracts, render-host ownership.
+- `docs/adr/0030-qde-primary-rendering-backend-typst.md` - **Proposed (2026-08-15):** QDE primary rendering backend = Typst 0.15.1.
+- `docs/adr/0031-qde-ownership-and-versioning.md` - **Proposed (2026-08-15):** QDE as monorepo component, closes AUDIT ARC-08.
+- `docs/adr/0032-qde-warehouse-integration-contract.md` - **Proposed (2026-08-15):** Warehouse → QDE integration seam (Phase 6).
 
 ### Active Technical Assignments
 
 - `docs/TZ-HISTORICAL_INTEGRITY_STAGE_A.md` - **Ready for execution; implementation not started:** historical-integrity Stage A.
+- `docs/TZ-QDE_INTEGRATION_READINESS.md` - **Proposed (2026-08-15):** QDE integration readiness baseline + Phase 6A–6F decomposition; repository baseline prepared, Phase 6A not started.
 - `docs/TZ-OPERATION_CANCEL_DOMAIN_ERRORS.md` - ✅ реализовано (2026-08-07): cancel-flow доменные ошибки в формате envelope ADR-0025 (type urn:warehouse:problem:operation-cancel-rejected, code operation_cancel_rejected), двухфазный pre-check `_check_cancel_balance_sufficiency`, workflow/authz-политики → доменные исключения, BFF `OperationCancelView` → `api_error_response`, Angular баннер cancel-ошибок + toasts, DB-backed envelope/конкурентные тесты, e2e `operations-cancel.spec.ts`.
 - `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md` - internal transport hardening.
 - `docs/TZ-NOMENCLATURE_BATCH_CATALOG_CRUD.md` - batch catalog CRUD.
@@ -99,4 +111,5 @@
 - Django -> SyncServer stays on `/api/v1` HTTP/JSON for Warehouse 3.0; harden `apps/sync_client` before considering alternate transports.
 - Angular must run through Django.
 - Future offline clients must share `Warehouse_client_core`.
+- QDE is a monorepo component: `Warehouse_web` → QDE allowed, QDE → Warehouse code forbidden (ADR-0031 D2).
 - AI workstation is out of routine scope.

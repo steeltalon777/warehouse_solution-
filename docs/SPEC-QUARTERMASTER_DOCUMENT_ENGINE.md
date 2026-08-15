@@ -468,6 +468,8 @@ document_payload_hash
 
 Окончательный выбор выполняется после spike.
 
+> **Статус (2026-08-15):** по итогам Phase 2 spike (`TZ-PHASE2-BACKEND-SPIKE.md`) provisional-рекомендация Typst переведена в formal ADR-0030: primary rendering backend = Typst 0.15.1 (Linux x64 pinned), WeasyPrint = legacy/emergency fallback. См. `docs/adr/0030-qde-primary-rendering-backend-typst.md`.
+
 ### 12.1. Python + WeasyPrint
 
 Плюсы:

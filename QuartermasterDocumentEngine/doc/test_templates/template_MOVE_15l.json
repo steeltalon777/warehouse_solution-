@@ -1,0 +1,392 @@
+{
+  "engine_contract_version": "1.0.0",
+  "document_contract": "warehouse.operation-document/v2",
+  "document_type": "waybill",
+  "template_id": "warehouse-waybill-ru",
+  "template_version": "1.0",
+  "locale": "ru-RU",
+  "render_profile": "print",
+  "document_id": "a795358c-1c8b-4fae-9de8-6df6d1d844fa",
+  "document_number": "WB-1-20260804-5156",
+  "document": {
+    "basis": {
+      "date": null,
+      "type": null,
+      "label": "Перемещение Угдан → ДЭУ (КСК)",
+      "number": null,
+      "operation_type_label": "Перемещение"
+    },
+    "lines": [
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3619,
+        "item_sku": "",
+        "quantity": 16.0,
+        "item_name": "Реле VL-396",
+        "unit_name": "Штука",
+        "line_number": 1,
+        "unit_symbol": "шт",
+        "category_name": "Электрооборудование"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3622,
+        "item_sku": "",
+        "quantity": 7.0,
+        "item_name": "Реле V-315",
+        "unit_name": "Штука",
+        "line_number": 2,
+        "unit_symbol": "шт",
+        "category_name": "Электрооборудование"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 2274,
+        "item_sku": "",
+        "quantity": 1.0,
+        "item_name": "Реле электронное РПП-1БМ",
+        "unit_name": "Штука",
+        "line_number": 3,
+        "unit_symbol": "шт",
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3617,
+        "item_sku": "",
+        "quantity": 2.0,
+        "item_name": "Блок управления УТД-2",
+        "unit_name": "Штука",
+        "line_number": 4,
+        "unit_symbol": "шт",
+        "category_name": "Электрооборудование"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3623,
+        "item_sku": "",
+        "quantity": 2.0,
+        "item_name": "Реле РЭП-3",
+        "unit_name": "Штука",
+        "line_number": 5,
+        "unit_symbol": "шт",
+        "category_name": "Электрооборудование"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3422,
+        "item_sku": "",
+        "quantity": 10.0,
+        "item_name": "Изолента TERMINATOR ПВХ чёрная 19×0,165 мм × 20 м, 80 °C",
+        "unit_name": "Штука",
+        "line_number": 6,
+        "unit_symbol": "шт",
+        "category_name": "Изоляционные материалы"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3843,
+        "item_sku": "",
+        "quantity": 1.0,
+        "item_name": "Автомат С32",
+        "unit_name": "Штука",
+        "line_number": 7,
+        "unit_symbol": "шт",
+        "category_name": "Освещение"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 858,
+        "item_sku": "211",
+        "quantity": 1.0,
+        "item_name": "Розетка ОП-2 16А 250В",
+        "unit_name": "Штука",
+        "line_number": 8,
+        "unit_symbol": "шт",
+        "category_name": "Электрооборудование"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 1990,
+        "item_sku": "00-00035937",
+        "quantity": 10.0,
+        "item_name": "СМС Бимакс 400г/100 пятен/24 АО \"Нэфис косметикс\"",
+        "unit_name": "Штука",
+        "line_number": 9,
+        "unit_symbol": "шт",
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 669,
+        "item_sku": "20644",
+        "quantity": 10.0,
+        "item_name": "Мыло туал.\"Банное\"  175гр/72шт",
+        "unit_name": "Штука",
+        "line_number": 10,
+        "unit_symbol": "шт",
+        "category_name": "Бытовая химия"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 1073,
+        "item_sku": "20902",
+        "quantity": 20.0,
+        "item_name": "Перчатки х/б ПВХ Чел 5 нитей 10/200 34269",
+        "unit_name": "Пара",
+        "line_number": 11,
+        "unit_symbol": "пар",
+        "category_name": "Перчатки"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3236,
+        "item_sku": "",
+        "quantity": 1.0,
+        "item_name": "М/с АОС для посуды 900 г/12 АО «Нэфис косметикс»",
+        "unit_name": "Штука",
+        "line_number": 12,
+        "unit_symbol": "шт",
+        "category_name": "Бытовая химия"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 2953,
+        "item_sku": "",
+        "quantity": 4.0,
+        "item_name": "Дихлофос",
+        "unit_name": "Штука",
+        "line_number": 13,
+        "unit_symbol": "шт",
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 1559,
+        "item_sku": "49039",
+        "quantity": 1.0,
+        "item_name": "Ср-во д/сантех. Санокс 750 мл/15шт ЗАО \"Аист\"",
+        "unit_name": "Штука",
+        "line_number": 14,
+        "unit_symbol": "шт",
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3347,
+        "item_sku": "",
+        "quantity": 3.0,
+        "item_name": "Сетка Москитная 1,6м (30м/рул)",
+        "unit_name": "Метр",
+        "line_number": 15,
+        "unit_symbol": "м",
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 293,
+        "item_sku": "",
+        "quantity": 15.0,
+        "item_name": "Бумага туал. «Главная» (40шт)",
+        "unit_name": "Рулон",
+        "line_number": 16,
+        "unit_symbol": "рул",
+        "category_name": "Бытовая химия"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 2905,
+        "item_sku": "",
+        "quantity": 100.0,
+        "item_name": "Лента липкая от мух /100",
+        "unit_name": "Штука",
+        "line_number": 17,
+        "unit_symbol": "шт",
+        "category_name": "Инвентарь"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 617,
+        "item_sku": "19885",
+        "quantity": 4.0,
+        "item_name": "Губка д/посуды Макси 10шт/26",
+        "unit_name": "Штука",
+        "line_number": 18,
+        "unit_symbol": "шт",
+        "category_name": "Кухонные принадлежности"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 668,
+        "item_sku": "35382",
+        "quantity": 10.0,
+        "item_name": "Салфетки  бумажные \" Пикник\"100л/63шт",
+        "unit_name": "Штука",
+        "line_number": 19,
+        "unit_symbol": "шт",
+        "category_name": "Бытовая химия"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3764,
+        "item_sku": "",
+        "quantity": 10.0,
+        "item_name": "Угольник 402776 Белаз",
+        "unit_name": "Штука",
+        "line_number": 20,
+        "unit_symbol": "шт",
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3618,
+        "item_sku": "",
+        "quantity": 1.0,
+        "item_name": "Реле 901-3747-24В",
+        "unit_name": "Штука",
+        "line_number": 21,
+        "unit_symbol": "шт",
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3917,
+        "item_sku": "",
+        "quantity": 5.0,
+        "item_name": "Коробка ОП 80×80×40 мм, для ПМ, IP66, 8 вводов, серая, TDM",
+        "unit_name": "Штука",
+        "line_number": 22,
+        "unit_symbol": "шт",
+        "category_name": "Без категории"
+      }
+    ],
+    "sender": {
+      "site_id": 1,
+      "site_code": "1",
+      "site_name": "Угдан",
+      "description": "",
+      "organization": {
+        "tax_id": null,
+        "address": "",
+        "contacts": null,
+        "legal_name": "Угдан"
+      }
+    },
+    "language": "ru",
+    "receiver": {
+      "site_id": 4,
+      "site_code": "4",
+      "site_name": "ДЭУ (КСК)",
+      "description": "",
+      "organization": {
+        "tax_id": null,
+        "address": "",
+        "contacts": null,
+        "legal_name": "ДЭУ (КСК)"
+      }
+    },
+    "issued_to": null,
+    "operation": {
+      "id": "85a7692d-542e-4290-96fb-8ec7977c0efb",
+      "type": "MOVE",
+      "status": "draft",
+      "site_id": 1,
+      "created_at": "2026-07-31T04:48:55.726613+00:00",
+      "type_label": "Перемещение",
+      "effective_at": "2026-07-31T04:48:00+00:00",
+      "submitted_at": null,
+      "display_number": "1/0448/310726",
+      "source_site_id": 1,
+      "issue_object_id": null,
+      "issue_object_name": null,
+      "destination_site_id": 4
+    },
+    "recipient": null,
+    "created_by": {
+      "role": "chief_storekeeper",
+      "user_id": "7337709e-a82b-4813-8b4d-283addc7a9c3",
+      "username": "Svetlana",
+      "full_name": "Светлана Викторовна"
+    },
+    "signatures": {
+      "roles": {
+        "accepted_by": null,
+        "handed_over": null,
+        "chief_accountant": "________________"
+      },
+      "created_by": "Светлана Викторовна",
+      "submitted_by": null
+    },
+    "basis_label": "Перемещение Угдан → ДЭУ (КСК)",
+    "source_site": {
+      "site_id": 1,
+      "site_code": "1",
+      "site_name": "Угдан",
+      "description": "",
+      "organization": {
+        "tax_id": null,
+        "address": "",
+        "contacts": null,
+        "legal_name": "Угдан"
+      }
+    },
+    "total_lines": 22,
+    "generated_at": "2026-08-04T08:20:45.306599+00:00",
+    "localization": {
+      "currency": "RUB",
+      "language": "ru",
+      "date_format": "%d.%m.%Y",
+      "datetime_format": "%d.%m.%Y %H:%M:%S",
+      "thousands_separator": " ",
+      "number_decimal_separator": ","
+    },
+    "operation_id": "85a7692d-542e-4290-96fb-8ec7977c0efb",
+    "submitted_by": null,
+    "document_title": "Товарная накладная",
+    "operation_type": "MOVE",
+    "consignee_label": "ДЭУ (КСК)",
+    "operation_notes": null,
+    "destination_site": {
+      "site_id": 4,
+      "site_code": "4",
+      "site_name": "ДЭУ (КСК)",
+      "description": "",
+      "organization": {
+        "tax_id": null,
+        "address": "",
+        "contacts": null,
+        "legal_name": "ДЭУ (КСК)"
+      }
+    },
+    "operation_status": "draft",
+    "operation_created_at": "2026-07-31T04:48:55.726613+00:00",
+    "operation_type_label": "Перемещение",
+    "operation_effective_at": "2026-07-31T04:48:00+00:00",
+    "operation_submitted_at": null,
+    "operation_display_number": "1/0448/310726",
+    "operation_acceptance_state": "pending"
+  },
+  "assets": {}
+}

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>{{ document.document_title or "Товарная накладная" }}</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 20mm;
+      @bottom-center {
+        content: "Страница " counter(page) " из " counter(pages);
+        font-size: 9px;
+        color: #555;
+      }
+    }
+    body {
+      font-family: "DejaVu Sans", "Liberation Sans", sans-serif;
+      font-size: 11px;
+      color: #111;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      font-size: 16px;
+      text-align: center;
+      margin: 0 0 4px 0;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 11px;
+      color: #333;
+      margin-bottom: 14px;
+    }
+    .header-block {
+      border: 1px solid #333;
+      padding: 8px 10px;
+      margin-bottom: 12px;
+    }
+    .header-block table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .header-block td {
+      padding: 2px 4px;
+      vertical-align: top;
+    }
+    .header-label {
+      color: #555;
+      white-space: nowrap;
+      padding-right: 8px;
+    }
+    table.lines {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    table.lines th, table.lines td {
+      border: 1px solid #333;
+      padding: 4px 6px;
+      font-size: 10px;
+    }
+    table.lines th {
+      background: #eee;
+      text-align: left;
+    }
+    td.num, th.num {
+      text-align: right;
+      white-space: nowrap;
+    }
+    tbody tr {
+      page-break-inside: avoid;
+    }
+    thead {
+      display: table-header-group;
+    }
+    .total-row td {
+      font-weight: bold;
+      background: #f4f4f4;
+    }
+    .signatures {
+      margin-top: 18px;
+      width: 100%;
+    }
+    .signatures td {
+      padding: 4px;
+    }
+    .sig {
+      margin-top: 34px;
+      padding-top: 4px;
+      border-top: 1px solid #333;
+      font-size: 10px;
+    }
+    .muted {
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>{{ document.document_title or "ТОВАРНАЯ НАКЛАДНАЯ" }}</h1>
+  {% set op = document.operation or {} %}
+  <div class="subtitle">
+    {% if document.operation_display_number %}№ {{ document.operation_display_number }}
+    {% elif document_number %}№ {{ document_number }}{% endif %}
+    {% if op.effective_at %} от {{ op.effective_at }}{% endif %}
+  </div>
+
+  <div class="header-block">
+    <table>
+      {% set sender = document.sender or document.header or {} %}
+      {% set sender_org = sender.organization or {} %}
+      {% if sender.site_name or sender_org.legal_name %}
+      <tr>
+        <td class="header-label">Склад / отправитель:</td>
+        <td>{{ sender.site_name or sender_org.legal_name }}</td>
+      </tr>
+      {% endif %}
+      {% set receiver = document.receiver or {} %}
+      {% set receiver_org = receiver.organization or {} %}
+      {% if document.consignee_label or receiver.site_name or receiver_org.legal_name %}
+      <tr>
+        <td class="header-label">Грузополучатель:</td>
+        <td>{{ document.consignee_label or receiver.site_name or receiver_org.legal_name }}</td>
+      </tr>
+      {% endif %}
+      {% if op.type_label or document.operation_type_label %}
+      <tr>
+        <td class="header-label">Операция:</td>
+        <td>{{ op.type_label or document.operation_type_label }}</td>
+      </tr>
+      {% endif %}
+      {% if document.basis_label or (document.basis and document.basis.label) %}
+      <tr>
+        <td class="header-label">Основание:</td>
+        <td>{{ document.basis_label or document.basis.label }}</td>
+      </tr>
+      {% endif %}
+      {% if document.generated_at %}
+      <tr>
+        <td class="header-label">Сформирован:</td>
+        <td>{{ document.generated_at }}</td>
+      </tr>
+      {% endif %}
+    </table>
+  </div>
+
+  <table class="lines">
+    <thead>
+      <tr>
+        <th style="width:4%">№</th>
+        <th style="width:8%">Артикул</th>
+        <th>Наименование</th>
+        <th style="width:6%">Ед.</th>
+        <th class="num" style="width:9%">Кол-во</th>
+        {% if document.lines[0] is defined and 'price' in document.lines[0] %}
+        <th class="num" style="width:9%">Цена</th>
+        <th class="num" style="width:11%">Сумма</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for line in document.lines %}
+      <tr>
+        <td>{{ line.line_number or line.seq or loop.index }}</td>
+        <td>{{ line.item_sku or line.sku or "" }}</td>
+        <td>{{ line.item_name or line.name or "" }}</td>
+        <td>{{ line.unit_symbol or line.unit_name or line.unit or "" }}</td>
+        {% if 'price' in line %}
+        <td class="num">{{ "%.2f"|format(line.quantity or line.qty) }}</td>
+        <td class="num">{{ "%.2f"|format(line.price) }}</td>
+        <td class="num">{{ "%.2f"|format(line.amount) }}</td>
+        {% else %}
+        <td class="num">{{ "%.2f"|format(line.quantity or line.qty or 0) }}</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr class="total-row">
+        <td colspan="4">Итого позиций: {{ document.total_lines or document.lines|length }}</td>
+        {% if document.lines[0] is defined and 'price' in document.lines[0] %}
+        <td class="num">{{ "%.2f"|format(document.lines | sum(attribute="qty")) }}</td>
+        <td></td>
+        <td class="num">{{ "%.2f"|format(document.lines | sum(attribute="amount")) }}</td>
+        {% else %}
+        <td class="num"></td>
+        {% endif %}
+      </tr>
+    </tfoot>
+  </table>
+
+  {% set sigs = document.signatures or {} %}
+  {% set sig_roles = sigs.roles or {} %}
+  <table class="signatures">
+    <tr>
+      <td><div class="sig">Сдал (подписант): {{ sig_roles.handed_over or sigs.submitted_by or "____________________" }}</div></td>
+      <td><div class="sig">Принял: {{ sig_roles.accepted_by or "____________________" }}</div></td>
+    </tr>
+  </table>
+
+</body>
+</html>

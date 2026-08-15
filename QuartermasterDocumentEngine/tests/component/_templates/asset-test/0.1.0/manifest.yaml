@@ -1,0 +1,18 @@
+id: asset-test
+version: 0.1.0
+document_contract: warehouse.operation-document/v2
+backend: weasyprint
+entrypoint: main.html
+output_formats:
+  - pdf
+locales:
+  - ru-RU
+page:
+  size: A4
+  orientation: portrait
+  margin: "20mm"
+capabilities:
+  - image
+fonts: []
+assets:
+  - qr

@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quartermaster.warehouse/contracts/warehouse.operation-document/v2/schema.json",
+  "title": "warehouse.operation-document/v2",
+  "description": "Operation-document contract. Accepts both the phase1-minimal shape (header + lines) and the prod payload shape produced by SyncServer (operation, sender, receiver, lines, signatures, localization, basis). Full canonical contract arrives in Phase 6.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["lines"],
+  "properties": {
+    "header": {
+      "type": "object",
+      "description": "Optional simplified header block (organization, counterparty, date)."
+    },
+    "lines": {
+      "type": "array",
+      "description": "Ordered operation lines.",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "line_number": { "type": ["integer", "null"] },
+          "item_id": { "type": ["integer", "string", "null"] },
+          "item_sku": { "type": ["string", "null"] },
+          "item_name": { "type": ["string", "null"] },
+          "quantity": { "type": ["number", "null"] },
+          "unit_name": { "type": ["string", "null"] },
+          "unit_symbol": { "type": ["string", "null"] },
+          "category_name": { "type": ["string", "null"] },
+          "accepted_qty": { "type": ["number", "null"] },
+          "lost_qty": { "type": ["number", "null"] },
+          "batch": { "type": ["string", "null"] },
+          "comment": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "operation": {
+      "type": ["object", "null"],
+      "description": "Operation metadata (id, type, type_label, status, effective_at, ...)."
+    },
+    "operation_type": { "type": ["string", "null"] },
+    "operation_type_label": { "type": ["string", "null"] },
+    "operation_status": { "type": ["string", "null"] },
+    "operation_display_number": { "type": ["string", "null"] },
+    "operation_created_at": { "type": ["string", "null"] },
+    "operation_effective_at": { "type": ["string", "null"] },
+    "operation_submitted_at": { "type": ["string", "null"] },
+    "document_title": { "type": ["string", "null"] },
+    "basis": { "type": ["object", "null"] },
+    "basis_label": { "type": ["string", "null"] },
+    "sender": { "type": ["object", "null"] },
+    "receiver": { "type": ["object", "null"] },
+    "source_site": { "type": ["object", "null"] },
+    "destination_site": { "type": ["object", "null"] },
+    "consignee_label": { "type": ["string", "null"] },
+    "issued_to": { "type": ["object", "null"] },
+    "recipient": { "type": ["object", "null"] },
+    "created_by": { "type": ["object", "null"] },
+    "submitted_by": { "type": ["object", "null"] },
+    "signatures": { "type": ["object", "null"] },
+    "localization": { "type": ["object", "null"] },
+    "total_lines": { "type": ["integer", "null"] },
+    "generated_at": { "type": ["string", "null"] },
+    "language": { "type": ["string", "null"] },
+    "operation_id": { "type": ["string", "null"] },
+    "operation_notes": { "type": ["string", "null"] },
+    "operation_acceptance_state": { "type": ["string", "null"] }
+  }
+}

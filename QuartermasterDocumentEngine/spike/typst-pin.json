@@ -1,0 +1,19 @@
+{
+  "version": "0.15.1",
+  "build": "9dfd3a08",
+  "released_at": "2026-07-17",
+  "binaries": {
+    "linux-x64": {
+      "url": "https://github.com/typst/typst/releases/download/v0.15.1/typst-x86_64-unknown-linux-musl.tar.xz",
+      "archive_sha256": "a6d077d0a95eed5a2eba715b2dae06be954f624ccbf85758a03f389ded33118c",
+      "binary_path_in_archive": "typst-x86_64-unknown-linux-musl/typst",
+      "binary_sha256": "29273eaa04f6d00edd0c2bec578f565fc9c65be856bfbffc894567c68ed0b237"
+    },
+    "windows-x64": {
+      "url": "https://github.com/typst/typst/releases/download/v0.15.1/typst-x86_64-pc-windows-msvc.zip",
+      "archive_sha256": "unverified-no-windows-env",
+      "binary_path_in_archive": "typst.exe",
+      "binary_sha256": "unverified-no-windows-env"
+    }
+  }
+}

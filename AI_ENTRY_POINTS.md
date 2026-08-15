@@ -16,10 +16,15 @@
 - `docs/adr/0012-deprecate-temporary-items-review-flow.md` - Temporary items deprecation.
 - `docs/adr/0018-audit-architecture.md` - audit spine/resources/item effects.
 - `docs/adr/0028-historical-integrity-stage-a.md` - accepted Stage A decision; implementation pending.
+- `docs/adr/0029-quartermaster-document-engine.md` - QDE architecture (envelope, contracts, render-host).
+- `docs/adr/0030-qde-primary-rendering-backend-typst.md` - QDE primary rendering backend = Typst.
+- `docs/adr/0031-qde-ownership-and-versioning.md` - QDE ownership: monorepo component.
+- `docs/adr/0032-qde-warehouse-integration-contract.md` - Warehouse → QDE integration contract.
 
 ### Active Technical Assignments
 
 - `docs/TZ-HISTORICAL_INTEGRITY_STAGE_A.md` - executable Stage A guard/audit/effect-time/integrity-check scope.
+- `docs/TZ-QDE_INTEGRATION_READINESS.md` - QDE integration readiness + Phase 6A–6F decomposition (baseline prepared, Phase 6A pending).
 - `docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md` - transport hardening.
 - `docs/TZ-PLAYWRIGHT_PIPELINE_INTEGRATION.md` - Playwright pipeline integration.
 - `docs/TZ-NOMENCLATURE_BATCH_CATALOG_CRUD.md` - batch catalog CRUD.
@@ -57,6 +62,18 @@
 - `Warehouse_web/apps/operations/` - operations UI.
 - `Warehouse_web/templates/` - server-rendered templates.
 - `Warehouse_web/apps/*/tests.py` - Django tests.
+
+## QuartermasterDocumentEngine
+
+- `QuartermasterDocumentEngine/README.md` - QDE overview and status.
+- `QuartermasterDocumentEngine/pyproject.toml` - own package/deps (`qm_engine`, `qm_backends`, `qm_cli`).
+- `QuartermasterDocumentEngine/engine/qm_engine/` - envelope, registry, fonts, render pipeline.
+- `QuartermasterDocumentEngine/backends/qm_backends/` - Typst + WeasyPrint backends.
+- `QuartermasterDocumentEngine/cli/qm_cli/main.py` - `qm-render` CLI (primary integration contract).
+- `QuartermasterDocumentEngine/contracts/` - envelope + document contract schemas.
+- `QuartermasterDocumentEngine/templates/` + `fonts/` - bundled template packages and DejaVu fonts.
+- `QuartermasterDocumentEngine/tests/` - unit/integration/component/golden suites; `tests/unit/test_architecture_boundaries.py` enforces ADR-0031 D2.
+- `QuartermasterDocumentEngine/doc/` - engine-internal ADR-0001, ROADMAP, SPEC, TZ-PHASE2-BACKEND-SPIKE.
 
 ## Warehouse_frontend
 

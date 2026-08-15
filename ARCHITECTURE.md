@@ -10,6 +10,7 @@
 | Web sessions, admin UI, BFF | `Warehouse_web` |
 | Browser SPA shell | `Warehouse_frontend`, hosted by Django |
 | Offline storage/sync runtime | `Warehouse_client_core` |
+| Document rendering engine | `QuartermasterDocumentEngine`, monorepo component (ADR-0031) |
 | Future desktop/mobile UI | `WarehouseDesktop`, `WarehouseMobile` |
 | AI workstation | `WarehouseAIWorkstation`, paused |
 
@@ -45,6 +46,17 @@ Desktop or Android UI
     -> SyncServer API/sync protocol
 ```
 
+Document rendering (Phase 6 target, ADR-0030/0031/0032):
+
+```text
+User browser
+  -> Django BFF DocumentPdfView
+    -> build_qde_envelope + render_via_qde (argv-only subprocess CLI)
+      -> QuartermasterDocumentEngine (Typst primary; WeasyPrint legacy/emergency fallback)
+```
+
+SyncServer keeps its own legacy direct-render path (`GET /documents/{id}/render`, Jinja2 + WeasyPrint) and does not call QDE in Phase 6.
+
 ## Internal Transport Direction
 
 Warehouse 3.0 keeps Django -> SyncServer communication on the canonical `/api/v1` HTTP/JSON contract.
@@ -68,6 +80,7 @@ See `docs/adr/0011-django-syncserver-internal-transport-hardening.md` and `docs/
 - `Warehouse_web` owns only web technical state: Django users/sessions, SyncServer user binding, cache, and BFF state.
 - `Warehouse_frontend` owns Angular UI source only. It does not own warehouse data or tokens.
 - `Warehouse_client_core` will own local offline state and sync mechanics, but not warehouse truth.
+- `QuartermasterDocumentEngine` owns document rendering: contracts, templates, fonts, backends, engine versioning. It must not import `warehouse_solution`-specific code; the only allowed direction is `Warehouse_web` → QDE (ADR-0031 D2, enforced by an AST architecture test in QDE).
 
 ## Project Details
 
@@ -113,6 +126,14 @@ Waybill/act/acceptance_certificate metadata lives in SyncServer (`/api/v1/docume
 - Planned Rust workspace for offline-first local runtime.
 - Target responsibilities: SQLite schema, outbox, sync, DTO mapping, validation, conflict state, FFI/facade API.
 
+### QuartermasterDocumentEngine (QDE)
+
+- Monorepo component (ADR-0031): own `pyproject.toml`, `engine/`, `backends/`, `cli/`, `contracts/`, `templates/`, `fonts/`, `tests/`, `doc/`.
+- Primary rendering backend: Typst 0.15.1 (Linux x64 pinned, deterministic env); WeasyPrint remains legacy/emergency fallback (ADR-0030).
+- Integration seam: `Warehouse_web` BFF calls QDE through an argv-only subprocess CLI with a generic envelope; template allowlist enforced on both sides (ADR-0032).
+- Boundary rule: `QDE → Warehouse_web` and `QDE → SyncServer` imports are forbidden; enforced by `tests/unit/test_architecture_boundaries.py`.
+- Verification: `pytest tests/unit`, `pytest tests/integration tests/component`, `pytest -m golden`.
+
 ### WarehouseDesktop And WarehouseMobile
 
 - Future clients to be rebuilt around `Warehouse_client_core`.
@@ -130,6 +151,7 @@ Waybill/act/acceptance_certificate metadata lives in SyncServer (`/api/v1/docume
 4. Angular runs through Django and never receives SyncServer tokens.
 5. Offline desktop/mobile behavior belongs in `Warehouse_client_core`.
 6. Root repository remains coordination/docs only.
+7. `QuartermasterDocumentEngine` is a monorepo component with strong subdirectory boundaries: it never imports Warehouse Solution code (enforced by AST test); only `Warehouse_web` may consume QDE (ADR-0031).
 
 ## ADRs
 
@@ -143,3 +165,4 @@ Key current decisions:
 - Backend writes use service and UnitOfWork layers.
 - Inventory is operation-driven.
 - Token auth and site-scoped access stay server-enforced.
+- `QuartermasterDocumentEngine` is a monorepo component (ADR-0031), primary rendering backend Typst (ADR-0030), `Warehouse_web` BFF is the Phase 6 render-host calling QDE via subprocess CLI (ADR-0032).

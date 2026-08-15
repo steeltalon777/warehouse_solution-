@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quartermaster.warehouse/contracts/envelope/v1/envelope.schema.json",
+  "title": "Quartermaster Document Envelope v1",
+  "description": "Self-contained versioned document envelope. Phase 1 minimal.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "engine_contract_version",
+    "document_contract",
+    "document_type",
+    "template_id",
+    "template_version",
+    "locale",
+    "render_profile",
+    "document"
+  ],
+  "properties": {
+    "engine_contract_version": {
+      "type": "string",
+      "description": "Semver of the engine contract understood by this payload.",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "document_contract": {
+      "type": "string",
+      "description": "Identifier of the document contract family, e.g. warehouse.operation-document/v2."
+    },
+    "document_type": {
+      "type": "string"
+    },
+    "template_id": {
+      "type": "string"
+    },
+    "template_version": {
+      "type": "string",
+      "description": "Version of the template package. Accepts 'X.Y' or 'X.Y.Z' (prod payloads use '1.0').",
+      "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$"
+    },
+    "locale": {
+      "type": "string",
+      "enum": ["ru-RU"]
+    },
+    "render_profile": {
+      "type": "string",
+      "enum": ["print"]
+    },
+    "document_id": {
+      "type": "string"
+    },
+    "document_number": {
+      "type": "string"
+    },
+    "document": {
+      "type": "object"
+    },
+    "assets": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

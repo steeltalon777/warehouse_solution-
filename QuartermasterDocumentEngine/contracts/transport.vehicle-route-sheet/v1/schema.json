@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quartermaster.warehouse/contracts/transport.vehicle-route-sheet/v1/schema.json",
+  "title": "transport.vehicle-route-sheet/v1",
+  "description": "Vehicle route sheet document contract. Strict: only declared properties are allowed at every level.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "vehicle",
+    "driver",
+    "trips",
+    "refuels",
+    "odometer",
+    "fuel_balance",
+    "fuel_consumption",
+    "signers",
+    "period"
+  ],
+  "properties": {
+    "vehicle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["make", "model", "plate", "garage_number"],
+      "properties": {
+        "make": {"type": "string"},
+        "model": {"type": "string"},
+        "plate": {"type": "string"},
+        "garage_number": {"type": "string"}
+      }
+    },
+    "driver": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["full_name", "employee_id", "class"],
+      "properties": {
+        "full_name": {"type": "string"},
+        "employee_id": {"type": "string"},
+        "class": {"type": "string"}
+      }
+    },
+    "trips": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "departure_at",
+          "return_at",
+          "origin",
+          "destination",
+          "purpose",
+          "distance_km",
+          "duration_min"
+        ],
+        "properties": {
+          "departure_at": {"type": "string", "format": "date-time"},
+          "return_at": {"type": "string", "format": "date-time"},
+          "origin": {"type": "string"},
+          "destination": {"type": "string"},
+          "purpose": {"type": "string"},
+          "distance_km": {"type": "number"},
+          "duration_min": {"type": "number"}
+        }
+      }
+    },
+    "refuels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["refueled_at", "station", "fuel_type", "volume_l", "cost"],
+        "properties": {
+          "refueled_at": {"type": "string", "format": "date-time"},
+          "station": {"type": "string"},
+          "fuel_type": {"type": "string"},
+          "volume_l": {"type": "number"},
+          "cost": {"type": "number"}
+        }
+      }
+    },
+    "odometer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": {"type": "number"},
+        "end": {"type": "number"}
+      }
+    },
+    "fuel_balance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_l", "end_l", "received_total_l"],
+      "properties": {
+        "start_l": {"type": "number"},
+        "end_l": {"type": "number"},
+        "received_total_l": {"type": "number"}
+      }
+    },
+    "fuel_consumption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["norm", "actual"],
+      "properties": {
+        "norm": {"type": "number"},
+        "actual": {"type": "number"}
+      }
+    },
+    "signers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["driver", "mechanic", "dispatcher"],
+      "properties": {
+        "driver": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["label", "name", "signed_at"],
+          "properties": {
+            "label": {"type": "string"},
+            "name": {"type": "string"},
+            "signed_at": {"type": "string", "format": "date-time"}
+          }
+        },
+        "mechanic": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["label", "name", "signed_at"],
+          "properties": {
+            "label": {"type": "string"},
+            "name": {"type": "string"},
+            "signed_at": {"type": "string", "format": "date-time"}
+          }
+        },
+        "dispatcher": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["label", "name", "signed_at"],
+          "properties": {
+            "label": {"type": "string"},
+            "name": {"type": "string"},
+            "signed_at": {"type": "string", "format": "date-time"}
+          }
+        }
+      }
+    },
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_date", "end_date"],
+      "properties": {
+        "start_date": {"type": "string", "format": "date"},
+        "end_date": {"type": "string", "format": "date"}
+      }
+    }
+  }
+}

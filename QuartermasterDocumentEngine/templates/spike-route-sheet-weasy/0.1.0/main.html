@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Путевой лист {{ document.vehicle.plate }}</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 12mm;
+      @bottom-center {
+        content: "Лист " counter(page) " из " counter(pages);
+        font-size: 9px;
+        color: #555;
+      }
+    }
+    body {
+      font-family: "DejaVu Sans", "Arial", sans-serif;
+      font-size: 10px;
+      color: #111;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      font-size: 14px;
+      text-align: center;
+      margin: 0 0 2px 0;
+      text-transform: uppercase;
+    }
+    .copy-banner {
+      font-weight: bold;
+      font-size: 11pt;
+      text-align: right;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 10px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    .box {
+      border: 1px solid #333;
+      padding: 6px 8px;
+      margin-bottom: 8px;
+      page-break-inside: avoid;
+    }
+    .box-title {
+      font-weight: bold;
+      font-size: 10px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      border-bottom: 1px solid #999;
+      padding-bottom: 2px;
+    }
+    table.kv {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table.kv td {
+      padding: 2px 4px;
+      vertical-align: top;
+      font-size: 10px;
+    }
+    table.kv td.label {
+      color: #555;
+      width: 32%;
+      white-space: nowrap;
+    }
+    h2 {
+      font-size: 11px;
+      margin: 8px 0 4px 0;
+      text-transform: uppercase;
+    }
+    table.data {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 8px;
+    }
+    table.data th, table.data td {
+      border: 1px solid #333;
+      padding: 2px 4px;
+      font-size: 9px;
+    }
+    table.data th {
+      background: #eee;
+      text-align: left;
+    }
+    table.data td.num, table.data th.num {
+      text-align: right;
+      white-space: nowrap;
+    }
+    thead { display: table-header-group; }
+    table.signers {
+      margin-top: 12px;
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table.signers td {
+      border: 1px solid #333;
+      padding: 6px;
+      vertical-align: top;
+      width: 33%;
+    }
+    .signer-label {
+      font-weight: bold;
+      font-size: 10px;
+    }
+    .signer-name {
+      margin: 16px 0 4px 0;
+      border-bottom: 1px solid #333;
+      min-height: 14px;
+      font-size: 10px;
+    }
+    .signer-meta {
+      font-size: 8px;
+      color: #555;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .summary-cell {
+      border: 1px solid #333;
+      padding: 4px 6px;
+    }
+    .summary-cell .label {
+      font-size: 8px;
+      color: #555;
+      text-transform: uppercase;
+    }
+    .summary-cell .value {
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .placeholder {
+      letter-spacing: -1px;
+      color: #999;
+    }
+    .watermark {
+      position: fixed;
+      top: 40%;
+      left: 10%;
+      transform: rotate(-35deg);
+      font-size: 100pt;
+      color: rgba(128, 128, 128, 0.13);
+      pointer-events: none;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+
+  {% if watermark %}
+  <div class="watermark">ОБРАЗЕЦ</div>
+  {% endif %}
+
+  {% if copies_total and copies_total > 1 %}
+  <div class="copy-banner">Экземпляр {{ copy_number }} из {{ copies_total }}</div>
+  {% endif %}
+
+  <h1>Путевой лист</h1>
+  <div class="subtitle">
+    Транспортное средство: <b>{{ document.vehicle.plate }}</b>
+    &middot; Период: {{ document.period.start_date }} — {{ document.period.end_date }}
+  </div>
+
+  <div class="box">
+    <div class="box-title">Транспортное средство</div>
+    <table class="kv">
+      <tr>
+        <td class="label">Марка, модель:</td>
+        <td>{{ document.vehicle.make }} {{ document.vehicle.model }}</td>
+      </tr>
+      <tr>
+        <td class="label">Гос. номер:</td>
+        <td>{{ document.vehicle.plate }}</td>
+      </tr>
+      <tr>
+        <td class="label">Гаражный номер:</td>
+        <td>{{ document.vehicle.garage_number }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="box">
+    <div class="box-title">Водитель</div>
+    <table class="kv">
+      <tr>
+        <td class="label">ФИО:</td>
+        <td>{{ document.driver.full_name }}</td>
+      </tr>
+      <tr>
+        <td class="label">Табельный номер:</td>
+        <td>{{ document.driver.employee_id }}</td>
+      </tr>
+      <tr>
+        <td class="label">Класс:</td>
+        <td>{{ document.driver.class }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="summary-grid">
+    <div class="summary-cell">
+      <div class="label">Одометр (начало / конец)</div>
+      <div class="value">
+        {{ "%.1f"|format(document.odometer.start) }} /
+        {{ "%.1f"|format(document.odometer.end) }} км
+      </div>
+    </div>
+    <div class="summary-cell">
+      <div class="label">Остаток топлива (начало / конец)</div>
+      <div class="value">
+        {{ "%.1f"|format(document.fuel_balance.start_l) }} /
+        {{ "%.1f"|format(document.fuel_balance.end_l) }} л
+      </div>
+    </div>
+    <div class="summary-cell">
+      <div class="label">Получено топлива</div>
+      <div class="value">
+        {{ "%.1f"|format(document.fuel_balance.received_total_l) }} л
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <div class="summary-cell">
+      <div class="label">Расход по норме</div>
+      <div class="value">{{ "%.2f"|format(document.fuel_consumption.norm) }} л</div>
+    </div>
+    <div class="summary-cell">
+      <div class="label">Расход фактический</div>
+      <div class="value">{{ "%.2f"|format(document.fuel_consumption.actual) }} л</div>
+    </div>
+    <div class="summary-cell">
+      <div class="label">Отклонение</div>
+      <div class="value">
+        {% set delta = document.fuel_consumption.actual - document.fuel_consumption.norm %}
+        {{ "%+.2f"|format(delta) }} л
+      </div>
+    </div>
+  </div>
+
+  <h2>Маршрутные записи</h2>
+  <table class="data">
+    <thead>
+      <tr>
+        <th style="width:4%">№</th>
+        <th style="width:13%">Выезд</th>
+        <th style="width:13%">Возврат</th>
+        <th style="width:18%">Откуда</th>
+        <th style="width:18%">Куда</th>
+        <th>Цель</th>
+        <th class="num" style="width:7%">км</th>
+        <th class="num" style="width:5%">мин</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for trip in document.trips %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ trip.departure_at }}</td>
+        <td>{{ trip.return_at }}</td>
+        <td>{{ trip.origin }}</td>
+        <td>{{ trip.destination }}</td>
+        <td>{{ trip.purpose }}</td>
+        <td class="num">{{ "%.1f"|format(trip.distance_km) }}</td>
+        <td class="num">{{ trip.duration_min }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Заправки</h2>
+  <table class="data">
+    <thead>
+      <tr>
+        <th style="width:6%">№</th>
+        <th style="width:18%">Дата / время</th>
+        <th style="width:24%">АЗС</th>
+        <th>Вид топлива</th>
+        <th class="num" style="width:8%">Объём, л</th>
+        <th class="num" style="width:11%">Сумма, руб</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for refuel in document.refuels %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ refuel.refueled_at }}</td>
+        <td>{{ refuel.station }}</td>
+        <td>{{ refuel.fuel_type }}</td>
+        <td class="num">{{ "%.1f"|format(refuel.volume_l) }}</td>
+        <td class="num">{{ "%.2f"|format(refuel.cost) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Подписи</h2>
+  <table class="signers">
+    <tr>
+      {% for role in ["driver", "mechanic", "dispatcher"] %}
+      {% set s = document.signers[role] %}
+      <td>
+        <div class="signer-label">{{ s.label }}</div>
+        <div class="signer-name">
+          {% if s.name %}{{ s.name }}{% else %}<span class="placeholder">_____________________________</span>{% endif %}
+        </div>
+        <div class="signer-meta">
+          {% if s.signed_at %}{{ s.signed_at }}{% else %}_____________________{% endif %}
+        </div>
+      </td>
+      {% endfor %}
+    </tr>
+  </table>
+
+</body>
+</html>

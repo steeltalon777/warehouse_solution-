@@ -1,0 +1,343 @@
+{
+  "engine_contract_version": "1.0.0",
+  "document_contract": "warehouse.operation-document/v2",
+  "document_type": "waybill",
+  "template_id": "warehouse-waybill-ru",
+  "template_version": "1.0",
+  "locale": "ru-RU",
+  "render_profile": "print",
+  "document_id": "c20d5d6f-cbdf-41bf-a8ea-6915ab52b7cc",
+  "document_number": "WB-1-20260810-c148",
+  "document": {
+    "basis": {
+      "date": null,
+      "type": null,
+      "label": "Приход на склад Угдан",
+      "number": null,
+      "operation_type_label": "Приход"
+    },
+    "lines": [
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3887,
+        "item_sku": "",
+        "lost_qty": null,
+        "quantity": 1.0,
+        "item_name": "Съёмник колец поршневых 110–160 мм ЭВРИКА",
+        "unit_name": "Штука",
+        "line_number": 1,
+        "unit_symbol": "шт",
+        "accepted_qty": 1.0,
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3888,
+        "item_sku": "",
+        "lost_qty": null,
+        "quantity": 10.0,
+        "item_name": "Шприц рычажно-плунжерный 500 мл, ХРОМ, со сменной крышкой",
+        "unit_name": "Штука",
+        "line_number": 2,
+        "unit_symbol": "шт",
+        "accepted_qty": 10.0,
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 2719,
+        "item_sku": "",
+        "lost_qty": null,
+        "quantity": 15.0,
+        "item_name": "Шланг шприца гибкий 30 см",
+        "unit_name": "Штука",
+        "line_number": 3,
+        "unit_symbol": "шт",
+        "accepted_qty": 15.0,
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 1670,
+        "item_sku": "Ш1-3911121",
+        "lost_qty": null,
+        "quantity": 50.0,
+        "item_name": "Наконечник шприца плунжерного (ШААЗ)",
+        "unit_name": "Штука",
+        "line_number": 4,
+        "unit_symbol": "шт",
+        "accepted_qty": 50.0,
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3889,
+        "item_sku": "",
+        "lost_qty": null,
+        "quantity": 10.0,
+        "item_name": "Шланг d=22×30–0,63 маслобензостойкий, в оплётке",
+        "unit_name": "Метр",
+        "line_number": 5,
+        "unit_symbol": "м",
+        "accepted_qty": 10.0,
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3890,
+        "item_sku": "",
+        "lost_qty": null,
+        "quantity": 5.0,
+        "item_name": "Сальник 85×110×12–2,2 МАЗ NBR",
+        "unit_name": "Штука",
+        "line_number": 6,
+        "unit_symbol": "шт",
+        "accepted_qty": 5.0,
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3891,
+        "item_sku": "",
+        "lost_qty": null,
+        "quantity": 6.0,
+        "item_name": "Сальник 75×100",
+        "unit_name": "Штука",
+        "line_number": 7,
+        "unit_symbol": "шт",
+        "accepted_qty": 6.0,
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3892,
+        "item_sku": "",
+        "lost_qty": null,
+        "quantity": 1.0,
+        "item_name": "Подшипник 305 (6305)",
+        "unit_name": "Штука",
+        "line_number": 8,
+        "unit_symbol": "шт",
+        "accepted_qty": 1.0,
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3893,
+        "item_sku": "",
+        "lost_qty": null,
+        "quantity": 2.0,
+        "item_name": "Подшипник 180201 (6201-2RS)",
+        "unit_name": "Штука",
+        "line_number": 9,
+        "unit_symbol": "шт",
+        "accepted_qty": 2.0,
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3894,
+        "item_sku": "",
+        "lost_qty": null,
+        "quantity": 1.0,
+        "item_name": "Подшипник 180207 (6207-2RS), 35×72×12",
+        "unit_name": "Штука",
+        "line_number": 10,
+        "unit_symbol": "шт",
+        "accepted_qty": 1.0,
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3895,
+        "item_sku": "",
+        "lost_qty": null,
+        "quantity": 1.0,
+        "item_name": "Насос водяной КамАЗ",
+        "unit_name": "Штука",
+        "line_number": 11,
+        "unit_symbol": "шт",
+        "accepted_qty": 1.0,
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3896,
+        "item_sku": "",
+        "lost_qty": null,
+        "quantity": 2.0,
+        "item_name": "Паронит ПМБ 0,5 мм",
+        "unit_name": "Штука",
+        "line_number": 12,
+        "unit_symbol": "шт",
+        "accepted_qty": 2.0,
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3897,
+        "item_sku": "",
+        "lost_qty": null,
+        "quantity": 2.0,
+        "item_name": "Паронит ПМБ 0,8 мм",
+        "unit_name": "Штука",
+        "line_number": 13,
+        "unit_symbol": "шт",
+        "accepted_qty": 2.0,
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3898,
+        "item_sku": "",
+        "lost_qty": null,
+        "quantity": 10.0,
+        "item_name": "Клемма АКБ свинцовая (+/−)",
+        "unit_name": "Штука",
+        "line_number": 14,
+        "unit_symbol": "шт",
+        "accepted_qty": 10.0,
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 3899,
+        "item_sku": "",
+        "lost_qty": null,
+        "quantity": 2.0,
+        "item_name": "Кран УРАЛ подкачки колёс, АЗ «УралАЗ»",
+        "unit_name": "Штука",
+        "line_number": 15,
+        "unit_symbol": "шт",
+        "accepted_qty": 2.0,
+        "category_name": "Без категории"
+      }
+    ],
+    "sender": {
+      "site_id": 1,
+      "site_code": "1",
+      "site_name": "Угдан",
+      "description": "",
+      "organization": {
+        "tax_id": null,
+        "address": "",
+        "contacts": null,
+        "legal_name": "Угдан"
+      }
+    },
+    "language": "ru",
+    "receiver": {
+      "site_id": 1,
+      "site_code": "1",
+      "site_name": "Угдан",
+      "description": "",
+      "organization": {
+        "tax_id": null,
+        "address": "",
+        "contacts": null,
+        "legal_name": "Угдан"
+      }
+    },
+    "issued_to": null,
+    "operation": {
+      "id": "283950e0-d1af-4bbe-9b50-73165fe2f240",
+      "type": "RECEIVE",
+      "status": "submitted",
+      "site_id": 1,
+      "created_at": "2026-08-03T07:30:38.029035+00:00",
+      "type_label": "Приход",
+      "effective_at": "2026-08-03T07:30:00+00:00",
+      "submitted_at": "2026-08-03T07:57:58.015234+00:00",
+      "display_number": "030826/0730/1",
+      "source_site_id": null,
+      "issue_object_id": null,
+      "issue_object_name": null,
+      "destination_site_id": 1
+    },
+    "recipient": null,
+    "created_by": {
+      "role": "chief_storekeeper",
+      "user_id": "7c0b0a64-195f-4bf6-859c-939dc0c48d27",
+      "username": "LLM",
+      "full_name": null
+    },
+    "signatures": {
+      "roles": {
+        "accepted_by": null,
+        "handed_over": "Светлана Викторовна",
+        "chief_accountant": "________________"
+      },
+      "created_by": null,
+      "submitted_by": "Светлана Викторовна"
+    },
+    "basis_label": "Приход на склад Угдан",
+    "source_site": {
+      "site_id": 1,
+      "site_code": "1",
+      "site_name": "Угдан",
+      "description": "",
+      "organization": {
+        "tax_id": null,
+        "address": "",
+        "contacts": null,
+        "legal_name": "Угдан"
+      }
+    },
+    "total_lines": 15,
+    "generated_at": "2026-08-10T04:44:16.522969+00:00",
+    "localization": {
+      "currency": "RUB",
+      "language": "ru",
+      "date_format": "%d.%m.%Y",
+      "datetime_format": "%d.%m.%Y %H:%M:%S",
+      "thousands_separator": " ",
+      "number_decimal_separator": ","
+    },
+    "operation_id": "283950e0-d1af-4bbe-9b50-73165fe2f240",
+    "submitted_by": {
+      "role": "chief_storekeeper",
+      "user_id": "7337709e-a82b-4813-8b4d-283addc7a9c3",
+      "username": "Svetlana",
+      "full_name": "Светлана Викторовна"
+    },
+    "document_title": "Товарная накладная",
+    "operation_type": "RECEIVE",
+    "consignee_label": "Угдан",
+    "operation_notes": "ООО «Строительные дорожные машины», УПД № ЦБ-1948 от 03.08.2026",
+    "destination_site": {
+      "site_id": 1,
+      "site_code": "1",
+      "site_name": "Угдан",
+      "description": "",
+      "organization": {
+        "tax_id": null,
+        "address": "",
+        "contacts": null,
+        "legal_name": "Угдан"
+      }
+    },
+    "operation_status": "submitted",
+    "operation_created_at": "2026-08-03T07:30:38.029035+00:00",
+    "operation_type_label": "Приход",
+    "operation_effective_at": "2026-08-03T07:30:00+00:00",
+    "operation_submitted_at": "2026-08-03T07:57:58.015234+00:00",
+    "operation_display_number": "030826/0730/1",
+    "operation_acceptance_state": "resolved"
+  },
+  "assets": {}
+}

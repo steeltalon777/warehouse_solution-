@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "engine_version": "0.1.0",
+  "thresholds": {
+    "ssim": 0.995,
+    "changed_pixels": 0.001
+  },
+  "lfs_status": "unavailable-git-lfs-not-installed",
+  "lfs_fallback": "json-only-assertions-png-pdf-as-ci-artifacts",
+  "entries": [
+    {
+      "id": "warehouse-waybill-ru-1.0-waybill-75",
+      "template": "warehouse-waybill-ru@1.0",
+      "backend": "weasyprint",
+      "fixture": "tests/fixtures/waybill/waybill-75.weasy.json",
+      "expected": "tests/golden/warehouse-waybill-ru-1.0/waybill-75.expected.json",
+      "lfs": false
+    },
+    {
+      "id": "spike-waybill-typst-0.1.0-waybill-75",
+      "template": "spike-waybill-typst@0.1.0",
+      "backend": "typst",
+      "fixture": "tests/fixtures/waybill/waybill-75.typst.json",
+      "expected": "tests/golden/spike-waybill-typst-0.1.0/waybill-75.expected.json",
+      "lfs": false
+    },
+    {
+      "id": "spike-route-sheet-weasy-0.1.0-vehicle-route-sheet-1",
+      "template": "spike-route-sheet-weasy@0.1.0",
+      "backend": "weasyprint",
+      "fixture": "tests/fixtures/route-sheet/vehicle-route-sheet-1.weasy.json",
+      "expected": "tests/golden/spike-route-sheet-weasy-0.1.0/vehicle-route-sheet-1.expected.json",
+      "lfs": false
+    },
+    {
+      "id": "spike-route-sheet-typst-0.1.0-vehicle-route-sheet-1",
+      "template": "spike-route-sheet-typst@0.1.0",
+      "backend": "typst",
+      "fixture": "tests/fixtures/route-sheet/vehicle-route-sheet-1.typst.json",
+      "expected": "tests/golden/spike-route-sheet-typst-0.1.0/vehicle-route-sheet-1.expected.json",
+      "lfs": false
+    },
+    {
+      "id": "spike-fuel-report-weasy-0.1.0-fuel-report-500",
+      "template": "spike-fuel-report-weasy@0.1.0",
+      "backend": "weasyprint",
+      "fixture": "tests/fixtures/fuel/fuel-report-500.weasy.json",
+      "expected": "tests/golden/spike-fuel-report-weasy-0.1.0/fuel-report-500.expected.json",
+      "lfs": false
+    },
+    {
+      "id": "spike-fuel-report-typst-0.1.0-fuel-report-500",
+      "template": "spike-fuel-report-typst@0.1.0",
+      "backend": "typst",
+      "fixture": "tests/fixtures/fuel/fuel-report-500.typst.json",
+      "expected": "tests/golden/spike-fuel-report-typst-0.1.0/fuel-report-500.expected.json",
+      "lfs": false
+    }
+  ]
+}

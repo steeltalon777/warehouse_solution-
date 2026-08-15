@@ -1,0 +1,77 @@
+{
+  "backend": "typst",
+  "backend_version": "0.15.1",
+  "engine_version": "0.1.0",
+  "fixture": "tests/fixtures/route-sheet/vehicle-route-sheet-1.typst.json",
+  "schema_version": 1,
+  "semantic": {
+    "document_number": {
+      "actual": "",
+      "expected": "RS-FIX-1",
+      "pass": false
+    },
+    "line_count": {
+      "actual": 59,
+      "expected": 60,
+      "pass": false
+    },
+    "signers_present": {
+      "actual": [
+        "Водитель",
+        "Механик",
+        "Диспетчер"
+      ],
+      "expected": [
+        "Водитель",
+        "Механик",
+        "Диспетчер"
+      ],
+      "pass": true
+    }
+  },
+  "structural": {
+    "orientation": "portrait",
+    "page_count": 3,
+    "paper_size": [
+      595,
+      842
+    ],
+    "required_blocks": {
+      "footer": {
+        "expected_substrings": [
+          "Лист",
+          "Страница"
+        ],
+        "pass": true
+      },
+      "header": {
+        "expected_substrings": [
+          "Путевой лист",
+          "ПУТЕВОЙ ЛИСТ"
+        ],
+        "pass": true
+      },
+      "signatures": {
+        "expected_substrings": [
+          "Водитель",
+          "Механик",
+          "Диспетчер"
+        ],
+        "pass": true
+      },
+      "table": {
+        "expected_substrings": [
+          "км",
+          "АЗС"
+        ],
+        "pass": true
+      }
+    },
+    "table_rows": 59
+  },
+  "template": "spike-route-sheet-typst@0.1.0",
+  "thresholds": {
+    "changed_pixels": 0.001,
+    "ssim": 0.995
+  }
+}

@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quartermaster-document-engine"
+version = "0.1.0"
+description = "Standalone offline document renderer (Quartermaster Document Engine)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+authors = [{ name = "Quartermaster" }]
+dependencies = [
+    "click>=8.1",
+    "Jinja2>=3.1",
+    "jsonschema>=4.20",
+    "PyYAML>=6.0",
+    "weasyprint>=66",
+    "pypdf>=4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+    "mypy>=1.10",
+]
+spike = [
+    "segno>=1.6",
+    "python-barcode>=0.15",
+    "Pillow>=10",
+    "psutil>=5.9",
+    "scikit-image>=0.21",
+    "PyMuPDF>=1.24",
+]
+
+[project.scripts]
+qm-render = "qm_cli.main:main"
+
+[tool.setuptools]
+packages = ["qm_engine", "qm_backends", "qm_cli"]
+
+[tool.setuptools.package-dir]
+qm_engine = "engine/qm_engine"
+qm_backends = "backends/qm_backends"
+qm_cli = "cli/qm_cli"
+
+[tool.setuptools.package-data]
+qm_engine = ["py.typed"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["qm_engine", "qm_backends", "qm_cli"]
+
+[[tool.mypy.overrides]]
+module = ["weasyprint.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "golden: Phase 2 golden regression tests (run with -m golden).",
+    "spike: Phase 2 spike-only tests (may require --spike or external binary).",
+]

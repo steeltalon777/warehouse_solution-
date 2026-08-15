@@ -1,0 +1,13 @@
+{
+  "engine_contract_version": "1.0.0",
+  "document_contract": "warehouse.inventory-report/v1",
+  "document_type": "waybill",
+  "template_id": "warehouse-waybill-ru",
+  "template_version": "0.1.0",
+  "locale": "ru-RU",
+  "render_profile": "print",
+  "document": {
+    "header": {},
+    "lines": []
+  }
+}

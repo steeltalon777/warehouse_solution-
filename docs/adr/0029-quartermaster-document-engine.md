@@ -46,9 +46,11 @@
 
 ## Decision
 
-### 1. Quartermaster Document Engine живёт в отдельном репозитории
+### 1. Quartermaster Document Engine — ownership и поставка
 
-- Репозиторий: `steeltalon777/QuartermasterDocumentEngine`.
+> **Superseded (ADR-0031, 2026-08-15):** часть решения про «отдельный репозиторий `steeltalon777/QuartermasterDocumentEngine`» отменена ADR-0031: исходники QDE входят в `warehouse_solution` как подкаталог `QuartermasterDocumentEngine/` (monorepo). Отклонения submodule и «PyPI-пакета с шаблонами» остаются в силе; release bundle как платформенная единица поставки — тоже.
+
+- Репозиторий: `warehouse_solution` monorepo, подкаталог `QuartermasterDocumentEngine/` (ADR-0031 D1). Ранее предлагавшийся отдельный репозиторий `steeltalon777/QuartermasterDocumentEngine` отменён.
 - Не git submodule. Submodule создаёт вторую проблему синхронизации поверх первой и плохо ложится на платформенные release bundles.
 - Не PyPI-пакет с шаблонами. Шаблоны поставляются как часть release bundle, а не как отдельный пакет.
 

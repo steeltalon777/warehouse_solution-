@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Отчёт по расходу топлива</title>
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 12mm;
+      @bottom-center {
+        content: "Лист " counter(page) " из " counter(pages);
+        font-size: 9px;
+        color: #555;
+      }
+    }
+    body {
+      font-family: "DejaVu Sans", "Arial", sans-serif;
+      font-size: 10px;
+      color: #111;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      font-size: 16px;
+      text-align: center;
+      margin: 0 0 6px 0;
+      text-transform: uppercase;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 10px;
+      color: #333;
+      margin-bottom: 12px;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .summary-cell {
+      border: 1px solid #333;
+      padding: 6px 10px;
+    }
+    .summary-cell .label {
+      font-size: 8px;
+      color: #555;
+      text-transform: uppercase;
+    }
+    .summary-cell .value {
+      font-size: 14px;
+      font-weight: bold;
+    }
+    table.data {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 8px;
+    }
+    table.data th, table.data td {
+      border: 1px solid #333;
+      padding: 3px 6px;
+      font-size: 9px;
+    }
+    table.data th {
+      background: #eee;
+      text-align: left;
+    }
+    table.data td.num, table.data th.num {
+      text-align: right;
+      white-space: nowrap;
+    }
+    thead { display: table-header-group; }
+    tr.subtotal-row td {
+      background: #f4f4f4;
+      font-weight: bold;
+    }
+    tr.grand-total-row td {
+      background: #ddd;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Отчёт по расходу топлива за {{ "%02d"|format(document.period.month) }}.{{ document.period.year }}</h1>
+  <div class="subtitle">
+    Всего записей: <b>{{ document.rows|length }}</b>
+    &middot; Техника: <b>{{ document.vehicles|length }}</b> ед.
+  </div>
+
+  <h3 style="font-size: 10px; margin: 0 0 4px 0; text-transform: uppercase;">Список техники</h3>
+  <table class="data" style="margin-bottom: 12px;">
+    <thead>
+      <tr>
+        <th style="width:14%">ID</th>
+        <th style="width:30%">Наименование</th>
+        <th style="width:18%">Гос. номер</th>
+        <th style="width:12%">Ед. изм.</th>
+        <th class="num" style="width:13%">Норма л/100км</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in document.vehicles %}
+      <tr>
+        <td>{{ v.id }}</td>
+        <td>{{ v.name }}</td>
+        <td>{{ v.plate }}</td>
+        <td>{{ v.unit }}</td>
+        <td class="num">{{ "%.2f"|format(v.norm_l_per_100km) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="summary-grid">
+    <div class="summary-cell">
+      <div class="label">Общий объём топлива</div>
+      <div class="value">{{ "%.2f"|format(document.grand_total.total_volume_l) }} л</div>
+    </div>
+    <div class="summary-cell">
+      <div class="label">Общий пробег</div>
+      <div class="value">{{ "%.1f"|format(document.grand_total.total_distance_km) }} км</div>
+    </div>
+    <div class="summary-cell">
+      <div class="label">Общая стоимость</div>
+      <div class="value">{{ "%.2f"|format(document.grand_total.total_cost) }} руб.</div>
+    </div>
+  </div>
+
+  <table class="data">
+    <thead>
+      <tr>
+        <th style="width:4%">№</th>
+        <th style="width:9%">Дата</th>
+        <th style="width:12%">Техника (ID)</th>
+        <th style="width:15%">Вид топлива</th>
+        <th class="num" style="width:9%">Объём, л</th>
+        <th class="num" style="width:9%">Пробег, км</th>
+        <th class="num" style="width:11%">Стоимость, руб</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in document.rows %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ row.date }}</td>
+        <td>{{ row.vehicle_id }}</td>
+        <td>{{ row.fuel_type }}</td>
+        <td class="num">{{ "%.2f"|format(row.volume_l) }}</td>
+        <td class="num">{{ "%.1f"|format(row.distance_km) }}</td>
+        <td class="num">{{ "%.2f"|format(row.cost) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      {% for sub in document.subtotals %}
+      <tr class="subtotal-row">
+        <td colspan="4">Итого по {{ sub.vehicle_id }}:</td>
+        <td class="num">{{ "%.2f"|format(sub.total_volume_l) }}</td>
+        <td class="num">{{ "%.1f"|format(sub.total_distance_km) }}</td>
+        <td class="num">{{ "%.2f"|format(sub.total_cost) }}</td>
+      </tr>
+      {% endfor %}
+      <tr class="grand-total-row">
+        <td colspan="4">ВСЕГО:</td>
+        <td class="num">{{ "%.2f"|format(document.grand_total.total_volume_l) }}</td>
+        <td class="num">{{ "%.1f"|format(document.grand_total.total_distance_km) }}</td>
+        <td class="num">{{ "%.2f"|format(document.grand_total.total_cost) }}</td>
+      </tr>
+    </tfoot>
+  </table>
+
+</body>
+</html>

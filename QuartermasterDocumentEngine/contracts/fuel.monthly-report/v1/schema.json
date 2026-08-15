@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quartermaster.warehouse/contracts/fuel.monthly-report/v1/schema.json",
+  "title": "fuel.monthly-report/v1",
+  "description": "Monthly fuel consumption report document contract. Strict: only declared properties are allowed at every level.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "period",
+    "vehicles",
+    "rows",
+    "subtotals",
+    "grand_total"
+  ],
+  "properties": {
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["year", "month"],
+      "properties": {
+        "year": {"type": "integer"},
+        "month": {"type": "integer"}
+      }
+    },
+    "vehicles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "plate", "unit", "norm_l_per_100km"],
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string"},
+          "plate": {"type": "string"},
+          "unit": {"type": "string"},
+          "norm_l_per_100km": {"type": "number"}
+        }
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "date",
+          "vehicle_id",
+          "fuel_type",
+          "volume_l",
+          "distance_km",
+          "cost"
+        ],
+        "properties": {
+          "date": {"type": "string", "format": "date"},
+          "vehicle_id": {"type": "string"},
+          "fuel_type": {"type": "string"},
+          "volume_l": {"type": "number"},
+          "distance_km": {"type": "number"},
+          "cost": {"type": "number"}
+        }
+      }
+    },
+    "subtotals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "vehicle_id",
+          "total_volume_l",
+          "total_distance_km",
+          "total_cost"
+        ],
+        "properties": {
+          "vehicle_id": {"type": "string"},
+          "total_volume_l": {"type": "number"},
+          "total_distance_km": {"type": "number"},
+          "total_cost": {"type": "number"}
+        }
+      }
+    },
+    "grand_total": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total_volume_l", "total_distance_km", "total_cost"],
+      "properties": {
+        "total_volume_l": {"type": "number"},
+        "total_distance_km": {"type": "number"},
+        "total_cost": {"type": "number"}
+      }
+    },
+    "chart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "image_asset_name"],
+      "description": "Optional pre-rendered chart asset reference (image_asset_name resolves an envelope.assets entry).",
+      "properties": {
+        "title": {"type": "string"},
+        "image_asset_name": {"type": "string"}
+      }
+    }
+  }
+}

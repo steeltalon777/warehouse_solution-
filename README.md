@@ -14,6 +14,7 @@ Runtime code lives in project directories; the root keeps cross-project document
 | `Warehouse_web/` | Django web client, session host, admin UI, BFF | Active |
 | `Warehouse_frontend/` | Angular shell hosted by Django | Active |
 | `Warehouse_client_core/` | Rust offline-first runtime (SQLite, sync engine, outbox, FFI) | Active (v3.1) |
+| `QuartermasterDocumentEngine/` | Standalone offline document renderer (Typst primary, WeasyPrint legacy), monorepo component | Active (Phase 6 pending) |
 | `WarehouseWorkstation/` | WPF desktop AI workstation, target for Rust core migration | Active (v3.1 Layer 0, full migration → 3.2) |
 | `WarehouseMobile/` | Future Android client over `Warehouse_client_core` (Kotlin/UniFFI) | Planned (v3.3) |
 
@@ -39,6 +40,8 @@ Future offline desktop/mobile
 
 `SyncServer` owns warehouse domain data and business rules. Django owns web technical state only: auth, sessions, user binding, cache, and BFF state. Angular never receives SyncServer tokens and never calls SyncServer directly from the browser.
 
+Document rendering direction (ADR-0029/0030/0031/0032): `QuartermasterDocumentEngine/` (QDE) is a monorepo component — standalone offline renderer with its own `pyproject.toml`, `engine/`, `backends/`, `cli/`, `contracts/`, `templates/`, `fonts/`. Primary backend = Typst 0.15.1 (pinned); WeasyPrint = legacy/emergency fallback. Phase 6 makes Django BFF the render-host: `Warehouse_web` calls QDE through subprocess CLI, SyncServer keeps its legacy direct-render path. QDE must not import `warehouse_solution`-specific code (ADR-0031 D2).
+
 ## Warehouse 3.0 Transport Direction
 
 The Django -> SyncServer boundary stays on the canonical `/api/v1` HTTP/JSON API. For Warehouse 3.0 the approved path is transport hardening, not a domain rewrite: improve `Warehouse_web/apps/sync_client/` connection reuse, timeouts, metrics, BFF aggregation, and safe read caching. Unix domain sockets may be tested later as an optional measured optimization.
@@ -52,6 +55,7 @@ SyncServer/              FastAPI backend, PostgreSQL, Alembic, API contracts
 Warehouse_web/           Django web client, admin UI, BFF, SyncServer HTTP wrappers
 Warehouse_frontend/      Angular shell target hosted by Django
 Warehouse_client_core/   Planned Rust offline-first runtime
+QuartermasterDocumentEngine/  Standalone document renderer (Typst primary), monorepo component
 WarehouseDesktop/        Future WPF offline client over warehouse core
 WarehouseMobile/         Future Android offline client over warehouse core
 WarehouseAIWorkstation/  Paused WPF AI workstation
@@ -75,6 +79,7 @@ plans/                  Working plans
 | `Warehouse_web/` | `python manage.py test` |
 | `Warehouse_frontend/` | `npm run build`; `make test-e2e` for Docker-backed Playwright E2E |
 | `Warehouse_client_core/` | `cargo fmt --all -- --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace` once Rust workspace exists |
+| `QuartermasterDocumentEngine/` | `pytest tests/unit`; `pytest tests/integration tests/component`; `pytest -m golden` (requires pinned Typst binary in `.spike/`) |
 | `WarehouseDesktop/` | `dotnet test WarehouseDesktop.sln` when touched |
 | `WarehouseMobile/` | `gradlew.bat test` when touched |
 | `WarehouseAIWorkstation/` | `dotnet test WarehouseAIWorkstation.sln` only when explicitly resumed |
@@ -104,3 +109,8 @@ plans/                  Working plans
 - [docs/TZ-OPERATION_CANCEL_DOMAIN_ERRORS.md](docs/TZ-OPERATION_CANCEL_DOMAIN_ERRORS.md) - executable cancel-flow envelope assignment
 - [docs/adr/0011-django-syncserver-internal-transport-hardening.md](docs/adr/0011-django-syncserver-internal-transport-hardening.md) - Warehouse 3.0 internal transport decision
 - [docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md](docs/TZ-DJANGO_SYNCSERVER_TRANSPORT_HARDENING.md) - executable transport hardening specification
+- [docs/adr/0029-quartermaster-document-engine.md](docs/adr/0029-quartermaster-document-engine.md) - Quartermaster Document Engine architecture
+- [docs/adr/0030-qde-primary-rendering-backend-typst.md](docs/adr/0030-qde-primary-rendering-backend-typst.md) - QDE primary rendering backend = Typst
+- [docs/adr/0031-qde-ownership-and-versioning.md](docs/adr/0031-qde-ownership-and-versioning.md) - QDE ownership: monorepo component
+- [docs/adr/0032-qde-warehouse-integration-contract.md](docs/adr/0032-qde-warehouse-integration-contract.md) - Warehouse → QDE integration contract
+- [docs/TZ-QDE_INTEGRATION_READINESS.md](docs/TZ-QDE_INTEGRATION_READINESS.md) - QDE integration readiness TZ (Phase 6A–6F)

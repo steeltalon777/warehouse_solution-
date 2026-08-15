@@ -1,0 +1,140 @@
+{
+  "engine_contract_version": "1.0.0",
+  "document_contract": "warehouse.operation-document/v2",
+  "document_type": "waybill",
+  "template_id": "spike-waybill-typst",
+  "template_version": "0.1.0",
+  "locale": "ru-RU",
+  "render_profile": "print",
+  "document_id": "8c2ef0d8-695f-4d57-8073-a9aba81b16ca",
+  "document_number": "WB-FIX-1",
+  "document": {
+    "basis": {
+      "date": null,
+      "type": null,
+      "label": "Перемещение Угдан → ДЭУ (КСК)",
+      "number": null,
+      "operation_type_label": "Перемещение"
+    },
+    "lines": [
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 100008,
+        "item_sku": "",
+        "quantity": 14.0,
+        "item_name": "Болт колеса М18х1.5 с внутренним шестигранником, класс прочности 10.9, оцинкованный, для дисковых и бездисковых колёс грузовых а/м",
+        "unit_name": "Штука",
+        "line_number": 1,
+        "unit_symbol": "шт",
+        "category_name": "Аксессуары"
+      }
+    ],
+    "sender": {
+      "site_id": 1,
+      "site_code": "1",
+      "site_name": "Угдан",
+      "description": "",
+      "organization": {
+        "tax_id": null,
+        "address": "",
+        "contacts": null,
+        "legal_name": "Угдан"
+      }
+    },
+    "language": "ru",
+    "receiver": {
+      "site_id": 4,
+      "site_code": "4",
+      "site_name": "ДЭУ (КСК)",
+      "description": "",
+      "organization": {
+        "tax_id": null,
+        "address": "",
+        "contacts": null,
+        "legal_name": "ДЭУ (КСК)"
+      }
+    },
+    "issued_to": null,
+    "operation": {
+      "id": "867f0f48-f8d2-42d0-955f-65a25d0885c3",
+      "type": "MOVE",
+      "status": "draft",
+      "site_id": 1,
+      "created_at": "2026-08-10T03:43:53.693546+00:00",
+      "type_label": "Перемещение",
+      "effective_at": "2026-08-10T03:42:00+00:00",
+      "submitted_at": null,
+      "display_number": "1/0343/100826",
+      "source_site_id": 1,
+      "issue_object_id": null,
+      "issue_object_name": null,
+      "destination_site_id": 4
+    },
+    "recipient": null,
+    "created_by": {
+      "role": "chief_storekeeper",
+      "user_id": "7337709e-a82b-4813-8b4d-283addc7a9c3",
+      "username": "Svetlana",
+      "full_name": "Светлана Викторовна"
+    },
+    "signatures": {
+      "roles": {
+        "accepted_by": null,
+        "handed_over": null,
+        "chief_accountant": "________________"
+      },
+      "created_by": "Светлана Викторовна",
+      "submitted_by": null
+    },
+    "basis_label": "Перемещение Угдан → ДЭУ (КСК)",
+    "source_site": {
+      "site_id": 1,
+      "site_code": "1",
+      "site_name": "Угдан",
+      "description": "",
+      "organization": {
+        "tax_id": null,
+        "address": "",
+        "contacts": null,
+        "legal_name": "Угдан"
+      }
+    },
+    "total_lines": 1,
+    "generated_at": "2026-08-10T03:43:53.693546+00:00",
+    "localization": {
+      "currency": "RUB",
+      "language": "ru",
+      "date_format": "%d.%m.%Y",
+      "datetime_format": "%d.%m.%Y %H:%M:%S",
+      "thousands_separator": " ",
+      "number_decimal_separator": ","
+    },
+    "operation_id": "867f0f48-f8d2-42d0-955f-65a25d0885c3",
+    "submitted_by": null,
+    "document_title": "Товарная накладная",
+    "operation_type": "MOVE",
+    "consignee_label": "ДЭУ (КСК)",
+    "operation_notes": null,
+    "destination_site": {
+      "site_id": 4,
+      "site_code": "4",
+      "site_name": "ДЭУ (КСК)",
+      "description": "",
+      "organization": {
+        "tax_id": null,
+        "address": "",
+        "contacts": null,
+        "legal_name": "ДЭУ (КСК)"
+      }
+    },
+    "operation_status": "draft",
+    "operation_created_at": "2026-08-10T03:43:53.693546+00:00",
+    "operation_type_label": "Перемещение",
+    "operation_effective_at": "2026-08-10T03:42:00+00:00",
+    "operation_submitted_at": null,
+    "operation_display_number": "1/0343/100826",
+    "operation_acceptance_state": "pending"
+  },
+  "assets": {}
+}

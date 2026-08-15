@@ -1,0 +1,4159 @@
+{
+  "engine_contract_version": "1.0.0",
+  "document_contract": "fuel.monthly-report/v1",
+  "document_type": "fuel_monthly_report",
+  "template_id": "spike-fuel-report-weasy",
+  "template_version": "0.1.0",
+  "locale": "ru-RU",
+  "render_profile": "print",
+  "document_id": "8c2ef0d8-695f-4d57-8073-fuel202607",
+  "document_number": "FR-FIX-500",
+  "document": {
+    "period": {
+      "year": 2026,
+      "month": 7
+    },
+    "vehicles": [
+      {
+        "id": "V-KAM-001",
+        "name": "КамАЗ 65115",
+        "plate": "А 123 ВС 75",
+        "unit": "л",
+        "norm_l_per_100km": 28.5
+      },
+      {
+        "id": "V-KAM-002",
+        "name": "КамАЗ 65116",
+        "plate": "А 124 ВС 75",
+        "unit": "л",
+        "norm_l_per_100km": 30.2
+      },
+      {
+        "id": "V-KAM-003",
+        "name": "КамАЗ 6520",
+        "plate": "А 125 ВС 75",
+        "unit": "л",
+        "norm_l_per_100km": 34.8
+      },
+      {
+        "id": "V-KAM-004",
+        "name": "КамАЗ 43118",
+        "plate": "А 126 ВС 75",
+        "unit": "л",
+        "norm_l_per_100km": 31.6
+      },
+      {
+        "id": "V-KAM-005",
+        "name": "КамАЗ 65206",
+        "plate": "А 127 ВС 75",
+        "unit": "л",
+        "norm_l_per_100km": 27.4
+      },
+      {
+        "id": "V-UAZ-001",
+        "name": "УАЗ 3909",
+        "plate": "В 456 ОК 75",
+        "unit": "л",
+        "norm_l_per_100km": 17.2
+      },
+      {
+        "id": "V-UAZ-002",
+        "name": "УАЗ 3151",
+        "plate": "В 457 ОК 75",
+        "unit": "л",
+        "norm_l_per_100km": 16.8
+      },
+      {
+        "id": "V-GAZ-001",
+        "name": "ГАЗель Next",
+        "plate": "К 234 МН 75",
+        "unit": "л",
+        "norm_l_per_100km": 12.5
+      },
+      {
+        "id": "V-ZIL-001",
+        "name": "ЗИЛ 4331",
+        "plate": "М 789 АА 75",
+        "unit": "л",
+        "norm_l_per_100km": 26.4
+      },
+      {
+        "id": "V-MAZ-001",
+        "name": "МАЗ 5440",
+        "plate": "Н 012 ВК 75",
+        "unit": "л",
+        "norm_l_per_100km": 29.1
+      }
+    ],
+    "rows": [
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 387.0,
+        "distance_km": 670.6,
+        "cost": 26685.54
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 283.6,
+        "distance_km": 270.2,
+        "cost": 19131.27
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 365.6,
+        "distance_km": 465.0,
+        "cost": 22907.9
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 282.9,
+        "distance_km": 686.5,
+        "cost": 21204.6
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 385.9,
+        "distance_km": 123.4,
+        "cost": 12142.02
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 50.9,
+        "distance_km": 714.2,
+        "cost": 3023.88
+      },
+      {
+        "date": "2026-07-25",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 344.0,
+        "distance_km": 162.3,
+        "cost": 23721.63
+      },
+      {
+        "date": "2026-07-17",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 452.2,
+        "distance_km": 277.8,
+        "cost": 27998.83
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 221.1,
+        "distance_km": 182.1,
+        "cost": 15307.27
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 181.3,
+        "distance_km": 562.9,
+        "cost": 15468.62
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 436.9,
+        "distance_km": 722.8,
+        "cost": 36424.14
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 335.5,
+        "distance_km": 761.5,
+        "cost": 10592.23
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 55.3,
+        "distance_km": 424.2,
+        "cost": 1753.68
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 200.9,
+        "distance_km": 185.4,
+        "cost": 11735.0
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 213.4,
+        "distance_km": 260.9,
+        "cost": 15977.19
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 22.2,
+        "distance_km": 595.1,
+        "cost": 1492.11
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 194.4,
+        "distance_km": 298.8,
+        "cost": 11222.17
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 264.0,
+        "distance_km": 215.1,
+        "cost": 16702.55
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 260.6,
+        "distance_km": 120.0,
+        "cost": 19469.07
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 495.4,
+        "distance_km": 478.3,
+        "cost": 34819.3
+      },
+      {
+        "date": "2026-07-25",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 180.6,
+        "distance_km": 253.5,
+        "cost": 6250.76
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 172.5,
+        "distance_km": 598.4,
+        "cost": 5692.69
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 180.6,
+        "distance_km": 549.9,
+        "cost": 12358.21
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 98.7,
+        "distance_km": 702.2,
+        "cost": 7515.36
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 282.7,
+        "distance_km": 461.8,
+        "cost": 20758.91
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 373.4,
+        "distance_km": 154.2,
+        "cost": 27380.71
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 413.3,
+        "distance_km": 504.2,
+        "cost": 26123.3
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 87.7,
+        "distance_km": 300.1,
+        "cost": 5131.47
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 448.2,
+        "distance_km": 474.7,
+        "cost": 29850.51
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 431.1,
+        "distance_km": 707.9,
+        "cost": 30649.73
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 219.4,
+        "distance_km": 426.7,
+        "cost": 14963.23
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 396.0,
+        "distance_km": 658.2,
+        "cost": 31488.37
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 144.1,
+        "distance_km": 275.0,
+        "cost": 9411.48
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 337.8,
+        "distance_km": 572.3,
+        "cost": 20419.93
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 348.2,
+        "distance_km": 217.4,
+        "cost": 24131.38
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 185.4,
+        "distance_km": 318.2,
+        "cost": 12881.88
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 240.8,
+        "distance_km": 68.8,
+        "cost": 15611.93
+      },
+      {
+        "date": "2026-07-25",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 81.0,
+        "distance_km": 700.2,
+        "cost": 4714.93
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 65.7,
+        "distance_km": 214.2,
+        "cost": 5352.92
+      },
+      {
+        "date": "2026-07-18",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 197.3,
+        "distance_km": 404.3,
+        "cost": 6084.75
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 53.3,
+        "distance_km": 427.9,
+        "cost": 3767.98
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 290.4,
+        "distance_km": 546.3,
+        "cost": 18705.03
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 340.0,
+        "distance_km": 789.3,
+        "cost": 21186.13
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 139.2,
+        "distance_km": 575.9,
+        "cost": 10361.8
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 117.9,
+        "distance_km": 532.8,
+        "cost": 6937.07
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 224.4,
+        "distance_km": 747.4,
+        "cost": 14761.55
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 187.6,
+        "distance_km": 176.9,
+        "cost": 12957.09
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 38.8,
+        "distance_km": 459.3,
+        "cost": 2674.41
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 485.5,
+        "distance_km": 386.0,
+        "cost": 27182.96
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 282.5,
+        "distance_km": 507.0,
+        "cost": 22506.82
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 201.3,
+        "distance_km": 374.1,
+        "cost": 6880.52
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 384.3,
+        "distance_km": 154.7,
+        "cost": 12618.73
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 330.3,
+        "distance_km": 399.6,
+        "cost": 18904.3
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 426.9,
+        "distance_km": 152.0,
+        "cost": 33437.19
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 412.2,
+        "distance_km": 763.5,
+        "cost": 23880.23
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 175.8,
+        "distance_km": 85.6,
+        "cost": 11151.88
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 177.4,
+        "distance_km": 120.5,
+        "cost": 12561.18
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 200.5,
+        "distance_km": 548.4,
+        "cost": 13222.57
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 338.0,
+        "distance_km": 452.8,
+        "cost": 25898.49
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 389.2,
+        "distance_km": 575.7,
+        "cost": 28031.68
+      },
+      {
+        "date": "2026-07-13",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 56.2,
+        "distance_km": 175.5,
+        "cost": 3967.41
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 452.1,
+        "distance_km": 524.1,
+        "cost": 35769.79
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 108.7,
+        "distance_km": 273.9,
+        "cost": 6537.39
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 39.4,
+        "distance_km": 106.6,
+        "cost": 2978.43
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 329.6,
+        "distance_km": 143.6,
+        "cost": 11389.36
+      },
+      {
+        "date": "2026-07-18",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 438.1,
+        "distance_km": 662.0,
+        "cost": 29360.22
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 65.6,
+        "distance_km": 536.3,
+        "cost": 4495.18
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 469.1,
+        "distance_km": 784.4,
+        "cost": 26008.72
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 84.0,
+        "distance_km": 785.8,
+        "cost": 2767.38
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 110.4,
+        "distance_km": 787.0,
+        "cost": 7154.3
+      },
+      {
+        "date": "2026-07-27",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 55.6,
+        "distance_km": 736.4,
+        "cost": 3188.39
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 323.9,
+        "distance_km": 752.2,
+        "cost": 24002.98
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 125.4,
+        "distance_km": 359.4,
+        "cost": 9113.33
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 90.4,
+        "distance_km": 407.6,
+        "cost": 2768.11
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 63.9,
+        "distance_km": 128.2,
+        "cost": 4113.45
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 435.2,
+        "distance_km": 62.8,
+        "cost": 29144.79
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 141.1,
+        "distance_km": 440.6,
+        "cost": 4700.61
+      },
+      {
+        "date": "2026-07-18",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 246.5,
+        "distance_km": 767.5,
+        "cost": 21135.12
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 55.7,
+        "distance_km": 626.1,
+        "cost": 3503.26
+      },
+      {
+        "date": "2026-07-17",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 179.3,
+        "distance_km": 607.8,
+        "cost": 11183.73
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 154.4,
+        "distance_km": 688.9,
+        "cost": 9444.2
+      },
+      {
+        "date": "2026-07-27",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 448.8,
+        "distance_km": 137.4,
+        "cost": 31545.18
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 307.2,
+        "distance_km": 203.3,
+        "cost": 21939.3
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 289.4,
+        "distance_km": 263.4,
+        "cost": 21695.47
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 209.7,
+        "distance_km": 140.9,
+        "cost": 13125.3
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 300.2,
+        "distance_km": 598.4,
+        "cost": 17837.16
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 462.4,
+        "distance_km": 704.3,
+        "cost": 14262.62
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 365.0,
+        "distance_km": 627.6,
+        "cost": 26036.73
+      },
+      {
+        "date": "2026-07-14",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 205.8,
+        "distance_km": 433.1,
+        "cost": 13470.45
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 368.8,
+        "distance_km": 439.8,
+        "cost": 30282.49
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 38.2,
+        "distance_km": 792.4,
+        "cost": 2414.35
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 216.9,
+        "distance_km": 301.9,
+        "cost": 14652.52
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 193.9,
+        "distance_km": 246.8,
+        "cost": 14129.07
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 217.1,
+        "distance_km": 350.0,
+        "cost": 6919.38
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 36.3,
+        "distance_km": 771.8,
+        "cost": 1275.48
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 335.4,
+        "distance_km": 699.2,
+        "cost": 22475.95
+      },
+      {
+        "date": "2026-07-17",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 312.9,
+        "distance_km": 283.0,
+        "cost": 17538.4
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 84.4,
+        "distance_km": 302.8,
+        "cost": 5624.42
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 139.9,
+        "distance_km": 89.8,
+        "cost": 10721.76
+      },
+      {
+        "date": "2026-07-17",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 117.0,
+        "distance_km": 530.4,
+        "cost": 9937.48
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 413.3,
+        "distance_km": 144.9,
+        "cost": 31333.86
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 365.8,
+        "distance_km": 651.7,
+        "cost": 21074.0
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 152.0,
+        "distance_km": 484.5,
+        "cost": 10341.99
+      },
+      {
+        "date": "2026-07-25",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 158.0,
+        "distance_km": 264.0,
+        "cost": 13374.88
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 404.2,
+        "distance_km": 736.5,
+        "cost": 12350.09
+      },
+      {
+        "date": "2026-07-13",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 301.6,
+        "distance_km": 799.4,
+        "cost": 10265.85
+      },
+      {
+        "date": "2026-07-25",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 120.9,
+        "distance_km": 608.5,
+        "cost": 7182.96
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 317.9,
+        "distance_km": 452.7,
+        "cost": 10926.98
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 365.5,
+        "distance_km": 659.6,
+        "cost": 27533.89
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 118.6,
+        "distance_km": 656.1,
+        "cost": 8814.04
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 168.0,
+        "distance_km": 741.5,
+        "cost": 10609.35
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 284.5,
+        "distance_km": 317.7,
+        "cost": 9499.49
+      },
+      {
+        "date": "2026-07-13",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 234.9,
+        "distance_km": 84.6,
+        "cost": 13647.35
+      },
+      {
+        "date": "2026-07-27",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 312.3,
+        "distance_km": 241.7,
+        "cost": 9774.92
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 240.0,
+        "distance_km": 603.7,
+        "cost": 14923.75
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 357.0,
+        "distance_km": 338.2,
+        "cost": 28419.58
+      },
+      {
+        "date": "2026-07-03",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 49.8,
+        "distance_km": 721.0,
+        "cost": 1580.35
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 212.9,
+        "distance_km": 506.6,
+        "cost": 17767.59
+      },
+      {
+        "date": "2026-07-25",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 231.5,
+        "distance_km": 449.7,
+        "cost": 15398.62
+      },
+      {
+        "date": "2026-07-13",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 492.0,
+        "distance_km": 694.6,
+        "cost": 28110.68
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 310.4,
+        "distance_km": 546.3,
+        "cost": 18672.92
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 429.0,
+        "distance_km": 110.3,
+        "cost": 26655.36
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 276.1,
+        "distance_km": 89.9,
+        "cost": 9463.56
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 395.8,
+        "distance_km": 471.8,
+        "cost": 25461.36
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 467.6,
+        "distance_km": 146.2,
+        "cost": 16186.54
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 417.3,
+        "distance_km": 711.5,
+        "cost": 24324.62
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 106.5,
+        "distance_km": 632.6,
+        "cost": 8746.01
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 406.8,
+        "distance_km": 195.6,
+        "cost": 24597.78
+      },
+      {
+        "date": "2026-07-14",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 28.5,
+        "distance_km": 776.8,
+        "cost": 2022.06
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 353.0,
+        "distance_km": 494.5,
+        "cost": 23969.97
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 383.0,
+        "distance_km": 769.3,
+        "cost": 21230.03
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 348.8,
+        "distance_km": 703.6,
+        "cost": 10942.53
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 410.6,
+        "distance_km": 780.2,
+        "cost": 13283.28
+      },
+      {
+        "date": "2026-07-17",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 48.8,
+        "distance_km": 433.3,
+        "cost": 3414.84
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 220.1,
+        "distance_km": 749.6,
+        "cost": 17816.7
+      },
+      {
+        "date": "2026-07-14",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 238.6,
+        "distance_km": 489.9,
+        "cost": 17792.75
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 490.7,
+        "distance_km": 192.3,
+        "cost": 32211.88
+      },
+      {
+        "date": "2026-07-25",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 448.6,
+        "distance_km": 232.9,
+        "cost": 32506.77
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 368.2,
+        "distance_km": 611.0,
+        "cost": 24721.08
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 403.5,
+        "distance_km": 266.6,
+        "cost": 32512.35
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 339.8,
+        "distance_km": 728.8,
+        "cost": 27367.7
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 240.3,
+        "distance_km": 344.0,
+        "cost": 17690.32
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 81.6,
+        "distance_km": 213.3,
+        "cost": 2606.61
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 409.9,
+        "distance_km": 248.9,
+        "cost": 27459.38
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 90.7,
+        "distance_km": 143.7,
+        "cost": 7308.39
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 25.4,
+        "distance_km": 667.3,
+        "cost": 1484.18
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 403.5,
+        "distance_km": 505.0,
+        "cost": 25239.89
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 67.9,
+        "distance_km": 482.7,
+        "cost": 5151.36
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 449.5,
+        "distance_km": 409.8,
+        "cost": 29787.48
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 34.5,
+        "distance_km": 505.6,
+        "cost": 2163.52
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 139.6,
+        "distance_km": 347.2,
+        "cost": 9462.38
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 286.8,
+        "distance_km": 431.2,
+        "cost": 18240.41
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 302.2,
+        "distance_km": 197.3,
+        "cost": 17027.51
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 494.9,
+        "distance_km": 658.2,
+        "cost": 38693.64
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 447.9,
+        "distance_km": 302.4,
+        "cost": 35506.42
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 221.0,
+        "distance_km": 378.1,
+        "cost": 7201.07
+      },
+      {
+        "date": "2026-07-17",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 241.4,
+        "distance_km": 301.2,
+        "cost": 16908.24
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 442.3,
+        "distance_km": 432.8,
+        "cost": 30682.64
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 213.2,
+        "distance_km": 65.6,
+        "cost": 14988.58
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 20.7,
+        "distance_km": 580.3,
+        "cost": 1315.52
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 303.3,
+        "distance_km": 668.6,
+        "cost": 21211.25
+      },
+      {
+        "date": "2026-07-27",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 100.7,
+        "distance_km": 575.2,
+        "cost": 8190.66
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 248.8,
+        "distance_km": 756.4,
+        "cost": 8043.95
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 365.4,
+        "distance_km": 300.0,
+        "cost": 24427.09
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 144.5,
+        "distance_km": 501.8,
+        "cost": 8491.53
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 309.7,
+        "distance_km": 366.9,
+        "cost": 25447.34
+      },
+      {
+        "date": "2026-07-25",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 422.3,
+        "distance_km": 341.3,
+        "cost": 28723.72
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 382.6,
+        "distance_km": 772.1,
+        "cost": 25944.4
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 399.8,
+        "distance_km": 173.3,
+        "cost": 13379.25
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 204.5,
+        "distance_km": 520.2,
+        "cost": 6450.92
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 224.6,
+        "distance_km": 437.6,
+        "cost": 14639.68
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 104.7,
+        "distance_km": 359.8,
+        "cost": 6715.73
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 159.4,
+        "distance_km": 438.8,
+        "cost": 10089.25
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 83.8,
+        "distance_km": 128.4,
+        "cost": 5081.55
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 356.8,
+        "distance_km": 364.9,
+        "cost": 12159.27
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 399.4,
+        "distance_km": 292.6,
+        "cost": 32116.91
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 320.7,
+        "distance_km": 201.0,
+        "cost": 19824.63
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 332.7,
+        "distance_km": 73.7,
+        "cost": 24042.03
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 96.0,
+        "distance_km": 473.6,
+        "cost": 6728.57
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 130.0,
+        "distance_km": 330.8,
+        "cost": 7672.26
+      },
+      {
+        "date": "2026-07-14",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 130.6,
+        "distance_km": 643.1,
+        "cost": 4158.67
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 308.6,
+        "distance_km": 458.4,
+        "cost": 24580.04
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 468.2,
+        "distance_km": 524.4,
+        "cost": 15222.4
+      },
+      {
+        "date": "2026-07-03",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 196.1,
+        "distance_km": 471.1,
+        "cost": 12711.71
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 127.0,
+        "distance_km": 266.0,
+        "cost": 7395.91
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 331.2,
+        "distance_km": 205.9,
+        "cost": 26332.11
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 435.8,
+        "distance_km": 285.8,
+        "cost": 26436.21
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 200.5,
+        "distance_km": 465.7,
+        "cost": 12811.0
+      },
+      {
+        "date": "2026-07-14",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 127.1,
+        "distance_km": 135.2,
+        "cost": 8551.29
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 58.4,
+        "distance_km": 274.0,
+        "cost": 4592.58
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 439.9,
+        "distance_km": 92.3,
+        "cost": 28803.89
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 168.5,
+        "distance_km": 307.0,
+        "cost": 11347.07
+      },
+      {
+        "date": "2026-07-18",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 209.0,
+        "distance_km": 408.0,
+        "cost": 14831.07
+      },
+      {
+        "date": "2026-07-03",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 203.6,
+        "distance_km": 190.4,
+        "cost": 11223.55
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 263.8,
+        "distance_km": 548.6,
+        "cost": 18126.05
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 221.2,
+        "distance_km": 252.0,
+        "cost": 18803.7
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 315.3,
+        "distance_km": 517.6,
+        "cost": 22831.49
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 340.2,
+        "distance_km": 301.2,
+        "cost": 22463.28
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 398.9,
+        "distance_km": 107.0,
+        "cost": 24634.4
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 139.7,
+        "distance_km": 253.0,
+        "cost": 4600.15
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 74.6,
+        "distance_km": 215.2,
+        "cost": 5205.28
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 250.9,
+        "distance_km": 576.2,
+        "cost": 14251.12
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 324.3,
+        "distance_km": 153.7,
+        "cost": 22159.0
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 412.3,
+        "distance_km": 232.6,
+        "cost": 31015.2
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 177.1,
+        "distance_km": 146.8,
+        "cost": 15186.03
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 409.7,
+        "distance_km": 465.1,
+        "cost": 28538.53
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 376.8,
+        "distance_km": 307.4,
+        "cost": 26463.43
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 99.5,
+        "distance_km": 649.5,
+        "cost": 6796.43
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 424.1,
+        "distance_km": 598.0,
+        "cost": 26872.15
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 380.1,
+        "distance_km": 135.1,
+        "cost": 28496.62
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 133.4,
+        "distance_km": 390.9,
+        "cost": 10627.82
+      },
+      {
+        "date": "2026-07-27",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 399.6,
+        "distance_km": 136.1,
+        "cost": 13100.67
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 166.0,
+        "distance_km": 632.1,
+        "cost": 11286.43
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 455.8,
+        "distance_km": 164.0,
+        "cost": 28978.01
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 155.3,
+        "distance_km": 261.9,
+        "cost": 10522.71
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 25.8,
+        "distance_km": 646.7,
+        "cost": 1967.22
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 57.8,
+        "distance_km": 429.7,
+        "cost": 4699.49
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 90.1,
+        "distance_km": 235.8,
+        "cost": 5845.87
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 78.7,
+        "distance_km": 238.0,
+        "cost": 4840.61
+      },
+      {
+        "date": "2026-07-03",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 318.5,
+        "distance_km": 773.9,
+        "cost": 18962.96
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 293.7,
+        "distance_km": 94.7,
+        "cost": 20528.56
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 237.3,
+        "distance_km": 252.7,
+        "cost": 19925.73
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 327.8,
+        "distance_km": 90.9,
+        "cost": 21887.24
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 475.1,
+        "distance_km": 602.7,
+        "cost": 16574.67
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 35.0,
+        "distance_km": 573.3,
+        "cost": 2959.32
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 337.5,
+        "distance_km": 765.7,
+        "cost": 18801.38
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 162.8,
+        "distance_km": 194.7,
+        "cost": 11624.59
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 221.1,
+        "distance_km": 197.9,
+        "cost": 17032.45
+      },
+      {
+        "date": "2026-07-25",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 132.8,
+        "distance_km": 574.6,
+        "cost": 10971.29
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 174.7,
+        "distance_km": 50.5,
+        "cost": 13862.2
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 480.4,
+        "distance_km": 586.9,
+        "cost": 39288.21
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 36.0,
+        "distance_km": 414.3,
+        "cost": 2459.93
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 80.5,
+        "distance_km": 519.4,
+        "cost": 2635.69
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 367.8,
+        "distance_km": 251.8,
+        "cost": 12870.38
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 206.7,
+        "distance_km": 89.1,
+        "cost": 15640.82
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 253.2,
+        "distance_km": 288.2,
+        "cost": 15205.81
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 122.2,
+        "distance_km": 230.0,
+        "cost": 8539.16
+      },
+      {
+        "date": "2026-07-13",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 226.4,
+        "distance_km": 558.7,
+        "cost": 16457.09
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 474.4,
+        "distance_km": 220.7,
+        "cost": 33484.29
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 350.2,
+        "distance_km": 601.5,
+        "cost": 24145.85
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 358.2,
+        "distance_km": 123.3,
+        "cost": 28256.41
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 172.0,
+        "distance_km": 734.0,
+        "cost": 10145.53
+      },
+      {
+        "date": "2026-07-13",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 241.3,
+        "distance_km": 413.0,
+        "cost": 15569.12
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 50.7,
+        "distance_km": 585.8,
+        "cost": 1648.87
+      },
+      {
+        "date": "2026-07-17",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 45.6,
+        "distance_km": 317.9,
+        "cost": 3003.4
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 98.4,
+        "distance_km": 130.6,
+        "cost": 3273.04
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 228.3,
+        "distance_km": 306.8,
+        "cost": 19457.77
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 51.3,
+        "distance_km": 740.7,
+        "cost": 1567.39
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 72.0,
+        "distance_km": 425.4,
+        "cost": 5901.58
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 56.3,
+        "distance_km": 483.7,
+        "cost": 3832.3
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 414.9,
+        "distance_km": 763.0,
+        "cost": 26073.33
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 405.8,
+        "distance_km": 716.0,
+        "cost": 13357.6
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 98.2,
+        "distance_km": 448.5,
+        "cost": 8246.68
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 204.4,
+        "distance_km": 610.1,
+        "cost": 12645.61
+      },
+      {
+        "date": "2026-07-13",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 364.0,
+        "distance_km": 169.4,
+        "cost": 11309.87
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 268.4,
+        "distance_km": 203.5,
+        "cost": 18171.14
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 312.7,
+        "distance_km": 125.5,
+        "cost": 22290.95
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 190.3,
+        "distance_km": 625.8,
+        "cost": 11855.58
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 212.3,
+        "distance_km": 267.9,
+        "cost": 14528.41
+      },
+      {
+        "date": "2026-07-27",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 231.1,
+        "distance_km": 346.0,
+        "cost": 18227.51
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 380.7,
+        "distance_km": 137.5,
+        "cost": 12633.03
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 232.1,
+        "distance_km": 795.1,
+        "cost": 16773.67
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 293.7,
+        "distance_km": 659.9,
+        "cost": 18715.59
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 438.6,
+        "distance_km": 445.6,
+        "cost": 31148.57
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 477.9,
+        "distance_km": 245.4,
+        "cost": 28961.64
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 486.5,
+        "distance_km": 227.8,
+        "cost": 29872.77
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 258.9,
+        "distance_km": 563.6,
+        "cost": 14868.71
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 482.4,
+        "distance_km": 726.5,
+        "cost": 33651.4
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 276.9,
+        "distance_km": 541.3,
+        "cost": 15865.39
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 104.5,
+        "distance_km": 150.0,
+        "cost": 7390.04
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 143.2,
+        "distance_km": 735.3,
+        "cost": 9772.94
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 102.2,
+        "distance_km": 613.8,
+        "cost": 3586.14
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 490.4,
+        "distance_km": 329.8,
+        "cost": 33484.66
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 293.6,
+        "distance_km": 655.8,
+        "cost": 17962.5
+      },
+      {
+        "date": "2026-07-25",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 470.6,
+        "distance_km": 155.0,
+        "cost": 31977.57
+      },
+      {
+        "date": "2026-07-17",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 62.8,
+        "distance_km": 134.0,
+        "cost": 4838.36
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 460.4,
+        "distance_km": 330.4,
+        "cost": 15747.62
+      },
+      {
+        "date": "2026-07-18",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 244.7,
+        "distance_km": 234.3,
+        "cost": 15531.6
+      },
+      {
+        "date": "2026-07-03",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 162.6,
+        "distance_km": 681.1,
+        "cost": 9287.51
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 303.9,
+        "distance_km": 555.6,
+        "cost": 9624.96
+      },
+      {
+        "date": "2026-07-18",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 201.8,
+        "distance_km": 307.8,
+        "cost": 11296.77
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 350.6,
+        "distance_km": 447.7,
+        "cost": 11317.08
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 382.6,
+        "distance_km": 708.6,
+        "cost": 25532.41
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 499.7,
+        "distance_km": 443.3,
+        "cost": 31767.27
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 117.2,
+        "distance_km": 345.6,
+        "cost": 3921.75
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 335.1,
+        "distance_km": 699.9,
+        "cost": 22644.47
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 380.0,
+        "distance_km": 596.8,
+        "cost": 29848.59
+      },
+      {
+        "date": "2026-07-03",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 99.6,
+        "distance_km": 236.1,
+        "cost": 6259.49
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 75.6,
+        "distance_km": 689.1,
+        "cost": 2385.23
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 413.7,
+        "distance_km": 369.3,
+        "cost": 26731.76
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 242.1,
+        "distance_km": 762.1,
+        "cost": 16861.87
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 54.3,
+        "distance_km": 473.1,
+        "cost": 3375.76
+      },
+      {
+        "date": "2026-07-25",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 69.0,
+        "distance_km": 683.7,
+        "cost": 5159.57
+      },
+      {
+        "date": "2026-07-14",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 331.7,
+        "distance_km": 640.9,
+        "cost": 20281.87
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 269.2,
+        "distance_km": 147.6,
+        "cost": 17175.71
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 290.2,
+        "distance_km": 548.6,
+        "cost": 9422.39
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 385.1,
+        "distance_km": 209.9,
+        "cost": 28872.7
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 176.7,
+        "distance_km": 564.5,
+        "cost": 14888.64
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 327.3,
+        "distance_km": 287.5,
+        "cost": 26180.21
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 490.8,
+        "distance_km": 557.9,
+        "cost": 32335.98
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 449.7,
+        "distance_km": 739.6,
+        "cost": 27245.8
+      },
+      {
+        "date": "2026-07-18",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 254.6,
+        "distance_km": 558.1,
+        "cost": 16784.07
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 24.6,
+        "distance_km": 743.2,
+        "cost": 1686.77
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 438.6,
+        "distance_km": 117.2,
+        "cost": 25554.14
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 453.5,
+        "distance_km": 515.1,
+        "cost": 29045.7
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 70.9,
+        "distance_km": 66.7,
+        "cost": 4228.98
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 144.9,
+        "distance_km": 118.3,
+        "cost": 8801.81
+      },
+      {
+        "date": "2026-07-03",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 196.6,
+        "distance_km": 556.1,
+        "cost": 13276.47
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 487.1,
+        "distance_km": 546.3,
+        "cost": 30882.67
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 485.0,
+        "distance_km": 430.5,
+        "cost": 29394.81
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 267.0,
+        "distance_km": 352.4,
+        "cost": 22204.4
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 226.1,
+        "distance_km": 326.7,
+        "cost": 18443.99
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 217.0,
+        "distance_km": 635.6,
+        "cost": 14635.0
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 158.7,
+        "distance_km": 370.7,
+        "cost": 10445.64
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 268.1,
+        "distance_km": 375.7,
+        "cost": 22593.99
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 62.8,
+        "distance_km": 687.4,
+        "cost": 5166.9
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 137.7,
+        "distance_km": 483.8,
+        "cost": 8957.37
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 78.0,
+        "distance_km": 192.7,
+        "cost": 6519.14
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 309.3,
+        "distance_km": 717.9,
+        "cost": 22107.38
+      },
+      {
+        "date": "2026-07-03",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 114.5,
+        "distance_km": 611.1,
+        "cost": 6463.71
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 71.6,
+        "distance_km": 599.4,
+        "cost": 4370.63
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 288.6,
+        "distance_km": 575.6,
+        "cost": 20540.26
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 71.3,
+        "distance_km": 188.0,
+        "cost": 4525.28
+      },
+      {
+        "date": "2026-07-03",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 270.0,
+        "distance_km": 575.9,
+        "cost": 9339.54
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 497.6,
+        "distance_km": 357.0,
+        "cost": 33338.46
+      },
+      {
+        "date": "2026-07-03",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 57.3,
+        "distance_km": 136.8,
+        "cost": 1754.58
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 362.2,
+        "distance_km": 416.9,
+        "cost": 11711.61
+      },
+      {
+        "date": "2026-07-13",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 299.8,
+        "distance_km": 199.4,
+        "cost": 21562.76
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 179.6,
+        "distance_km": 785.0,
+        "cost": 11351.39
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 32.2,
+        "distance_km": 371.0,
+        "cost": 1053.18
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 485.9,
+        "distance_km": 655.4,
+        "cost": 14895.81
+      },
+      {
+        "date": "2026-07-03",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 184.7,
+        "distance_km": 415.5,
+        "cost": 15472.2
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 102.0,
+        "distance_km": 775.5,
+        "cost": 8645.22
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 493.2,
+        "distance_km": 328.1,
+        "cost": 16919.84
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 343.4,
+        "distance_km": 163.3,
+        "cost": 27101.42
+      },
+      {
+        "date": "2026-07-18",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 120.8,
+        "distance_km": 631.9,
+        "cost": 4046.43
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 375.5,
+        "distance_km": 455.1,
+        "cost": 21993.17
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 436.2,
+        "distance_km": 455.5,
+        "cost": 13455.08
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 478.6,
+        "distance_km": 216.1,
+        "cost": 15263.56
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 180.7,
+        "distance_km": 692.7,
+        "cost": 14200.3
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 221.7,
+        "distance_km": 469.6,
+        "cost": 16030.21
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 347.6,
+        "distance_km": 474.7,
+        "cost": 25541.34
+      },
+      {
+        "date": "2026-07-14",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 345.3,
+        "distance_km": 554.9,
+        "cost": 22701.0
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 239.2,
+        "distance_km": 501.8,
+        "cost": 8415.06
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 42.4,
+        "distance_km": 222.7,
+        "cost": 2410.89
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 398.7,
+        "distance_km": 255.1,
+        "cost": 24532.89
+      },
+      {
+        "date": "2026-07-13",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 100.5,
+        "distance_km": 678.8,
+        "cost": 6908.01
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 80.5,
+        "distance_km": 636.5,
+        "cost": 5667.71
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 40.1,
+        "distance_km": 66.6,
+        "cost": 2824.28
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 350.2,
+        "distance_km": 59.8,
+        "cost": 10783.68
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 357.0,
+        "distance_km": 344.6,
+        "cost": 25379.52
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 441.1,
+        "distance_km": 716.2,
+        "cost": 15369.29
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 232.5,
+        "distance_km": 640.9,
+        "cost": 15944.57
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 448.3,
+        "distance_km": 287.1,
+        "cost": 29219.01
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 300.2,
+        "distance_km": 571.6,
+        "cost": 19080.9
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 144.2,
+        "distance_km": 789.3,
+        "cost": 11846.19
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 483.5,
+        "distance_km": 760.2,
+        "cost": 33265.82
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 81.3,
+        "distance_km": 351.0,
+        "cost": 5563.48
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 490.1,
+        "distance_km": 600.7,
+        "cost": 28253.22
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 489.4,
+        "distance_km": 117.9,
+        "cost": 41072.36
+      },
+      {
+        "date": "2026-07-27",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 489.2,
+        "distance_km": 158.3,
+        "cost": 41775.17
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 194.0,
+        "distance_km": 378.6,
+        "cost": 15199.36
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 280.4,
+        "distance_km": 705.5,
+        "cost": 9198.19
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 307.1,
+        "distance_km": 416.4,
+        "cost": 10777.17
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 56.8,
+        "distance_km": 627.7,
+        "cost": 4068.11
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 180.0,
+        "distance_km": 398.6,
+        "cost": 11847.2
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 430.0,
+        "distance_km": 575.1,
+        "cost": 27297.54
+      },
+      {
+        "date": "2026-07-13",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 86.5,
+        "distance_km": 81.7,
+        "cost": 2963.49
+      },
+      {
+        "date": "2026-07-18",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 464.5,
+        "distance_km": 797.8,
+        "cost": 39137.22
+      },
+      {
+        "date": "2026-07-17",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 464.3,
+        "distance_km": 94.6,
+        "cost": 30492.96
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 191.0,
+        "distance_km": 201.0,
+        "cost": 15126.93
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 74.8,
+        "distance_km": 593.8,
+        "cost": 5793.23
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 438.2,
+        "distance_km": 724.9,
+        "cost": 31891.46
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 359.0,
+        "distance_km": 747.4,
+        "cost": 23696.81
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 393.1,
+        "distance_km": 627.3,
+        "cost": 26664.92
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 124.7,
+        "distance_km": 544.0,
+        "cost": 10056.07
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 69.4,
+        "distance_km": 777.6,
+        "cost": 2296.35
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 463.5,
+        "distance_km": 634.2,
+        "cost": 29367.36
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 405.1,
+        "distance_km": 629.8,
+        "cost": 33734.33
+      },
+      {
+        "date": "2026-07-27",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 165.4,
+        "distance_km": 377.9,
+        "cost": 12028.05
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 402.2,
+        "distance_km": 734.0,
+        "cost": 24727.46
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 66.2,
+        "distance_km": 533.0,
+        "cost": 5456.25
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 370.1,
+        "distance_km": 68.6,
+        "cost": 31709.74
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 204.6,
+        "distance_km": 124.3,
+        "cost": 13239.72
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 195.3,
+        "distance_km": 661.0,
+        "cost": 12167.89
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 397.5,
+        "distance_km": 149.3,
+        "cost": 12684.96
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 131.7,
+        "distance_km": 114.5,
+        "cost": 4141.13
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 331.2,
+        "distance_km": 674.0,
+        "cost": 26924.98
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 255.3,
+        "distance_km": 797.0,
+        "cost": 7846.77
+      },
+      {
+        "date": "2026-07-13",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 403.6,
+        "distance_km": 765.5,
+        "cost": 26647.15
+      },
+      {
+        "date": "2026-07-17",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 480.9,
+        "distance_km": 419.8,
+        "cost": 15926.97
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 74.0,
+        "distance_km": 693.3,
+        "cost": 4988.83
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 279.8,
+        "distance_km": 110.6,
+        "cost": 21506.3
+      },
+      {
+        "date": "2026-07-25",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 108.5,
+        "distance_km": 377.6,
+        "cost": 6749.01
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 39.6,
+        "distance_km": 558.7,
+        "cost": 2875.36
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 367.7,
+        "distance_km": 415.4,
+        "cost": 26293.42
+      },
+      {
+        "date": "2026-07-17",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 105.4,
+        "distance_km": 285.0,
+        "cost": 3564.96
+      },
+      {
+        "date": "2026-07-17",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 454.7,
+        "distance_km": 141.7,
+        "cost": 32394.44
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 81.5,
+        "distance_km": 213.1,
+        "cost": 5205.12
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 447.8,
+        "distance_km": 651.6,
+        "cost": 32241.87
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 420.3,
+        "distance_km": 381.6,
+        "cost": 27612.17
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 433.0,
+        "distance_km": 442.6,
+        "cost": 30302.99
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 145.8,
+        "distance_km": 93.5,
+        "cost": 10395.13
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 186.8,
+        "distance_km": 236.4,
+        "cost": 13309.42
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 53.4,
+        "distance_km": 540.3,
+        "cost": 3755.24
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 345.1,
+        "distance_km": 56.2,
+        "cost": 22115.34
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 225.1,
+        "distance_km": 231.0,
+        "cost": 12542.79
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 354.6,
+        "distance_km": 66.3,
+        "cost": 12107.49
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 340.4,
+        "distance_km": 147.4,
+        "cost": 23405.61
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 323.6,
+        "distance_km": 69.4,
+        "cost": 24516.81
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 429.6,
+        "distance_km": 654.9,
+        "cost": 14838.13
+      },
+      {
+        "date": "2026-07-14",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 316.4,
+        "distance_km": 554.8,
+        "cost": 17620.69
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 470.6,
+        "distance_km": 533.2,
+        "cost": 29194.4
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 366.7,
+        "distance_km": 676.9,
+        "cost": 30035.76
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 58.2,
+        "distance_km": 328.6,
+        "cost": 1814.18
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 190.9,
+        "distance_km": 443.5,
+        "cost": 15037.53
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 407.8,
+        "distance_km": 588.7,
+        "cost": 28283.66
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 333.7,
+        "distance_km": 336.7,
+        "cost": 11353.11
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 218.7,
+        "distance_km": 501.9,
+        "cost": 17818.31
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 225.8,
+        "distance_km": 777.0,
+        "cost": 16028.75
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 280.1,
+        "distance_km": 282.4,
+        "cost": 16551.66
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 114.0,
+        "distance_km": 306.2,
+        "cost": 3744.3
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 301.5,
+        "distance_km": 541.8,
+        "cost": 19927.92
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 467.5,
+        "distance_km": 622.5,
+        "cost": 29705.36
+      },
+      {
+        "date": "2026-07-13",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 41.7,
+        "distance_km": 691.7,
+        "cost": 1438.34
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 491.2,
+        "distance_km": 705.5,
+        "cost": 32092.41
+      },
+      {
+        "date": "2026-07-13",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 24.9,
+        "distance_km": 675.3,
+        "cost": 1981.87
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 185.9,
+        "distance_km": 383.3,
+        "cost": 5744.48
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 160.4,
+        "distance_km": 760.1,
+        "cost": 10842.17
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 95.5,
+        "distance_km": 600.1,
+        "cost": 6527.81
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 62.3,
+        "distance_km": 232.4,
+        "cost": 2074.14
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 381.6,
+        "distance_km": 232.0,
+        "cost": 28783.48
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 313.3,
+        "distance_km": 398.4,
+        "cost": 19135.69
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 341.8,
+        "distance_km": 248.5,
+        "cost": 11350.07
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 204.4,
+        "distance_km": 381.4,
+        "cost": 6556.92
+      },
+      {
+        "date": "2026-07-18",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 258.6,
+        "distance_km": 413.4,
+        "cost": 8876.47
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 399.5,
+        "distance_km": 104.8,
+        "cost": 25096.52
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 410.3,
+        "distance_km": 395.2,
+        "cost": 12761.03
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 316.6,
+        "distance_km": 715.9,
+        "cost": 20570.99
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 122.8,
+        "distance_km": 53.8,
+        "cost": 7394.79
+      },
+      {
+        "date": "2026-07-19",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 325.4,
+        "distance_km": 418.6,
+        "cost": 18324.76
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 403.5,
+        "distance_km": 177.7,
+        "cost": 13083.2
+      },
+      {
+        "date": "2026-07-17",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 259.4,
+        "distance_km": 463.5,
+        "cost": 16014.82
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 211.8,
+        "distance_km": 777.0,
+        "cost": 13508.19
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 249.7,
+        "distance_km": 177.5,
+        "cost": 20867.93
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 338.0,
+        "distance_km": 436.2,
+        "cost": 10821.24
+      },
+      {
+        "date": "2026-07-09",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 385.4,
+        "distance_km": 448.5,
+        "cost": 23182.59
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 145.6,
+        "distance_km": 722.6,
+        "cost": 12114.92
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 263.5,
+        "distance_km": 422.4,
+        "cost": 16786.91
+      },
+      {
+        "date": "2026-07-23",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 130.0,
+        "distance_km": 791.3,
+        "cost": 8921.39
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 56.4,
+        "distance_km": 482.8,
+        "cost": 4307.98
+      },
+      {
+        "date": "2026-07-10",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 461.3,
+        "distance_km": 162.0,
+        "cost": 32442.25
+      },
+      {
+        "date": "2026-07-12",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 155.3,
+        "distance_km": 344.0,
+        "cost": 5445.22
+      },
+      {
+        "date": "2026-07-06",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 130.6,
+        "distance_km": 780.9,
+        "cost": 9025.73
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 139.9,
+        "distance_km": 93.9,
+        "cost": 9395.98
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 32.6,
+        "distance_km": 200.9,
+        "cost": 2315.81
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 113.9,
+        "distance_km": 73.0,
+        "cost": 7880.55
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 318.9,
+        "distance_km": 120.1,
+        "cost": 22868.59
+      },
+      {
+        "date": "2026-07-21",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 329.9,
+        "distance_km": 798.4,
+        "cost": 18835.69
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 471.3,
+        "distance_km": 522.8,
+        "cost": 33462.49
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-MAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 213.2,
+        "distance_km": 128.5,
+        "cost": 6742.57
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 118.2,
+        "distance_km": 276.2,
+        "cost": 7355.7
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 350.8,
+        "distance_km": 678.2,
+        "cost": 26058.83
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 473.5,
+        "distance_km": 736.7,
+        "cost": 40589.77
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 497.3,
+        "distance_km": 726.7,
+        "cost": 15778.72
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 132.8,
+        "distance_km": 395.2,
+        "cost": 10370.82
+      },
+      {
+        "date": "2026-07-18",
+        "vehicle_id": "V-KAM-004",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 332.3,
+        "distance_km": 633.8,
+        "cost": 28114.58
+      },
+      {
+        "date": "2026-07-27",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 214.4,
+        "distance_km": 289.0,
+        "cost": 7008.94
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 109.8,
+        "distance_km": 673.9,
+        "cost": 3501.74
+      },
+      {
+        "date": "2026-07-18",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 354.8,
+        "distance_km": 131.2,
+        "cost": 24098.71
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 375.5,
+        "distance_km": 788.5,
+        "cost": 20959.96
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 224.4,
+        "distance_km": 182.8,
+        "cost": 7418.87
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 104.5,
+        "distance_km": 215.5,
+        "cost": 7809.23
+      },
+      {
+        "date": "2026-07-18",
+        "vehicle_id": "V-ZIL-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 236.3,
+        "distance_km": 154.3,
+        "cost": 16386.35
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 238.4,
+        "distance_km": 204.3,
+        "cost": 7346.75
+      },
+      {
+        "date": "2026-07-22",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 157.6,
+        "distance_km": 488.7,
+        "cost": 12707.36
+      },
+      {
+        "date": "2026-07-01",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 212.9,
+        "distance_km": 763.3,
+        "cost": 14903.91
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 432.9,
+        "distance_km": 351.0,
+        "cost": 36674.86
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 297.7,
+        "distance_km": 412.4,
+        "cost": 16852.65
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 75.4,
+        "distance_km": 250.9,
+        "cost": 4752.56
+      },
+      {
+        "date": "2026-07-18",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 232.2,
+        "distance_km": 64.7,
+        "cost": 16944.29
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 152.3,
+        "distance_km": 170.9,
+        "cost": 9853.09
+      },
+      {
+        "date": "2026-07-11",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 297.8,
+        "distance_km": 769.4,
+        "cost": 9406.15
+      },
+      {
+        "date": "2026-07-02",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 431.7,
+        "distance_km": 519.8,
+        "cost": 28693.89
+      },
+      {
+        "date": "2026-07-16",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 175.1,
+        "distance_km": 595.7,
+        "cost": 12658.25
+      },
+      {
+        "date": "2026-07-25",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 168.2,
+        "distance_km": 599.2,
+        "cost": 5726.12
+      },
+      {
+        "date": "2026-07-04",
+        "vehicle_id": "V-KAM-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 250.0,
+        "distance_km": 389.4,
+        "cost": 19589.45
+      },
+      {
+        "date": "2026-07-24",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 195.0,
+        "distance_km": 181.1,
+        "cost": 6131.94
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 480.9,
+        "distance_km": 733.3,
+        "cost": 39713.85
+      },
+      {
+        "date": "2026-07-15",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 333.3,
+        "distance_km": 75.7,
+        "cost": 28029.73
+      },
+      {
+        "date": "2026-07-20",
+        "vehicle_id": "V-KAM-001",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 216.6,
+        "distance_km": 388.1,
+        "cost": 14223.92
+      },
+      {
+        "date": "2026-07-05",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 450.6,
+        "distance_km": 472.2,
+        "cost": 30456.73
+      },
+      {
+        "date": "2026-07-08",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 219.1,
+        "distance_km": 704.5,
+        "cost": 13934.3
+      },
+      {
+        "date": "2026-07-27",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-98",
+        "volume_l": 145.6,
+        "distance_km": 484.3,
+        "cost": 11263.91
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-UAZ-002",
+        "fuel_type": "Бензин АИ-92",
+        "volume_l": 248.9,
+        "distance_km": 390.3,
+        "cost": 15222.08
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-KAM-005",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 482.8,
+        "distance_km": 424.8,
+        "cost": 15389.7
+      },
+      {
+        "date": "2026-07-28",
+        "vehicle_id": "V-GAZ-001",
+        "fuel_type": "Дизельное топливо",
+        "volume_l": 258.1,
+        "distance_km": 734.6,
+        "cost": 16100.63
+      },
+      {
+        "date": "2026-07-26",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Бензин АИ-95",
+        "volume_l": 204.5,
+        "distance_km": 402.2,
+        "cost": 13108.5
+      },
+      {
+        "date": "2026-07-07",
+        "vehicle_id": "V-UAZ-001",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 227.1,
+        "distance_km": 644.9,
+        "cost": 7445.29
+      },
+      {
+        "date": "2026-07-14",
+        "vehicle_id": "V-KAM-003",
+        "fuel_type": "Газ пропан-бутан",
+        "volume_l": 423.4,
+        "distance_km": 611.3,
+        "cost": 14761.28
+      }
+    ],
+    "subtotals": [
+      {
+        "vehicle_id": "V-GAZ-001",
+        "total_volume_l": 15987.1,
+        "total_distance_km": 28563.8,
+        "total_cost": 972369.07
+      },
+      {
+        "vehicle_id": "V-KAM-001",
+        "total_volume_l": 12793.4,
+        "total_distance_km": 20417.6,
+        "total_cost": 812251.94
+      },
+      {
+        "vehicle_id": "V-KAM-002",
+        "total_volume_l": 12928.2,
+        "total_distance_km": 21687.8,
+        "total_cost": 806005.55
+      },
+      {
+        "vehicle_id": "V-KAM-003",
+        "total_volume_l": 11869.4,
+        "total_distance_km": 22346.6,
+        "total_cost": 699881.93
+      },
+      {
+        "vehicle_id": "V-KAM-004",
+        "total_volume_l": 11753.4,
+        "total_distance_km": 18346.5,
+        "total_cost": 759007.16
+      },
+      {
+        "vehicle_id": "V-KAM-005",
+        "total_volume_l": 11138.5,
+        "total_distance_km": 17172.8,
+        "total_cost": 669141.44
+      },
+      {
+        "vehicle_id": "V-MAZ-001",
+        "total_volume_l": 13240.3,
+        "total_distance_km": 23454.9,
+        "total_cost": 835435.53
+      },
+      {
+        "vehicle_id": "V-UAZ-001",
+        "total_volume_l": 13948.4,
+        "total_distance_km": 21152.0,
+        "total_cost": 902875.68
+      },
+      {
+        "vehicle_id": "V-UAZ-002",
+        "total_volume_l": 13256.7,
+        "total_distance_km": 20612.8,
+        "total_cost": 796089.13
+      },
+      {
+        "vehicle_id": "V-ZIL-001",
+        "total_volume_l": 12924.7,
+        "total_distance_km": 22520.0,
+        "total_cost": 765771.51
+      }
+    ],
+    "grand_total": {
+      "total_volume_l": 129840.1,
+      "total_distance_km": 216274.8,
+      "total_cost": 8018828.94
+    }
+  },
+  "assets": {}
+}

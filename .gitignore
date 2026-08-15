@@ -10,6 +10,18 @@
 /Warehouse_client_core/
 /WarehouseMobile/
 
+# QuartermasterDocumentEngine is part of the root monorepo (ADR-0031):
+# its source is tracked, local/generated environment is not.
+/QuartermasterDocumentEngine/.venv/
+/QuartermasterDocumentEngine/.spike/
+/QuartermasterDocumentEngine/spike-out/
+/QuartermasterDocumentEngine/.pytest_cache/
+/QuartermasterDocumentEngine/.mypy_cache/
+/QuartermasterDocumentEngine/.ruff_cache/
+/QuartermasterDocumentEngine/quartermaster_document_engine.egg-info/
+/QuartermasterDocumentEngine/build/
+/QuartermasterDocumentEngine/dist/
+
 # Local IDE/editor
 .idea/
 .vscode/

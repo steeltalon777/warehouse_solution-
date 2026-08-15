@@ -1,0 +1,78 @@
+{
+  "backend": "typst",
+  "backend_version": "0.15.1",
+  "engine_version": "0.1.0",
+  "fixture": "tests/fixtures/waybill/waybill-75.typst.json",
+  "schema_version": 1,
+  "semantic": {
+    "document_number": {
+      "actual": "WB-FIX-75",
+      "expected": "WB-FIX-75",
+      "pass": true
+    },
+    "line_count": {
+      "actual": 75,
+      "expected": 75,
+      "pass": true
+    },
+    "signers_present": {
+      "actual": [
+        "Сдал",
+        "Принял",
+        "Главный бухгалтер"
+      ],
+      "expected": [
+        "Сдал",
+        "Принял",
+        "Главный бухгалтер",
+        "Кладовщик"
+      ],
+      "pass": true
+    }
+  },
+  "structural": {
+    "orientation": "portrait",
+    "page_count": 7,
+    "paper_size": [
+      595,
+      842
+    ],
+    "required_blocks": {
+      "footer": {
+        "expected_substrings": [
+          "Лист",
+          "Страница"
+        ],
+        "pass": true
+      },
+      "header": {
+        "expected_substrings": [
+          "Товарная накладная",
+          "ТОВАРНАЯ НАКЛАДНАЯ"
+        ],
+        "pass": true
+      },
+      "signatures": {
+        "expected_substrings": [
+          "Сдал",
+          "Принял",
+          "Главный бухгалтер"
+        ],
+        "pass": true
+      },
+      "table": {
+        "expected_substrings": [
+          "Наименование",
+          "Кол-во"
+        ],
+        "pass": true
+      }
+    },
+    "table_rows": 75
+  },
+  "template": "spike-waybill-typst@0.1.0",
+  "thresholds": {
+    "changed_pixels": 0.001,
+    "ssim": 0.995
+  }
+}

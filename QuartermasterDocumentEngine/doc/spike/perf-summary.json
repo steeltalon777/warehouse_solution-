@@ -1,0 +1,909 @@
+{
+  "machine": {
+    "os": "Linux-7.0.0-28-generic-x86_64-with-glibc2.39",
+    "uname": {
+      "system": "Linux",
+      "node": "Ubik",
+      "release": "7.0.0-28-generic",
+      "version": "#28~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Wed Jul  1 15:50:57 UTC 2",
+      "machine": "x86_64",
+      "processor": "x86_64"
+    },
+    "cpu_cores_logical": 24,
+    "cpu_cores_physical": 16,
+    "ram_bytes": 33445232640,
+    "ram_gb": 31.1,
+    "python": "3.12.3",
+    "psutil": "7.2.2",
+    "pypdf": "6.15.0",
+    "pymupdf": "1.28.2",
+    "weasyprint": "69.0",
+    "typst": "typst 0.15.1 (9dfd3a08)",
+    "typst_timestamp": 1700000000
+  },
+  "versions": {
+    "weasyprint": "69.0",
+    "typst": "typst 0.15.1 (9dfd3a08)",
+    "pymupdf": "1.28.2",
+    "psutil": "7.2.2",
+    "pypdf": "6.15.0",
+    "python": "3.12.3"
+  },
+  "filters": {
+    "backends": [
+      "weasyprint",
+      "typst"
+    ],
+    "datasets": [
+      "waybill-20",
+      "waybill-500",
+      "fuel-1500"
+    ],
+    "scenarios": [
+      "cold",
+      "10 sequential",
+      "10 parallel",
+      "50 pool=4"
+    ],
+    "iterations": {
+      "cold": 1,
+      "10 sequential": 10,
+      "10 parallel": 10,
+      "50 pool=4": 50
+    },
+    "pool_workers": 4
+  },
+  "targets": {
+    "cold_waybill20_ms": {
+      "target": 1500,
+      "hard": 2500
+    },
+    "cold_waybill500_ms": {
+      "target": 4000,
+      "hard": 7000
+    },
+    "cold_fuel1500_ms": {
+      "target": 8000,
+      "hard": 15000
+    },
+    "warm_ms": {
+      "target": 700,
+      "hard": 1200
+    },
+    "warm_waybill500_ms": {
+      "target": 4000,
+      "hard": 7000
+    },
+    "warm_fuel1500_ms": {
+      "target": 8000,
+      "hard": 15000
+    },
+    "pool_ms": {
+      "target": 30000,
+      "hard": 60000
+    },
+    "worker_rss_bytes": {
+      "target": 419430400,
+      "hard": 734003200
+    }
+  },
+  "results": [
+    {
+      "backend": "weasyprint",
+      "dataset": "waybill-20",
+      "scenario": "cold",
+      "status": "ok",
+      "metrics": {
+        "wall_ms": 659.885266002675,
+        "cpu_user_ms": 510.0,
+        "cpu_system_ms": 40.0,
+        "peak_rss_bytes": 87310336,
+        "output_size_bytes": 20354,
+        "returncode": 0
+      }
+    },
+    {
+      "backend": "weasyprint",
+      "dataset": "waybill-20",
+      "scenario": "10 sequential",
+      "status": "ok",
+      "metrics": {
+        "n": 10,
+        "failures": 0,
+        "wall_ms": {
+          "min": 658.4053129990934,
+          "max": 699.65200900333,
+          "mean": 678.0030027992325,
+          "p50": 677.4847054985003,
+          "p95": 697.0006611998542
+        },
+        "cpu_ms": {
+          "sum_user": 5320.0,
+          "sum_system": 380.0,
+          "sum_total": 5700.0,
+          "mean_total": 570.0
+        },
+        "rss_bytes": {
+          "peak_max": 87666688,
+          "peak_mean": 87402905,
+          "peak_sum": 874029056
+        },
+        "output_bytes": {
+          "mean": 20355,
+          "min": 20354,
+          "max": 20356
+        },
+        "returncodes": [
+          0
+        ]
+      }
+    },
+    {
+      "backend": "weasyprint",
+      "dataset": "waybill-20",
+      "scenario": "10 parallel",
+      "status": "ok",
+      "metrics": {
+        "n": 10,
+        "failures": 0,
+        "wall_ms": {
+          "min": 788.1654429947957,
+          "max": 884.6027020044858,
+          "mean": 849.3981918989448,
+          "p50": 858.6491599962756,
+          "p95": 881.9521498040558
+        },
+        "cpu_ms": {
+          "sum_user": 6160.0,
+          "sum_system": 430.0,
+          "sum_total": 6590.0,
+          "mean_total": 659.0
+        },
+        "rss_bytes": {
+          "peak_max": 87396352,
+          "peak_mean": 25684377,
+          "peak_sum": 256843776
+        },
+        "output_bytes": {
+          "mean": 20356,
+          "min": 20356,
+          "max": 20356
+        },
+        "returncodes": [
+          0
+        ],
+        "total_wall_ms": 886.0024189998512
+      }
+    },
+    {
+      "backend": "weasyprint",
+      "dataset": "waybill-20",
+      "scenario": "50 pool=4",
+      "status": "ok",
+      "metrics": {
+        "n": 50,
+        "failures": 0,
+        "wall_ms": {
+          "min": 657.7523220039438,
+          "max": 735.3442309977254,
+          "mean": 688.0681429994002,
+          "p50": 686.488201499742,
+          "p95": 718.1381689981208
+        },
+        "cpu_ms": {
+          "sum_user": 27770.0,
+          "sum_system": 1960.0,
+          "sum_total": 29730.0,
+          "mean_total": 594.6
+        },
+        "rss_bytes": {
+          "peak_max": 87736320,
+          "peak_mean": 87354163,
+          "peak_sum": 4367708160
+        },
+        "output_bytes": {
+          "mean": 20355,
+          "min": 20355,
+          "max": 20356
+        },
+        "returncodes": [
+          0
+        ],
+        "total_wall_ms": 8942.374338999798
+      }
+    },
+    {
+      "backend": "weasyprint",
+      "dataset": "waybill-500",
+      "scenario": "cold",
+      "status": "ok",
+      "metrics": {
+        "wall_ms": 2575.1224420018843,
+        "cpu_user_ms": 2320.0,
+        "cpu_system_ms": 140.0,
+        "peak_rss_bytes": 157188096,
+        "output_size_bytes": 140081,
+        "returncode": 0
+      }
+    },
+    {
+      "backend": "weasyprint",
+      "dataset": "waybill-500",
+      "scenario": "10 sequential",
+      "status": "ok",
+      "metrics": {
+        "n": 10,
+        "failures": 0,
+        "wall_ms": {
+          "min": 2512.8484009983367,
+          "max": 2589.1660819979734,
+          "mean": 2546.562217299652,
+          "p50": 2544.479776501248,
+          "p95": 2588.0107195971505
+        },
+        "cpu_ms": {
+          "sum_user": 22840.0,
+          "sum_system": 1520.0,
+          "sum_total": 24360.0,
+          "mean_total": 2436.0
+        },
+        "rss_bytes": {
+          "peak_max": 157360128,
+          "peak_mean": 157237248,
+          "peak_sum": 1572372480
+        },
+        "output_bytes": {
+          "mean": 140080,
+          "min": 140074,
+          "max": 140082
+        },
+        "returncodes": [
+          0
+        ]
+      }
+    },
+    {
+      "backend": "weasyprint",
+      "dataset": "waybill-500",
+      "scenario": "10 parallel",
+      "status": "ok",
+      "metrics": {
+        "n": 10,
+        "failures": 0,
+        "wall_ms": {
+          "min": 3067.4181729991687,
+          "max": 3835.302521001722,
+          "mean": 3594.9884888003,
+          "p50": 3809.5080589991994,
+          "p95": 3832.7243567015103
+        },
+        "cpu_ms": {
+          "sum_user": 27130.0,
+          "sum_system": 1870.0,
+          "sum_total": 29000.0,
+          "mean_total": 2900.0
+        },
+        "rss_bytes": {
+          "peak_max": 157491200,
+          "peak_mean": 31433932,
+          "peak_sum": 314339328
+        },
+        "output_bytes": {
+          "mean": 140082,
+          "min": 140082,
+          "max": 140082
+        },
+        "returncodes": [
+          0
+        ],
+        "total_wall_ms": 3837.509056997078
+      }
+    },
+    {
+      "backend": "weasyprint",
+      "dataset": "waybill-500",
+      "scenario": "50 pool=4",
+      "status": "ok",
+      "metrics": {
+        "n": 50,
+        "failures": 0,
+        "wall_ms": {
+          "min": 2586.950331002299,
+          "max": 2934.928563001449,
+          "mean": 2666.302222059894,
+          "p50": 2656.641085002775,
+          "p95": 2787.872894949396
+        },
+        "cpu_ms": {
+          "sum_user": 120580.0,
+          "sum_system": 8030.0,
+          "sum_total": 128610.0,
+          "mean_total": 2572.2
+        },
+        "rss_bytes": {
+          "peak_max": 157483008,
+          "peak_mean": 157231022,
+          "peak_sum": 7861551104
+        },
+        "output_bytes": {
+          "mean": 140080,
+          "min": 140075,
+          "max": 140082
+        },
+        "returncodes": [
+          0
+        ],
+        "total_wall_ms": 34608.31883599894
+      }
+    },
+    {
+      "backend": "weasyprint",
+      "dataset": "fuel-1500",
+      "scenario": "cold",
+      "status": "ok",
+      "metrics": {
+        "wall_ms": 8128.69570300245,
+        "cpu_user_ms": 7500.0,
+        "cpu_system_ms": 530.0,
+        "peak_rss_bytes": 440619008,
+        "output_size_bytes": 463726,
+        "returncode": 0
+      }
+    },
+    {
+      "backend": "weasyprint",
+      "dataset": "fuel-1500",
+      "scenario": "10 sequential",
+      "status": "ok",
+      "metrics": {
+        "n": 10,
+        "failures": 0,
+        "wall_ms": {
+          "min": 8175.594311003806,
+          "max": 8323.287671999424,
+          "mean": 8261.389586000587,
+          "p50": 8250.036534504034,
+          "p95": 8322.581121599796
+        },
+        "cpu_ms": {
+          "sum_user": 75820.0,
+          "sum_system": 5700.0,
+          "sum_total": 81520.0,
+          "mean_total": 8152.0
+        },
+        "rss_bytes": {
+          "peak_max": 440684544,
+          "peak_mean": 440502681,
+          "peak_sum": 4405026816
+        },
+        "output_bytes": {
+          "mean": 463728,
+          "min": 463727,
+          "max": 463730
+        },
+        "returncodes": [
+          0
+        ]
+      }
+    },
+    {
+      "backend": "weasyprint",
+      "dataset": "fuel-1500",
+      "scenario": "10 parallel",
+      "status": "ok",
+      "metrics": {
+        "n": 10,
+        "failures": 0,
+        "wall_ms": {
+          "min": 9377.317958002095,
+          "max": 13035.803942999337,
+          "mean": 12390.013450699189,
+          "p50": 13010.451046997332,
+          "p95": 13033.269577649844
+        },
+        "cpu_ms": {
+          "sum_user": 91900.0,
+          "sum_system": 6450.0,
+          "sum_total": 98350.0,
+          "mean_total": 9835.0
+        },
+        "rss_bytes": {
+          "peak_max": 440340480,
+          "peak_mean": 132045619,
+          "peak_sum": 1320456192
+        },
+        "output_bytes": {
+          "mean": 463729,
+          "min": 463729,
+          "max": 463729
+        },
+        "returncodes": [
+          0
+        ],
+        "total_wall_ms": 13038.427366001997
+      }
+    },
+    {
+      "backend": "weasyprint",
+      "dataset": "fuel-1500",
+      "scenario": "50 pool=4",
+      "status": "ok",
+      "metrics": {
+        "n": 50,
+        "failures": 0,
+        "wall_ms": {
+          "min": 8386.106534999271,
+          "max": 9683.104463001655,
+          "mean": 8704.334479480458,
+          "p50": 8648.07309650132,
+          "p95": 9228.499623898824
+        },
+        "cpu_ms": {
+          "sum_user": 401690.0,
+          "sum_system": 28830.0,
+          "sum_total": 430520.0,
+          "mean_total": 8610.4
+        },
+        "rss_bytes": {
+          "peak_max": 441016320,
+          "peak_mean": 440501043,
+          "peak_sum": 22025052160
+        },
+        "output_bytes": {
+          "mean": 463729,
+          "min": 463727,
+          "max": 463734
+        },
+        "returncodes": [
+          0
+        ],
+        "total_wall_ms": 112231.61098200217
+      }
+    },
+    {
+      "backend": "typst",
+      "dataset": "waybill-20",
+      "scenario": "cold",
+      "status": "ok",
+      "metrics": {
+        "wall_ms": 159.617186000105,
+        "cpu_user_ms": 100.0,
+        "cpu_system_ms": 10.0,
+        "peak_rss_bytes": 71286784,
+        "output_size_bytes": 76858,
+        "returncode": 0
+      }
+    },
+    {
+      "backend": "typst",
+      "dataset": "waybill-20",
+      "scenario": "10 sequential",
+      "status": "ok",
+      "metrics": {
+        "n": 10,
+        "failures": 0,
+        "wall_ms": {
+          "min": 156.82633699907456,
+          "max": 176.59541700413683,
+          "mean": 162.14633640047396,
+          "p50": 160.48381550353952,
+          "p95": 173.08173555138637
+        },
+        "cpu_ms": {
+          "sum_user": 1050.0,
+          "sum_system": 90.0,
+          "sum_total": 1140.0,
+          "mean_total": 114.0
+        },
+        "rss_bytes": {
+          "peak_max": 67682304,
+          "peak_mean": 65827225,
+          "peak_sum": 658272256
+        },
+        "output_bytes": {
+          "mean": 76858,
+          "min": 76858,
+          "max": 76858
+        },
+        "returncodes": [
+          0
+        ]
+      }
+    },
+    {
+      "backend": "typst",
+      "dataset": "waybill-20",
+      "scenario": "10 parallel",
+      "status": "ok",
+      "metrics": {
+        "n": 10,
+        "failures": 0,
+        "wall_ms": {
+          "min": 240.1026150037069,
+          "max": 295.78522899828386,
+          "mean": 268.50761129826424,
+          "p50": 268.72171349896234,
+          "p95": 293.08685709729616
+        },
+        "cpu_ms": {
+          "sum_user": 1260.0,
+          "sum_system": 110.0,
+          "sum_total": 1370.0,
+          "mean_total": 137.0
+        },
+        "rss_bytes": {
+          "peak_max": 65572864,
+          "peak_mean": 6557286,
+          "peak_sum": 65572864
+        },
+        "output_bytes": {
+          "mean": 76858,
+          "min": 76858,
+          "max": 76858
+        },
+        "returncodes": [
+          0
+        ],
+        "total_wall_ms": 297.23178099811776
+      }
+    },
+    {
+      "backend": "typst",
+      "dataset": "waybill-20",
+      "scenario": "50 pool=4",
+      "status": "ok",
+      "metrics": {
+        "n": 50,
+        "failures": 0,
+        "wall_ms": {
+          "min": 153.49575000436744,
+          "max": 204.05790400400292,
+          "mean": 170.75084656011313,
+          "p50": 170.1432880036009,
+          "p95": 185.20706949639134
+        },
+        "cpu_ms": {
+          "sum_user": 5550.0,
+          "sum_system": 440.0,
+          "sum_total": 5990.0,
+          "mean_total": 119.8
+        },
+        "rss_bytes": {
+          "peak_max": 71716864,
+          "peak_mean": 66633891,
+          "peak_sum": 3331694592
+        },
+        "output_bytes": {
+          "mean": 76858,
+          "min": 76858,
+          "max": 76858
+        },
+        "returncodes": [
+          0
+        ],
+        "total_wall_ms": 2212.2680230022524
+      }
+    },
+    {
+      "backend": "typst",
+      "dataset": "waybill-500",
+      "scenario": "cold",
+      "status": "ok",
+      "metrics": {
+        "wall_ms": 432.06829900009325,
+        "cpu_user_ms": 130.0,
+        "cpu_system_ms": 10.0,
+        "peak_rss_bytes": 161738752,
+        "output_size_bytes": 1018186,
+        "returncode": 0
+      }
+    },
+    {
+      "backend": "typst",
+      "dataset": "waybill-500",
+      "scenario": "10 sequential",
+      "status": "ok",
+      "metrics": {
+        "n": 10,
+        "failures": 0,
+        "wall_ms": {
+          "min": 407.81341300316853,
+          "max": 440.6077669991646,
+          "mean": 419.7322077008721,
+          "p50": 417.50451200277894,
+          "p95": 437.17824230006954
+        },
+        "cpu_ms": {
+          "sum_user": 1270.0,
+          "sum_system": 90.0,
+          "sum_total": 1360.0,
+          "mean_total": 136.0
+        },
+        "rss_bytes": {
+          "peak_max": 162422784,
+          "peak_mean": 160248627,
+          "peak_sum": 1602486272
+        },
+        "output_bytes": {
+          "mean": 1018186,
+          "min": 1018186,
+          "max": 1018186
+        },
+        "returncodes": [
+          0
+        ]
+      }
+    },
+    {
+      "backend": "typst",
+      "dataset": "waybill-500",
+      "scenario": "10 parallel",
+      "status": "ok",
+      "metrics": {
+        "n": 10,
+        "failures": 0,
+        "wall_ms": {
+          "min": 604.2627719943994,
+          "max": 663.8490710029146,
+          "mean": 633.3587125984195,
+          "p50": 630.887907500437,
+          "p95": 661.0888924999017
+        },
+        "cpu_ms": {
+          "sum_user": 1560.0,
+          "sum_system": 110.0,
+          "sum_total": 1670.0,
+          "mean_total": 167.0
+        },
+        "rss_bytes": {
+          "peak_max": 158011392,
+          "peak_mean": 15801139,
+          "peak_sum": 158011392
+        },
+        "output_bytes": {
+          "mean": 1018186,
+          "min": 1018186,
+          "max": 1018186
+        },
+        "returncodes": [
+          0
+        ],
+        "total_wall_ms": 665.7821650005644
+      }
+    },
+    {
+      "backend": "typst",
+      "dataset": "waybill-500",
+      "scenario": "50 pool=4",
+      "status": "ok",
+      "metrics": {
+        "n": 50,
+        "failures": 0,
+        "wall_ms": {
+          "min": 419.6014600020135,
+          "max": 460.4345050029224,
+          "mean": 437.0149026802392,
+          "p50": 436.41232150184806,
+          "p95": 453.8712952977221
+        },
+        "cpu_ms": {
+          "sum_user": 6710.0,
+          "sum_system": 460.0,
+          "sum_total": 7170.0,
+          "mean_total": 143.4
+        },
+        "rss_bytes": {
+          "peak_max": 162586624,
+          "peak_mean": 160264192,
+          "peak_sum": 8013209600
+        },
+        "output_bytes": {
+          "mean": 1018186,
+          "min": 1018186,
+          "max": 1018186
+        },
+        "returncodes": [
+          0
+        ],
+        "total_wall_ms": 5675.064957998984
+      }
+    },
+    {
+      "backend": "typst",
+      "dataset": "fuel-1500",
+      "scenario": "cold",
+      "status": "ok",
+      "metrics": {
+        "wall_ms": 763.015541000641,
+        "cpu_user_ms": 150.0,
+        "cpu_system_ms": 20.0,
+        "peak_rss_bytes": 278396928,
+        "output_size_bytes": 2249323,
+        "returncode": 0
+      }
+    },
+    {
+      "backend": "typst",
+      "dataset": "fuel-1500",
+      "scenario": "10 sequential",
+      "status": "ok",
+      "metrics": {
+        "n": 10,
+        "failures": 0,
+        "wall_ms": {
+          "min": 748.768702003872,
+          "max": 790.0302659982117,
+          "mean": 767.5510820001364,
+          "p50": 766.1281109976699,
+          "p95": 785.1164000985591
+        },
+        "cpu_ms": {
+          "sum_user": 1560.0,
+          "sum_system": 90.0,
+          "sum_total": 1650.0,
+          "mean_total": 165.0
+        },
+        "rss_bytes": {
+          "peak_max": 279236608,
+          "peak_mean": 275764838,
+          "peak_sum": 2757648384
+        },
+        "output_bytes": {
+          "mean": 2249323,
+          "min": 2249323,
+          "max": 2249323
+        },
+        "returncodes": [
+          0
+        ]
+      }
+    },
+    {
+      "backend": "typst",
+      "dataset": "fuel-1500",
+      "scenario": "10 parallel",
+      "status": "ok",
+      "metrics": {
+        "n": 10,
+        "failures": 0,
+        "wall_ms": {
+          "min": 1136.3736490020528,
+          "max": 1188.9425620029215,
+          "mean": 1162.60724060121,
+          "p50": 1162.4428979994263,
+          "p95": 1186.3241938026476
+        },
+        "cpu_ms": {
+          "sum_user": 1760.0,
+          "sum_system": 100.0,
+          "sum_total": 1860.0,
+          "mean_total": 186.0
+        },
+        "rss_bytes": {
+          "peak_max": 279654400,
+          "peak_mean": 27965440,
+          "peak_sum": 279654400
+        },
+        "output_bytes": {
+          "mean": 2249323,
+          "min": 2249323,
+          "max": 2249323
+        },
+        "returncodes": [
+          0
+        ],
+        "total_wall_ms": 1191.2933619969408
+      }
+    },
+    {
+      "backend": "typst",
+      "dataset": "fuel-1500",
+      "scenario": "50 pool=4",
+      "status": "ok",
+      "metrics": {
+        "n": 50,
+        "failures": 0,
+        "wall_ms": {
+          "min": 764.8945860055392,
+          "max": 814.4041480045416,
+          "mean": 788.8241934603138,
+          "p50": 788.1773250010156,
+          "p95": 807.0693891982955
+        },
+        "cpu_ms": {
+          "sum_user": 8110.0,
+          "sum_system": 540.0,
+          "sum_total": 8650.0,
+          "mean_total": 173.0
+        },
+        "rss_bytes": {
+          "peak_max": 279420928,
+          "peak_mean": 275819970,
+          "peak_sum": 13790998528
+        },
+        "output_bytes": {
+          "mean": 2249323,
+          "min": 2249323,
+          "max": 2249323
+        },
+        "returncodes": [
+          0
+        ],
+        "total_wall_ms": 10233.026827998401
+      }
+    }
+  ],
+  "in_process": {
+    "status": "skipped",
+    "reason": "weasyprint backend not selected",
+    "in_process_typst": {
+      "status": "not-measured",
+      "reason": "PyPI typst-py is not installed; Typst 0.15.1 ships CLI only. In-process measurement would require a separate evaluation (tracked as future work)."
+    }
+  },
+  "distribution": {
+    "weasyprint_venv_bytes": 523679204,
+    "weasyprint_venv_mb": 499.4,
+    "weasyprint_package_bytes": 2648158,
+    "weasyprint_package_mb": 2.5,
+    "typst_root_bytes": 73245273,
+    "typst_root_mb": 69.9,
+    "typst_binary_bytes": 55739488,
+    "typst_binary_mb": 53.2,
+    "paths": {
+      "venv": "/home/makc/AI_sandbox/warehouse_solution/QuartermasterDocumentEngine/.venv",
+      "weasyprint_package": "/home/makc/AI_sandbox/warehouse_solution/QuartermasterDocumentEngine/.venv/lib/python3.12/site-packages/weasyprint",
+      "typst_root": "/home/makc/AI_sandbox/warehouse_solution/QuartermasterDocumentEngine/.spike/typst-0.15.1",
+      "typst_binary": "/home/makc/AI_sandbox/warehouse_solution/QuartermasterDocumentEngine/.spike/typst-0.15.1/typst-x86_64-unknown-linux-musl/typst"
+    },
+    "display": {
+      "venv": "529 MB",
+      "weasyprint_package": "2.9 MB",
+      "weasyprint_transitive_pure_python": "35.5 MB",
+      "weasyprint_native_system_libs_apt": "~50 MB (NOT in venv)",
+      "typst_root": "70 MB",
+      "typst_binary": "54 MB (55739488 bytes)"
+    },
+    "weasyprint_transitive_pure_python_bytes": 37224448,
+    "weasyprint_native_system_note": "WeasyPrint requires libcairo2, libpango-1.0-0, libgdk-pixbuf-2.0-0, libpangoft2-1.0-0, libffi, libxml2, libpangocairo-1.0-0 — must be apt-installed on a fresh container; not part of the venv. Phase 5 deployment MUST budget for these (~50 MB apt packages). Typst has no such requirement."
+  },
+  "runtime_dependencies": {
+    "Pillow": "12.3.0",
+    "PyMuPDF": "1.28.2",
+    "PyYAML": "6.0.3",
+    "cffi": "2.1.1",
+    "click": "8.4.2",
+    "cssselect2": "0.9.0",
+    "fonttools": "4.63.0",
+    "jinja2": "3.1.6",
+    "jsonschema": "4.26.0",
+    "psutil": "7.2.2",
+    "pydyf": "0.12.1",
+    "pypdf": "6.15.0",
+    "tinycss2": "1.5.1",
+    "weasyprint": "69.0"
+  },
+  "phase21": {
+    "baseline_commit": "1c3ee5c (Phase 2 T9-T12)",
+    "phase21_fixes": [
+      "W1: Typst backend now writes full normalized envelope to document.json",
+      "W2: Determinism terminology now distinguishes byte-deterministic (Typst) from visually/structurally deterministic (WeasyPrint)",
+      "W3: WeasyPrint package size corrected from 24.2 MB to 2.9 MB (artefact)",
+      "W4: Evidence section refreshed with 212 passing tests",
+      "Note-1: Watermark flag implemented in two spike templates (review-fix)",
+      "Note-2: Per-backend output_formats surfaced via module-level SUPPORTED_FORMATS",
+      "Note-3: Windows-binary SHA = unverified-no-windows-env kept honest"
+    ],
+    "new_typst_waybill_density": {
+      "wb1_pages": 1,
+      "wb20_pages": 2,
+      "wb75_pages": 7,
+      "wb200_pages": 17,
+      "wb500_pages": 42,
+      "weasy_baseline_wb500_pages": 18,
+      "ratio": 2.3,
+      "pre_fix_wb500_pages": 124
+    },
+    "rebench_note": "Re-ran 24-cell matrix with the density-fixed Typst waybill template. WeasyPrint numbers unchanged from the original Phase 2 run (no template change on the WeasyPrint side). Pool=4 WeasyPrint fuel-1500 remains at ~112 s on this machine (≈2× the SPEC hard target)."
+  }
+}

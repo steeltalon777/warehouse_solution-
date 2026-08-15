@@ -1,0 +1,67 @@
+{
+  "backend": "weasyprint",
+  "backend_version": "69.0",
+  "engine_version": "0.1.0",
+  "fixture": "tests/fixtures/fuel/fuel-report-500.weasy.json",
+  "schema_version": 1,
+  "semantic": {
+    "document_number": {
+      "actual": "",
+      "expected": "FR-FIX-500",
+      "pass": false
+    },
+    "line_count": {
+      "actual": 500,
+      "expected": 500,
+      "pass": true
+    },
+    "signers_present": {
+      "actual": [],
+      "expected": [
+        "Ответственный"
+      ],
+      "pass": false
+    }
+  },
+  "structural": {
+    "orientation": "landscape",
+    "page_count": 19,
+    "paper_size": [
+      842,
+      595
+    ],
+    "required_blocks": {
+      "footer": {
+        "expected_substrings": [
+          "Лист",
+          "Страница"
+        ],
+        "pass": true
+      },
+      "header": {
+        "expected_substrings": [
+          "Отчёт по расходу",
+          "ОТЧЁТ ПО РАСХОДУ"
+        ],
+        "pass": true
+      },
+      "signatures": {
+        "expected_substrings": [],
+        "pass": true
+      },
+      "table": {
+        "expected_substrings": [
+          "Объём",
+          "Пробег"
+        ],
+        "pass": true
+      }
+    },
+    "table_rows": 500
+  },
+  "template": "spike-fuel-report-weasy@0.1.0",
+  "thresholds": {
+    "changed_pixels": 0.001,
+    "ssim": 0.995
+  }
+}

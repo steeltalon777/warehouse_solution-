@@ -311,10 +311,15 @@
 
 #let render_table(rows, config) = {
   block[
-    // leading 0.4em reproduces the legacy table line box (~8.5 mm per
-    // single-line row incl. 2mm cell inset) that the page capacities
-    // were calibrated against (TZ-V3.1I rev.7).
-    #set par(leading: 0.4em)
+    // Legacy line-box geometry: WeasyPrint lays out DejaVu Sans 11pt
+    // with a ~12.8 pt line box (1.164 em). Typst's default table-cell
+    // line box is only ~0.76 em — rows would be visibly compressed
+    // and the last text line would hug the row border. The explicit
+    // top/bottom edges restore the legacy line box, so a table row
+    // always has enough height for the actually rendered wrapped
+    // content (one visual unit = one 12.8 pt line + 2 mm insets).
+    #set par(leading: 0pt)
+    #set text(top-edge: 0.582em, bottom-edge: -0.582em)
     #table(
       columns: (11mm, 1fr, 24mm, 28mm),
       stroke: config.typography.table-stroke + config.typography.body-color,

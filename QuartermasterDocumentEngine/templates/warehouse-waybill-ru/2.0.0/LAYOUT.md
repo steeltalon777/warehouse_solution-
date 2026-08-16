@@ -32,6 +32,15 @@ legacy Django/WeasyPrint form (`Warehouse_web@133e2fa`,
   (`28 mm`, right). Border `0.75 pt` `#111827` (legacy 1 px), header
   row fill `#f3f4f6` (legacy `th` background), cell inset `2 mm`
   (legacy `td` padding).
+* Table line box: Typst's default table-cell line box for DejaVu Sans
+  is only ~0.76 em, which would compress rows and push the last text
+  line against the row border. `render-table` restores the legacy
+  ~1.164 em line box with
+  `#set text(top-edge: 0.582em, bottom-edge: -0.582em)` and
+  `#set par(leading: 0pt)` — a table row always has enough height for
+  the actually rendered wrapped content, and one visual unit equals
+  one 12.8 pt line + 2 mm insets, exactly like the legacy renderer
+  (verified against WeasyPrint row geometry).
 * Each logical page is rendered as one non-breakable block separated
   by an explicit `pagebreak()` — Typst never decides where pages
   break.
@@ -112,6 +121,21 @@ TZ-V3.1I rev. 7):
 * Failure behaviour: a line taller than any page role aborts the
   render with the same error messages the legacy renderer raised as
   `DocumentPdfRenderError` (Typst `panic`, engine exit code 5).
+
+Known worst-case note: a page filled with ALL single-line rows at
+full capacity (e.g. 22 rows on the first page, 28 on a middle page)
+consumes slightly more than the 267 mm frame (rows are 8.5 mm/unit
+exactly like the legacy budget, but the fixed page overhead —
+header/thead/storekeeper/counter — is marginally larger than the
+legacy calibration constants). The frozen legacy renderer handles
+this input by producing an orphan counter page (a documented legacy
+defect class that rev.7 was designed to avoid); the Typst template
+keeps the page count deterministic with at most a ~2 mm overhang of
+the sheet counter. Real production data (mixed line lengths) never
+hits this case: the canonical fixtures 1/20/75/200/500 render within
+the frame (verified, overflow = 0). Capacities are NOT reduced for
+this case — that would change the accepted legacy allocation
+semantics; the limitation is documented here instead.
 
 Capacities live ONLY in `layout-config.typ` (`page-rows`,
 `operation-last-rows`, `operation-single-rows`). The pagination

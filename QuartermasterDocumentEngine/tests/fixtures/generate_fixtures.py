@@ -5,9 +5,12 @@ Run from repo root: ``python tests/fixtures/generate_fixtures.py``.
 Re-running without source changes produces byte-identical files (asserted by
 ``tests/unit/test_fixtures.py``).
 
-Produces 9 logical fixtures × 2 envelopes = 18 JSON files:
+Produces 14 logical fixtures × 2 envelopes = 28 JSON files:
 
 * ``tests/fixtures/waybill/waybill-{1,20,75,200,500}.{weasy,typst}.json``
+* ``tests/fixtures/waybill/waybill-qde-{1,20,75,200,500}.{weasy,typst}.json``
+  (Phase 6C canonical pair: same document bodies, typst member pins
+  ``warehouse-waybill-ru@2.0.0``)
 * ``tests/fixtures/route-sheet/vehicle-route-sheet-1.{weasy,typst}.json``
 * ``tests/fixtures/fuel/fuel-report-{100,500,1500}.{weasy,typst}.json``
 
@@ -31,6 +34,12 @@ WAYBILL_WEASY_TEMPLATE_ID = "warehouse-waybill-ru"
 WAYBILL_WEASY_TEMPLATE_VERSION = "1.0"
 WAYBILL_TYPST_TEMPLATE_ID = "spike-waybill-typst"
 WAYBILL_TYPST_TEMPLATE_VERSION = "0.1.0"
+# Canonical production template (Phase 6C): the weasy member of the
+# pair reuses the Phase 1 baseline so the harness keeps a
+# structural/semantic comparison backend; the typst member pins the
+# production Typst template.
+WAYBILL_QDE_TYPST_TEMPLATE_ID = "warehouse-waybill-ru"
+WAYBILL_QDE_TYPST_TEMPLATE_VERSION = "2.0.0"
 
 ROUTE_SHEET_WEASY_TEMPLATE_ID = "spike-route-sheet-weasy"
 ROUTE_SHEET_TYPST_TEMPLATE_ID = "spike-route-sheet-typst"
@@ -971,7 +980,7 @@ def make_pair(
 
 
 def main() -> int:
-    """Generate all 18 fixtures. Returns ``0``. Run from repo root."""
+    """Generate all 28 fixtures. Returns ``0``. Run from repo root."""
 
     WAYBILL_DIR.mkdir(parents=True, exist_ok=True)
     ROUTE_DIR.mkdir(parents=True, exist_ok=True)
@@ -998,6 +1007,27 @@ def main() -> int:
                 weasy_template_version=WAYBILL_WEASY_TEMPLATE_VERSION,
                 typst_template_id=WAYBILL_TYPST_TEMPLATE_ID,
                 typst_template_version=WAYBILL_TYPST_TEMPLATE_VERSION,
+            )
+        )
+
+    # Canonical waybills (Phase 6C): same document bodies, pins the
+    # production Typst template 2.0.0 on the typst member.
+    for n in (1, 20, 75, 200, 500):
+        stem = f"waybill-qde-{n}"
+        payload = build_waybill_envelope(
+            n,
+            template_id=WAYBILL_WEASY_TEMPLATE_ID,
+            template_version=WAYBILL_WEASY_TEMPLATE_VERSION,
+        )
+        pairs.append(
+            make_pair(
+                stem=stem,
+                pair_dir=WAYBILL_DIR,
+                payload=payload,
+                weasy_template_id=WAYBILL_WEASY_TEMPLATE_ID,
+                weasy_template_version=WAYBILL_WEASY_TEMPLATE_VERSION,
+                typst_template_id=WAYBILL_QDE_TYPST_TEMPLATE_ID,
+                typst_template_version=WAYBILL_QDE_TYPST_TEMPLATE_VERSION,
             )
         )
 

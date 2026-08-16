@@ -1,0 +1,23 @@
+id: warehouse-waybill-ru
+version: 2.0.0
+document_contract: warehouse.operation-document/v2
+backend: typst
+entrypoint: main.typ
+output_formats:
+  - pdf
+  - png
+locales:
+  - ru-RU
+page:
+  size: A4
+  orientation: portrait
+  margin: "16mm 14mm 14mm"
+capabilities:
+  - multi-page-table
+  - fixed-form
+fonts:
+  - { family: "DejaVu Sans", weight: normal, style: normal, file: "DejaVuSans.ttf" }
+  - { family: "DejaVu Sans", weight: bold, style: normal, file: "DejaVuSans-Bold.ttf" }
+  - { family: "DejaVu Sans", weight: normal, style: italic, file: "DejaVuSans-Oblique.ttf" }
+  - { family: "DejaVu Sans", weight: bold, style: italic, file: "DejaVuSans-BoldOblique.ttf" }
+assets: []

@@ -55,6 +55,46 @@
       "fixture": "tests/fixtures/fuel/fuel-report-500.typst.json",
       "expected": "tests/golden/spike-fuel-report-typst-0.1.0/fuel-report-500.expected.json",
       "lfs": false
+    },
+    {
+      "id": "warehouse-waybill-ru-2.0.0-waybill-qde-1",
+      "template": "warehouse-waybill-ru@2.0.0",
+      "backend": "typst",
+      "fixture": "tests/fixtures/waybill/waybill-qde-1.typst.json",
+      "expected": "tests/golden/warehouse-waybill-ru-2.0.0/waybill-qde-1.expected.json",
+      "lfs": false
+    },
+    {
+      "id": "warehouse-waybill-ru-2.0.0-waybill-qde-20",
+      "template": "warehouse-waybill-ru@2.0.0",
+      "backend": "typst",
+      "fixture": "tests/fixtures/waybill/waybill-qde-20.typst.json",
+      "expected": "tests/golden/warehouse-waybill-ru-2.0.0/waybill-qde-20.expected.json",
+      "lfs": false
+    },
+    {
+      "id": "warehouse-waybill-ru-2.0.0-waybill-qde-75",
+      "template": "warehouse-waybill-ru@2.0.0",
+      "backend": "typst",
+      "fixture": "tests/fixtures/waybill/waybill-qde-75.typst.json",
+      "expected": "tests/golden/warehouse-waybill-ru-2.0.0/waybill-qde-75.expected.json",
+      "lfs": false
+    },
+    {
+      "id": "warehouse-waybill-ru-2.0.0-waybill-qde-200",
+      "template": "warehouse-waybill-ru@2.0.0",
+      "backend": "typst",
+      "fixture": "tests/fixtures/waybill/waybill-qde-200.typst.json",
+      "expected": "tests/golden/warehouse-waybill-ru-2.0.0/waybill-qde-200.expected.json",
+      "lfs": false
+    },
+    {
+      "id": "warehouse-waybill-ru-2.0.0-waybill-qde-500",
+      "template": "warehouse-waybill-ru@2.0.0",
+      "backend": "typst",
+      "fixture": "tests/fixtures/waybill/waybill-qde-500.typst.json",
+      "expected": "tests/golden/warehouse-waybill-ru-2.0.0/waybill-qde-500.expected.json",
+      "lfs": false
     }
   ]
 }

@@ -19,6 +19,8 @@ from qm_engine.envelope import parse_envelope
 
 from tests.fixtures.generate_fixtures import (
     SPIKE_TEMPLATE_VERSION,
+    WAYBILL_QDE_TYPST_TEMPLATE_ID,
+    WAYBILL_QDE_TYPST_TEMPLATE_VERSION,
     WAYBILL_TYPST_TEMPLATE_ID,
     WAYBILL_TYPST_TEMPLATE_VERSION,
     WAYBILL_WEASY_TEMPLATE_ID,
@@ -147,9 +149,9 @@ def test_all_committed_fixtures_parse_and_have_template_pair() -> None:
     ``template_id``/``template_version``.
     """
     by_stem = _all_committed_pairs()
-    assert len(by_stem) == 9, f"expected 9 logical fixtures, got {len(by_stem)}"
+    assert len(by_stem) == 14, f"expected 14 logical fixtures, got {len(by_stem)}"
     total_files = sum(len(backend_map) for backend_map in by_stem.values())
-    assert total_files == 18, f"expected 18 committed files, got {total_files}"
+    assert total_files == 28, f"expected 28 committed files, got {total_files}"
 
     for stem, files in sorted(by_stem.items()):
         weasy_f = files["weasy"]
@@ -162,7 +164,14 @@ def test_all_committed_fixtures_parse_and_have_template_pair() -> None:
         assert weasy_env.document_contract == typst_env.document_contract
         assert _envelope_data(weasy_env.data) == _envelope_data(typst_env.data)
 
-        if stem.startswith("waybill"):
+        if stem.startswith("waybill-qde"):
+            # Phase 6C canonical pair: baseline weasy member + the
+            # production Typst template 2.0.0.
+            assert weasy_env.template_id == WAYBILL_WEASY_TEMPLATE_ID
+            assert weasy_env.template_version == WAYBILL_WEASY_TEMPLATE_VERSION
+            assert typst_env.template_id == WAYBILL_QDE_TYPST_TEMPLATE_ID
+            assert typst_env.template_version == WAYBILL_QDE_TYPST_TEMPLATE_VERSION
+        elif stem.startswith("waybill"):
             assert weasy_env.template_id == WAYBILL_WEASY_TEMPLATE_ID
             assert weasy_env.template_version == WAYBILL_WEASY_TEMPLATE_VERSION
             assert typst_env.template_id == WAYBILL_TYPST_TEMPLATE_ID

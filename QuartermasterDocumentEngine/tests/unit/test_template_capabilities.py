@@ -66,6 +66,13 @@ SPIKE_TEMPLATES: tuple[tuple[str, str], ...] = (
     ("spike-fuel-report-typst", "0.1.0"),
 )
 
+# Canonical production template (Phase 6C). Runs the same generic
+# manifest checks as the spike packages plus production-specific
+# assertions below.
+PRODUCTION_TEMPLATES: tuple[tuple[str, str], ...] = (
+    ("warehouse-waybill-ru", "2.0.0"),
+)
+
 
 def _load(template_id: str, version: str) -> dict[str, Any]:
     pkg = Registry(TEMPLATES).lookup(template_id, version)
@@ -198,3 +205,66 @@ def test_weasyprint_templates_only_declare_pdf_in_output_formats() -> None:
     for tid in ("spike-route-sheet-weasy", "spike-fuel-report-weasy"):
         manifest = _load(tid, "0.1.0")
         assert manifest["output_formats"] == ["pdf"]
+
+
+# ---------------------------------------------------------------------------
+# Canonical production template (warehouse-waybill-ru@2.0.0)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(("template_id", "version"), PRODUCTION_TEMPLATES)
+def test_production_manifest_capabilities_are_known_tokens(
+    template_id: str, version: str
+) -> None:
+    """The production manifest declares known capabilities (multi-page table)."""
+    manifest = _load(template_id, version)
+    caps = manifest.get("capabilities")
+    assert isinstance(caps, list) and caps
+    for entry in caps:
+        assert entry in KNOWN_CAPABILITIES
+    # The waybill form is a fixed print form with a multi-page item table.
+    assert "multi-page-table" in caps
+    assert "fixed-form" in caps
+
+
+@pytest.mark.parametrize(("template_id", "version"), PRODUCTION_TEMPLATES)
+def test_production_manifest_fonts_match_bundled_ttf(
+    template_id: str, version: str
+) -> None:
+    """The production template bundles the four DejaVu Sans variants."""
+    manifest = _load(template_id, version)
+    fonts = manifest.get("fonts")
+    assert isinstance(fonts, list) and fonts
+    declared_files: set[str] = set()
+    for entry in fonts:
+        assert isinstance(entry, dict)
+        assert entry.get("family") == "DejaVu Sans"
+        file_name = entry.get("file")
+        assert isinstance(file_name, str) and file_name in BUNDLED_FONTS
+        declared_files.add(file_name)
+    assert declared_files >= BUNDLED_FONTS
+
+
+@pytest.mark.parametrize(("template_id", "version"), PRODUCTION_TEMPLATES)
+def test_production_manifest_contract_and_formats(
+    template_id: str, version: str
+) -> None:
+    """Canonical waybill targets the warehouse contract, A4 portrait, pdf+png."""
+    manifest = _load(template_id, version)
+    assert manifest["document_contract"] == "warehouse.operation-document/v2"
+    assert manifest["backend"] == "typst"
+    page = manifest["page"]
+    assert page["size"] == "A4"
+    assert page["orientation"] == "portrait"
+    assert isinstance(page.get("margin"), str) and page["margin"]
+    assert "pdf" in manifest["output_formats"]
+    assert "png" in manifest["output_formats"]
+
+
+def test_production_template_package_has_entrypoint_and_layout_doc() -> None:
+    """2.0.0 ships main.typ, layout-config.typ and LAYOUT.md."""
+    package_root = TEMPLATES / "warehouse-waybill-ru" / "2.0.0"
+    manifest = _load("warehouse-waybill-ru", "2.0.0")
+    assert (package_root / manifest["entrypoint"]).is_file()
+    assert (package_root / "layout-config.typ").is_file()
+    assert (package_root / "LAYOUT.md").is_file()

@@ -111,6 +111,34 @@ FAMILY_SIGNERS_EXPECTED: dict[str, list[str]] = {
     "fuel": FUEL_SIGNERS_EXPECTED,
 }
 
+# The canonical production waybill (warehouse-waybill-ru@2.0.0)
+# reproduces the legacy Django/WeasyPrint form: header "Накладная № …",
+# 4-column table, MOVE signature labels, no totals row.
+CANONICAL_WAYBILL_TEMPLATE = "warehouse-waybill-ru@2.0.0"
+CANONICAL_WAYBILL_BLOCKS: dict[str, list[str]] = {
+    "header": ["Накладная №"],
+    "table": ["Наименование ТМЦ", "Кол-во"],
+    "signatures": ["Кладовщик", "Операцию разрешил", "Водитель", "Начальник базы", "Груз принял"],
+    "footer": ["Лист"],
+}
+CANONICAL_WAYBILL_SIGNERS = [
+    "Кладовщик",
+    "Операцию разрешил",
+    "Водитель",
+    "Начальник базы",
+    "Груз принял",
+]
+
+
+def _blocks_and_signers_for_template(
+    template: str,
+    family: str,
+) -> tuple[dict[str, list[str]], list[str]]:
+    """Return (block expectations, signer labels) for an entry."""
+    if template == CANONICAL_WAYBILL_TEMPLATE:
+        return CANONICAL_WAYBILL_BLOCKS, CANONICAL_WAYBILL_SIGNERS
+    return FAMILY_BLOCKS[family], FAMILY_SIGNERS_EXPECTED[family]
+
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -165,9 +193,9 @@ def _page_texts(pdf_path: Path) -> list[str]:
         doc.close()
 
 
-def _signers_actual(family: str, sem_fields: dict[str, Any]) -> list[str]:
+def _signers_actual(family: str, sem_fields: dict[str, Any], template: str) -> list[str]:
     """Return the ordered list of actually-rendered signer labels."""
-    expected_labels = FAMILY_SIGNERS_EXPECTED[family]
+    _, expected_labels = _blocks_and_signers_for_template(template, family)
     actual: list[str] = []
     for label in expected_labels:
         key = f"signer_{label}"
@@ -176,9 +204,9 @@ def _signers_actual(family: str, sem_fields: dict[str, Any]) -> list[str]:
     return actual
 
 
-def _signers_pass(family: str, sem_fields: dict[str, Any]) -> bool:
+def _signers_pass(family: str, sem_fields: dict[str, Any], template: str) -> bool:
     """Return True if at least one signer label is present in the PDF."""
-    expected_labels = FAMILY_SIGNERS_EXPECTED[family]
+    _, expected_labels = _blocks_and_signers_for_template(template, family)
     for label in expected_labels:
         key = f"signer_{label}"
         if key in sem_fields and sem_fields[key].get("pass"):
@@ -230,7 +258,7 @@ def build_expected_json(
     table_rows = int(structural_dict["table_rows"])
 
     blocks_pass: dict[str, bool] = structural_dict["blocks_pass"]
-    expected_blocks = FAMILY_BLOCKS[family]
+    expected_blocks, _ = _blocks_and_signers_for_template(entry["template"], family)
     required_blocks: dict[str, dict[str, Any]] = {}
     for name in ("header", "table", "signatures", "footer"):
         required_blocks[name] = {
@@ -242,9 +270,9 @@ def build_expected_json(
     doc_actual, doc_pass = _document_number_actual(family, sem_fields)
 
     expected_line = _line_count(family, envelope)
-    signers_expected = list(FAMILY_SIGNERS_EXPECTED[family])
-    signers_actual = _signers_actual(family, sem_fields)
-    signers_pass = _signers_pass(family, sem_fields)
+    signers_expected = _blocks_and_signers_for_template(entry["template"], family)[1]
+    signers_actual = _signers_actual(family, sem_fields, entry["template"])
+    signers_pass = _signers_pass(family, sem_fields, entry["template"])
 
     return {
         "schema_version": int(schema_version),

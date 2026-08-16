@@ -41,6 +41,9 @@ WHEEL_REQUIRED_SUBSTRINGS = (
     "share/quartermaster_document_engine/templates/warehouse-waybill-ru/0.1.0/main.html",
     "share/quartermaster_document_engine/templates/warehouse-waybill-ru/1.0/manifest.yaml",
     "share/quartermaster_document_engine/templates/warehouse-waybill-ru/1.0/main.html",
+    "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.0.0/manifest.yaml",
+    "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.0.0/main.typ",
+    "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.0.0/layout-config.typ",
     "share/quartermaster_document_engine/contracts/envelope/v1/envelope.schema.json",
     "share/quartermaster_document_engine/contracts/warehouse.operation-document/v2/schema.json",
     "share/quartermaster_document_engine/contracts/fuel.monthly-report/v1/schema.json",
@@ -202,6 +205,9 @@ def test_install_into_venv_resolves_installed_share_paths(
         "fonts/LICENSE",
         "templates/warehouse-waybill-ru/0.1.0/manifest.yaml",
         "templates/warehouse-waybill-ru/1.0/manifest.yaml",
+        "templates/warehouse-waybill-ru/2.0.0/manifest.yaml",
+        "templates/warehouse-waybill-ru/2.0.0/main.typ",
+        "templates/warehouse-waybill-ru/2.0.0/layout-config.typ",
         "contracts/envelope/v1/envelope.schema.json",
         "contracts/warehouse.operation-document/v2/schema.json",
     ):
@@ -231,6 +237,22 @@ def test_install_into_venv_resolves_installed_share_paths(
 
     # The console script entry point is installed too.
     assert (venv_dir / "bin" / "qm-render").is_file()
+
+    # Phase 6C (TZ §25): the production template package must land in
+    # the installed share tree with its runtime files (the registry
+    # discovers a template purely by its manifest.yaml location).
+    pkg_root = share_root / "templates" / "warehouse-waybill-ru" / "2.0.0"
+    for rel in (
+        "manifest.yaml",
+        "main.typ",
+        "layout-config.typ",
+        "components/pagination.typ",
+        "components/signatures.typ",
+    ):
+        assert (pkg_root / rel).is_file(), f"installed 2.0.0 resource missing: {rel}"
+    manifest_text = (pkg_root / "manifest.yaml").read_text(encoding="utf-8")
+    assert "id: warehouse-waybill-ru" in manifest_text
+    assert "version: 2.0.0" in manifest_text
 
 
 def test_install_env_override_beats_installed_share(

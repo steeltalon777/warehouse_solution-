@@ -37,6 +37,31 @@ from typing import Any
 from tests.harness._internals import detect_family
 
 # ---------------------------------------------------------------------------
+# Template-aware expectations
+# ---------------------------------------------------------------------------
+
+# The canonical production waybill (warehouse-waybill-ru@2.0.0)
+# reproduces the frozen legacy Django/WeasyPrint form:
+# * it has NO totals row, so the total_lines marker must not veto;
+# * its MOVE signature labels differ from the Phase 1 spike baseline.
+CANONICAL_WAYBILL_TEMPLATE: tuple[str, str] = ("warehouse-waybill-ru", "2.0.0")
+CANONICAL_WAYBILL_SIGNERS: tuple[str, ...] = (
+    "Кладовщик",
+    "Операцию разрешил",
+    "Водитель",
+    "Начальник базы",
+    "Груз принял",
+)
+
+
+def template_key(envelope: dict[str, Any]) -> tuple[str, str]:
+    """Return ``(template_id, template_version)`` from an envelope."""
+    return (
+        str(envelope.get("template_id", "")),
+        str(envelope.get("template_version", "")),
+    )
+
+# ---------------------------------------------------------------------------
 # Result dataclasses
 # ---------------------------------------------------------------------------
 
@@ -222,6 +247,7 @@ def check_waybill_semantic(
     pass the gate without forcing a Phase 1 template change.
     """
     all_text = "\n".join(page_texts)
+    is_canonical = template_key(envelope) == CANONICAL_WAYBILL_TEMPLATE
     fields: dict[str, SemanticFieldResult] = {}
 
     doc_number = envelope.get("document_number", "") or ""
@@ -280,7 +306,9 @@ def check_waybill_semantic(
             )
             quantity_sample_done += 1
 
-    # Total lines marker.
+    # Total lines marker. The canonical production form (legacy
+    # Django waybill) has NO totals row — for that template the
+    # field is informational and does not contribute to the veto.
     total_lines = envelope["document"].get("total_lines") or len(lines)
     marker_variants = [
         f"Всего наименований: {total_lines}",
@@ -293,7 +321,14 @@ def check_waybill_semantic(
         field="total_lines",
         expected=marker_variants,
         actual=found,
-        pass_=bool(found),
+        pass_=bool(found) or is_canonical,
+        notes=(
+            []
+            if found
+            else ["canonical form has no totals row; informational"]
+            if is_canonical
+            else ["total-lines marker not found in PDF text"]
+        ),
     )
 
     # Signer labels. The weasy baseline only renders "Сдал" and
@@ -301,10 +336,18 @@ def check_waybill_semantic(
     # role but the baseline template does not, so each signer's
     # field is informational and the overall signer block is
     # considered passing if at least one signer label is present.
+    # The canonical production template renders the MOVE signature
+    # set (Кладовщик + Операцию разрешил + Водитель + Начальник базы
+    # + Груз принял).
     # The individual fields stay in the report but are NOT part of
     # the veto calculation (the aggregate ``signer_block`` is).
+    signer_labels = (
+        CANONICAL_WAYBILL_SIGNERS
+        if is_canonical
+        else ("Сдал", "Принял", "Главный бухгалтер", "Кладовщик")
+    )
     signer_present = False
-    for signer_label in ("Сдал", "Принял", "Главный бухгалтер", "Кладовщик"):
+    for signer_label in signer_labels:
         label_found: bool = signer_label in all_text
         if label_found:
             signer_present = True
@@ -317,7 +360,7 @@ def check_waybill_semantic(
         )
     fields["signer_block"] = SemanticFieldResult(
         field="signer_block",
-        expected="any of [Сдал, Принял, Главный бухгалтер, Кладовщик]",
+        expected=f"any of {list(signer_labels)}",
         actual=["found"] if signer_present else [],
         pass_=signer_present,
         notes=[] if signer_present else ["signer block empty"],
@@ -325,11 +368,15 @@ def check_waybill_semantic(
 
     # Veto policy: gate on identifier fields and signer_block, NOT
     # on individual signer labels (the templates render different
-    # subsets of the expected labels).
-    _waybill_signer_keys = {
-        f"signer_{label}" for label in ("Сдал", "Принял", "Главный бухгалтер", "Кладовщик")
-    }
-    veto = any(not f.pass_ for k, f in fields.items() if k not in _waybill_signer_keys)
+    # subsets of the expected labels). For the canonical template the
+    # total_lines marker is informational (no totals row in the form).
+    _waybill_signer_keys = {f"signer_{label}" for label in signer_labels}
+    _veto_exempt = {"total_lines"} if is_canonical else set()
+    veto = any(
+        not f.pass_
+        for k, f in fields.items()
+        if k not in _waybill_signer_keys and k not in _veto_exempt
+    )
     return SemanticResult(fields=fields, veto=veto)
 
 

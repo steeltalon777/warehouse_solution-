@@ -146,9 +146,29 @@ def ensure_calibration(
 # ---------------------------------------------------------------------------
 
 
-def _backend_label_for_template(template: str) -> str:
-    """Return the backend label implied by a template id@version."""
-    template_id = template.split("@", 1)[0]
+def _backend_label_for_template(template: str, templates_dir: Path | None = None) -> str:
+    """Return the backend label implied by a template id@version.
+
+    The authoritative source is the template's manifest
+    (``backend: typst | weasyprint``) resolved through the registry;
+    the id-suffix heuristics below are the fallback for template
+    dirs where the manifest is unavailable. Manifest-based resolution
+    is required for the canonical pair (``warehouse-waybill-ru@1.0``
+    is weasyprint while ``warehouse-waybill-ru@2.0.0`` is typst).
+    """
+    template_id, _, version = template.partition("@")
+    if templates_dir is not None:
+        try:
+            from qm_engine.registry import Registry
+
+            package = Registry(templates_dir).lookup(template_id, version)
+            backend = str(package.manifest.get("backend", ""))
+            if backend == "typst":
+                return "typst"
+            if backend == "weasyprint":
+                return "weasy"
+        except Exception:  # noqa: BLE001 - fall back to heuristics
+            pass
     if template_id.endswith("-typst"):
         return "typst"
     if template_id.endswith("-weasy") or template_id == "warehouse-waybill-ru":
@@ -157,14 +177,32 @@ def _backend_label_for_template(template: str) -> str:
     return "unknown"
 
 
-def _template_to_fixture(template: str, available_paths: dict[str, Path], default: Path) -> Path:
+def _template_to_fixture(
+    template: str,
+    available_paths: dict[str, Path],
+    default: Path,
+) -> Path:
     """Pick the right fixture file for a given template.
 
-    The fixture's ``template_id`` field is the authoritative source
-    of truth: the weasy/typst pair share the same identifier apart
-    from the suffix. We map by suffix, falling back to the default
-    file when no match is found.
+    The fixture's ``template_id``/``template_version`` fields are the
+    authoritative source of truth: the envelope that pins
+    ``template`` is the one to render. When no fixture pins the
+    template, fall back to the legacy suffix-based mapping (weasy/typst
+    pair sharing the logical stem).
     """
+    template_id, _, version = template.partition("@")
+    for candidate in available_paths.values():
+        if not candidate.exists():
+            continue
+        try:
+            envelope = safe_load_json(candidate)
+        except Exception:  # noqa: BLE001 - skip unreadable fixtures
+            continue
+        if (
+            str(envelope.get("template_id", "")) == template_id
+            and str(envelope.get("template_version", "")) == version
+        ):
+            return candidate
     backend = _backend_label_for_template(template)
     candidate = available_paths.get(backend)
     if candidate is not None:
@@ -220,7 +258,9 @@ def run_comparison(
     default_fixture = weasy_fixture if weasy_fixture.exists() else typst_fixture
     template_to_fixture: dict[str, Path] = {}
     for template in templates:
-        template_to_fixture[template] = _template_to_fixture(template, available, default_fixture)
+        template_to_fixture[template] = _template_to_fixture(
+            template, available, default_fixture
+        )
 
     # Render both backends.
     render_history: list[report.RenderHistory] = []
@@ -228,7 +268,7 @@ def run_comparison(
     envelope_paths: dict[str, Path] = {}
     for template in templates:
         fixture_path = template_to_fixture[template]
-        backend = _backend_label_for_template(template)
+        backend = _backend_label_for_template(template, templates_dir)
         output_pdf = out_dir / f"{backend}.pdf"
         outcome = render_pdf(fixture_path, output_pdf, templates_dir)
         render_history.append(

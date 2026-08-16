@@ -1,0 +1,81 @@
+{
+  "backend": "typst",
+  "backend_version": "0.15.1",
+  "engine_version": "0.1.0",
+  "fixture": "tests/fixtures/waybill/waybill-qde-1.typst.json",
+  "schema_version": 1,
+  "semantic": {
+    "document_number": {
+      "actual": "1/0343/100826",
+      "expected": "WB-FIX-1",
+      "pass": true
+    },
+    "line_count": {
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    "signers_present": {
+      "actual": [
+        "Кладовщик",
+        "Операцию разрешил",
+        "Водитель",
+        "Начальник базы",
+        "Груз принял"
+      ],
+      "expected": [
+        "Кладовщик",
+        "Операцию разрешил",
+        "Водитель",
+        "Начальник базы",
+        "Груз принял"
+      ],
+      "pass": true
+    }
+  },
+  "structural": {
+    "orientation": "portrait",
+    "page_count": 1,
+    "paper_size": [
+      595,
+      842
+    ],
+    "required_blocks": {
+      "footer": {
+        "expected_substrings": [
+          "Лист"
+        ],
+        "pass": false
+      },
+      "header": {
+        "expected_substrings": [
+          "Накладная №"
+        ],
+        "pass": true
+      },
+      "signatures": {
+        "expected_substrings": [
+          "Кладовщик",
+          "Операцию разрешил",
+          "Водитель",
+          "Начальник базы",
+          "Груз принял"
+        ],
+        "pass": true
+      },
+      "table": {
+        "expected_substrings": [
+          "Наименование ТМЦ",
+          "Кол-во"
+        ],
+        "pass": true
+      }
+    },
+    "table_rows": 1
+  },
+  "template": "warehouse-waybill-ru@2.0.0",
+  "thresholds": {
+    "changed_pixels": 0.001,
+    "ssim": 0.995
+  }
+}

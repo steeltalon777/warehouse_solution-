@@ -36,7 +36,7 @@ REQUIRED_KEYS = {
     "semantic",
 }
 
-EXPECTED_ENTRY_COUNT = 6
+EXPECTED_ENTRY_COUNT = 11
 
 
 # ---------------------------------------------------------------------------

@@ -77,6 +77,41 @@ BLOCK_EXPECTATIONS: dict[str, dict[str, list[str]]] = {
     },
 }
 
+# Template-specific block expectations override the family defaults.
+# The canonical production waybill (warehouse-waybill-ru@2.0.0)
+# reproduces the legacy Django/WeasyPrint form, whose wording differs
+# from the Phase 1 spike baseline (header "Накладная № …", 4-column
+# table with "Наименование ТМЦ", MOVE signature labels).
+TEMPLATE_BLOCK_EXPECTATIONS: dict[tuple[str, str], dict[str, list[str]]] = {
+    ("warehouse-waybill-ru", "2.0.0"): {
+        "header": ["Накладная №"],
+        "table": ["Наименование ТМЦ", "Кол-во"],
+        "signatures": [
+            "Кладовщик",
+            "Операцию разрешил",
+            "Водитель",
+            "Начальник базы",
+            "Груз принял",
+        ],
+        "footer": ["Лист"],
+    },
+}
+
+
+def block_expectations(envelope: dict[str, Any], family: str) -> dict[str, list[str]]:
+    """Return the block expectations for an envelope's template.
+
+    Template-specific expectations win; otherwise the family defaults
+    from :data:`BLOCK_EXPECTATIONS` apply.
+    """
+    template_key = (
+        str(envelope.get("template_id", "")),
+        str(envelope.get("template_version", "")),
+    )
+    if template_key in TEMPLATE_BLOCK_EXPECTATIONS:
+        return TEMPLATE_BLOCK_EXPECTATIONS[template_key]
+    return BLOCK_EXPECTATIONS[family]
+
 
 # ---------------------------------------------------------------------------
 # Result dataclass
@@ -158,7 +193,11 @@ def expected_table_rows(envelope: dict[str, Any], family: str) -> int:
     raise ValueError(f"Unknown family: {family}")
 
 
-def check_blocks(family: str, page_texts: list[str]) -> dict[str, bool]:
+def check_blocks(
+    family: str,
+    page_texts: list[str],
+    envelope: dict[str, Any] | None = None,
+) -> dict[str, bool]:
     """Check that required blocks are present in the page text.
 
     An empty substring list marks the block as "not applicable" —
@@ -166,8 +205,15 @@ def check_blocks(family: str, page_texts: list[str]) -> dict[str, bool]:
     This is used for families whose templates deliberately omit a
     block (e.g. the fuel spike templates do not render a signer
     block).
+
+    When ``envelope`` is given, template-specific expectations
+    (see :data:`TEMPLATE_BLOCK_EXPECTATIONS`) take precedence over
+    the family defaults.
     """
-    expectations = BLOCK_EXPECTATIONS[family]
+    if envelope is not None:
+        expectations = block_expectations(envelope, family)
+    else:
+        expectations = BLOCK_EXPECTATIONS[family]
     all_text = "\n".join(page_texts)
     result: dict[str, bool] = {}
     for block_name, substrings in expectations.items():
@@ -239,7 +285,7 @@ def check_structural(
 
     paper, orientation = detect_paper_and_orientation(width, height)
     page_texts = _iter_page_texts(pdf_path)
-    blocks_pass = check_blocks(family, page_texts)
+    blocks_pass = check_blocks(family, page_texts, envelope)
     table_rows = count_table_rows(page_texts, expected_rows)
 
     notes: list[str] = []

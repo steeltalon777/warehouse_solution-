@@ -88,11 +88,39 @@ Fallback chains (identical to legacy `build_waybill_context`):
     (`operation-signature-sets[<operation type>]`); MOVE renders 4
     blocks: `Операцию разрешил`, `Водитель` (driver-style), `Начальник
     базы`, `Груз принял`.
-* Sheet counter `Лист N из M` (right-aligned, `9 pt`, `#4b5563`) —
-  only when the document has more than one page (same rule as
-  legacy).
+* Sheet counter `Лист N из M` — **rendered in the reserved page
+  footer area** (Typst page footer inside the bottom margin), never
+  inside the body flow; shows only when the document has more than
+  one page (same rule as legacy).
 * Capacity: `19` row units for MOVE (per-operation-type values in
   config).
+
+### Footer / counter invariant
+
+The counter/footer owns a reserved area and body content can NEVER:
+
+* overlap the counter — body is constrained to the 267 mm content
+  frame (16/14/14 mm margins); the counter lives below the frame in
+  the bottom margin;
+* clip the counter — the bottom margin (`14 mm`) is always larger
+  than the counter text height;
+* push the counter onto an orphan page — the counter is not part of
+  the body flow at all (Typst page footer), so a full-capacity table
+  cannot displace it;
+* depend on accidental Typst overflow — page breaks are decided by
+  the deterministic pagination engine, the footer is laid out by
+  Typst in the reserved margin.
+
+The reserved budget is explicit in `layout-config.typ`
+(`counter-reserve: 12mm`): the page bottom margin must stay ≥ this
+value for the invariant to hold (the default margin of 14 mm does).
+
+**QDE intentionally does not reproduce the legacy orphan
+footer/page bug**: on pathological full-capacity inputs the frozen
+WeasyPrint renderer pushed the counter onto its own page (an
+orphan «Лист 1 из 2» page); the Typst template renders the counter
+in the reserved footer area instead. This is a deliberate,
+documented difference.
 
 ## 5. Pagination capacities
 
@@ -124,17 +152,18 @@ TZ-V3.1I rev. 7):
 
 Known worst-case note: a page filled with ALL single-line rows at
 full capacity (e.g. 22 rows on the first page, 28 on a middle page)
-consumes slightly more than the 267 mm frame (rows are 8.5 mm/unit
-exactly like the legacy budget, but the fixed page overhead —
-header/thead/storekeeper/counter — is marginally larger than the
-legacy calibration constants). The frozen legacy renderer handles
-this input by producing an orphan counter page (a documented legacy
-defect class that rev.7 was designed to avoid); the Typst template
-keeps the page count deterministic with at most a ~2 mm overhang of
-the sheet counter. Real production data (mixed line lengths) never
-hits this case: the canonical fixtures 1/20/75/200/500 render within
-the frame (verified, overflow = 0). Capacities are NOT reduced for
-this case — that would change the accepted legacy allocation
+consumes almost the whole 267 mm frame (rows are 8.5 mm/unit exactly
+like the legacy budget; the body — header/thead/storekeeper — fits
+the frame, verified: body bottom ≤ 802.2 pt on the pathological
+input). The sheet counter is NOT part of the body flow (it lives in
+the reserved footer area), so it cannot overhang or create an orphan
+page even here; the frozen legacy renderer produced an orphan
+counter page on the same input (a documented legacy defect class
+that rev.7 was designed to avoid) — QDE intentionally does not
+reproduce it. Real production data (mixed line lengths) never hits
+this case: the canonical fixtures 1/20/75/200/500 render within the
+frame (verified, overflow = 0). Capacities are NOT reduced for this
+case — that would change the accepted legacy allocation
 semantics; the limitation is documented here instead.
 
 Capacities live ONLY in `layout-config.typ` (`page-rows`,

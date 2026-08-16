@@ -185,7 +185,17 @@
   empty-row-text: "Нет строк для печати",
 
   // -------------------------------------------------------------------------
-  // H. Sheet counter ("Лист N из M", only when total pages > 1).
+  // H. Sheet counter / footer.
+  //
+  // "Лист N из M" renders in a RESERVED footer area (Typst page
+  // footer), never inside the body flow — table/signature content
+  // can never overlap or clip it, and the counter can never be
+  // pushed onto an orphan page by full-capacity tables. The counter
+  // shows only when the document has more than one page (same rule
+  // as the legacy renderer).
   // -------------------------------------------------------------------------
   counter-prefix: "Лист",
+  // Vertical budget reserved for the counter/footer area. The page
+  // bottom margin must be >= this value (14mm by default).
+  counter-reserve: 12mm,
 )

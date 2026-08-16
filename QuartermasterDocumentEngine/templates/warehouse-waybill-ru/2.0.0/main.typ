@@ -27,6 +27,23 @@
 #set page(
   paper: layout-config.page.size,
   margin: layout-config.page.margin,
+  // The sheet counter lives in the RESERVED footer area (bottom
+  // margin), so body content can never overlap/clip it and a
+  // full-capacity table can never push it onto an orphan page
+  // (hardening invariant; legacy WeasyPrint instead produced an
+  // orphan counter-only page on such inputs — intentionally NOT
+  // reproduced). Shows only when the document has > 1 page.
+  footer: context [
+    #if counter(page).final().first() > 1 [
+      #align(right)[
+        #set text(
+          size: layout-config.typography.counter-size,
+          fill: layout-config.typography.counter-color,
+        )
+        #layout-config.counter-prefix #counter(page).display() из #counter(page).final().first()
+      ]
+    ]
+  ],
 )
 #set text(
   font: "DejaVu Sans",
@@ -345,25 +362,14 @@
   ]
 }
 
-#let render_counter(page_number, total_pages, config) = [
-  #v(4mm)
-  #align(right)[
-    #set text(
-      size: config.typography.counter-size,
-      fill: config.typography.counter-color,
-    )
-    #config.counter-prefix #page_number из #total_pages
-  ]
-]
-
 #let render_page(page_desc, config, blocks) = {
+  // The sheet counter is NOT part of the body flow: it lives in the
+  // reserved page footer (see the page setup above), so body content
+  // can never overlap or clip it.
   block(breakable: false)[
     #render_title(page_desc.is-first, config)
     #render_table(page_desc.lines, config)
     #render_signature_section(page_desc.is-last, config, blocks)
-    #if page_desc.total-pages > 1 [
-      #render_counter(page_desc.page-number, page_desc.total-pages, config)
-    ]
   ]
 }
 

@@ -190,14 +190,39 @@ def _row_numbers(pdf_bytes: bytes, total: int) -> dict[int, int]:
 
 
 def _max_text_bottom(pdf_bytes: bytes) -> float:
-    """Return the max text baseline bottom across all pages."""
+    """Return the max body baseline bottom across all pages.
+
+    The sheet counter is excluded: since the Phase 6C hardening it
+    lives in the reserved page footer (bottom margin) by design and
+    must NOT be counted as body overflow (see LAYOUT.md §4).
+    """
     pymupdf = _pymupdf()
     doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
     bottom = 0.0
     try:
         for page in doc:
             for word in page.get_text("words"):
+                # The sheet counter lives in the reserved footer area
+                # (below the frame) — skip its whole line by the
+                # starting position, not just the "Лист" token.
+                if word[4].startswith("Лист") or word[1] > BOTTOM_LIMIT_PT - 2:
+                    continue
                 bottom = max(bottom, word[3])
+    finally:
+        doc.close()
+    return bottom
+
+
+def _footer_bottom(pdf_bytes: bytes) -> float:
+    """Return the max bottom of the sheet counter footer lines."""
+    pymupdf = _pymupdf()
+    doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
+    bottom = 0.0
+    try:
+        for page in doc:
+            for word in page.get_text("words"):
+                if word[4].startswith("Лист"):
+                    bottom = max(bottom, word[3])
     finally:
         doc.close()
     return bottom
@@ -305,6 +330,9 @@ def test_canonical_fixture_pagination_and_row_integrity(n: int) -> None:
         assert "Грузоотправитель:" in page_texts[0]
         for text in page_texts[1:]:
             assert "Грузоотправитель:" not in text
+        # Counter lives in the reserved footer area — must stay inside
+        # the page (hardening invariant, LAYOUT.md §4).
+        assert _footer_bottom(pdf) <= 841.89 - 2, "counter footer clipped at the page edge"
     else:
         assert "Грузоотправитель:" in page_texts[0]
         assert not any("Лист" in text for text in page_texts)
@@ -380,6 +408,31 @@ def test_empty_document_renders_single_page() -> None:
     assert len(texts) == 1
     assert "Нет строк для печати" in texts[0]
     assert "Кладовщик" in texts[0]
+
+
+def test_pathological_full_capacity_page_footer_invariant() -> None:
+    """All-single-line full-capacity page (30 short lines -> [22, 8]).
+
+    Hardening invariant: the body never overlaps/clips the counter,
+    the counter stays inside its reserved footer area, and there is
+    no orphan counter-only page (legacy produced one on this input —
+    QDE intentionally does not reproduce it).
+    """
+    envelope = _envelope_with_lines(30, _short_lines(30))
+    assert _legacy_pages(envelope["document"]["lines"], CANONICAL_CAPS) == 2
+    pdf = _render(envelope)
+    texts = _page_texts(pdf)
+    assert len(texts) == 2
+    assert "Лист 1 из 2" in texts[0]
+    assert "Лист 2 из 2" in texts[1]
+    rows = _row_numbers(pdf, 30)
+    assert len(rows) == 30 and all(c == 1 for c in rows.values())
+    # Body inside the frame, counter inside the page (footer area).
+    assert _max_text_bottom(pdf) <= BOTTOM_LIMIT_PT
+    assert _footer_bottom(pdf) <= 841.89 - 2
+    # No counter-only page: every page carries table rows.
+    for text in texts:
+        assert any(f"ТМЦ {i}" in text for i in range(1, 31))
 
 
 # ---------------------------------------------------------------------------

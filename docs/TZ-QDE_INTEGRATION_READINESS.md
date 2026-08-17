@@ -41,8 +41,8 @@
 - [x] 2. Phase 6A tests (unit + integration + stand smoke)
 - [x] 3. Phase 6B complete — RenderedDocumentArtifact v2 + cache key
 - [x] 4. Phase 6B tests (unit + integration + migration roundtrip + stand smoke)
-- [ ] 5. Phase 6C complete — production Typst waybill template `warehouse-waybill-ru@2.0.0`
-- [ ] 6. Phase 6C tests (golden + QDE unit/component + harness)
+- [x] 5. Phase 6C complete — production Typst waybill template `warehouse-waybill-ru@2.0.0`
+- [x] 6. Phase 6C tests (golden + QDE unit/component + harness)
 - [ ] 7. Phase 6D complete — SHADOW integration (legacy primary, QDE shadow)
 - [ ] 8. Phase 6D tests (visual diff collected, hash comparison, stand smoke)
 - [ ] 9. Phase 6E complete — acceptance / visual verification

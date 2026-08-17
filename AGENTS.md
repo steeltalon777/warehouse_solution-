@@ -43,6 +43,52 @@ This workspace contains one authoritative backend, one active web client, one hi
 - If tests fail, are unavailable, or were not run, the agent must not commit unless the user explicitly instructs to commit with that limitation documented.
 - Git push is completely forbidden for agents. The user performs all pushes manually.
 
+## GitHub Project Rules
+
+### Данные проекта
+
+- Owner: `steeltalon777`, номер проекта: `1`, имя: `Warehouse Solution`.
+- Control-tower репозиторий (кросс-репо, деплой, инфраструктура, архитектура): `steeltalon777/warehouse_solution-`.
+- Компонентные репозитории:
+  - SyncServer: `steeltalon777/SyncServer`
+  - Django BFF: `steeltalon777/Warehouse_web`
+  - Angular frontend: `steeltalon777/Warehouse_frontend`
+- Проектные значения (статусы, поля, шаблоны команд) — `.opencode/skills/github-project/SKILL.md`.
+  Протокол чтения/обновления доски — глобальный скилл `github-project`.
+
+### Что агенты могут
+
+- Читать доску: `gh project item-list 1 --owner steeltalon777 --limit 100 --format json`.
+- Читать issues (всегда с `--json`), поля проекта (`gh project field-list`), linked PR.
+- Докладывать статус/приоритет/компонент/тип/размер/блокеры/критерии и **рекомендовать** смену статуса.
+
+### Что агентам запрещено
+
+- Создавать, редактировать, закрывать issues; менять любые поля проекта кроме `Status`; добавлять/удалять items; ставить labels/assignees/milestones; создавать/закрывать/мержить PR; переводить задачу в `Done` без проверенных критериев приёмки.
+- Если нужна новая задача — агент описывает проблему текстом, а issue создаёт пользователь вручную.
+
+### Смена статусов (архитектор и ревьюер)
+
+- Архитектор: `Backlog` / `Ready to Work` → `In Progress`; → `Blocked` только при подтверждённом внешнем блокере; комментарии со ссылками на TZ/ADR.
+- Ревьюер: → `Review/QA`; `Review/QA` → `Done` только когда все критерии проверены; → `Blocked` при внешнем блокере.
+- Остальные агенты (build, swarm, cheap_sub) статусы не меняют и комментарии не пишут.
+
+### Обязательная процедура чтения
+
+1. Прочитать items доски в structured JSON.
+2. Найти issue в нужном репозитории и прочитать **тело** через
+   `gh issue view N --repo OWNER/REPO --json number,title,body,state,assignees,labels,comments,url`.
+   Выводы из одного заголовка делать нельзя.
+3. Каждое поле подтверждать из structured-вывода. Не извлечено — так и сообщать:
+   `Field was not extracted from the CLI response.`
+4. Пустое/однострочное тело issue — сообщать `Issue body is not defined`; не додумывать scope, ADR, TZ, файлы.
+5. Отсутствие на доске не доказывает отсутствие issue, и наоборот.
+
+### Требования к токену gh
+
+- Для чтения доски нужен scope `read:project`. Если `gh project item-list` падает с
+  `missing required scopes` — попросить пользователя выполнить `gh auth refresh -s read:project`.
+
 ## Architecture Rules
 
 - All warehouse domain writes go through `SyncServer` services.

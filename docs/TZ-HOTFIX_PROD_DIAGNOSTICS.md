@@ -7,20 +7,20 @@
 
 ## Execution Checklist
 
-- [ ] 0. Context verified
-- [ ] 1. Architecture boundaries confirmed
-- [ ] 2. Implementation: BFF hotfix (URL + event types)
-- [ ] 3. Implementation: SyncServer hotfix (event types)
-- [ ] 4. Unit/component tests complete
-- [ ] 5. Integration/DB tests complete
-- [ ] 6. Stand smoke tests complete
+- [x] 0. Context verified
+- [x] 1. Architecture boundaries confirmed
+- [x] 2. Implementation: BFF hotfix (URL + event types)
+- [x] 3. Implementation: SyncServer hotfix (event types)
+- [x] 4. Unit/component tests complete (targeted; полный прогон отложен — см. п.9)
+- [x] 5. Integration/DB tests complete (targeted; полный прогон отложен)
+- [x] 6. Stand smoke tests complete
 - [ ] 7. UI automation tests — N/A (обоснование в разделе 7)
 - [ ] 8. User scenario tests (production, после деплоя)
-- [ ] 9. Regression checks complete
+- [ ] 9. Regression checks complete (полный прогон отложен по указанию пользователя — «запускай точечно»)
 - [ ] 10. Documentation updated (DEPLOYMENT.md)
 - [ ] 11. Branch `prod` prepared (SHAs зафиксированы, push — пользователем)
-- [ ] 12. Prod backup gate passed (выполняет оператор/пользователь)
-- [ ] 13. Production deployment из ветки `prod` (выполняет оператор/пользователь)
+- [x] 12. Prod backup gate passed (выполняет оператор/пользователь)
+- [x] 13. Production deployment из ветки `prod` (выполняет оператор/пользователь)
 - [ ] 14. Production smoke passed
 - [ ] 15. Final acceptance review complete
 
@@ -339,6 +339,69 @@ docker exec -i pg-main pg_restore --list < ~/backups/syncserver_main_*_hotfix23.
 - Не удалять старые forensic/audit данные.
 - Не логировать и не публиковать secrets.
 - Не рефакторить diagnostics subsystem.
+
+---
+
+## Производственный журнал (hotfix #23, 2026-08-18)
+
+### Preflight (до изменений)
+
+| Репо (VPS) | Ветка | SHA |
+|---|---|---|
+| `~/SyncServer` | `main` | `5f44bf2` |
+| `~/Warehouse_web` | `main` | `82a7169` |
+
+Образы до деплоя (rollback point): `syncserver-syncserver:latest` = `829c37f25775`, `warehouse_web-web:latest` = `9bd7f48dcbba`.
+
+### Backup gate
+
+- Файл: `~/backups/syncserver_main_20260818_131358_hotfix23.dump` (custom format, gzip)
+- Size: `3568011` байт
+- SHA-256: `0d863180c0add27686c7e10121d61f1da2129051a82108f6bb72e7ed2bd6913e`
+- Проверка: `pg_restore --list` — 443 TOC entries, PostgreSQL 16.13. Ничего не восстанавливалось.
+
+### Fix commits
+
+| Репо | Коммит (hotfix) | База |
+|---|---|---|
+| `SyncServer` | `4b228bf` fix(diagnostics): allow draft event types + contract parity test | `5f44bf2` |
+| `Warehouse_web` | `e15f5f1` fix(bff): diagnostics proxy via SyncServerClient | `82a7169` |
+
+Локальные ветки (dev-машина): `hotfix/prod-diagnostics-23` в каждом репо.
+Перенос на VPS: git bundle → fast-forward ветки `prod`.
+
+### Stand verification (dev-стенд)
+
+- SyncServer targeted: `pytest tests/test_diagnostics.py -q` → 10 passed, 1 skipped.
+- BFF targeted: `manage.py test apps.bff_api.tests_diagnostics` → 13 passed.
+- E2E через HTTP: draft_autosaved/restored/lost/cleared → 204; unknown type → 400 (invalid_event_type); строка `draft_autosaved` (frontend_version=hotfix23-smoke) появилась в `diagnostics_ui_events`; `/api/v1/api/v1` в логах — 0.
+- Полные прогоны тестов обоих репозиториев отложены по указанию пользователя (п.9 не закрыт).
+
+### Production deployment
+
+- Ветка `prod` на VPS: `~/SyncServer` @ `4b228bf`, `~/Warehouse_web` @ `e15f5f1` (ff из preflight-состояний).
+- Порядок: build → recreate SyncServer → Warehouse_web. Миграции не запускались. PostgreSQL volume не тронут.
+- Новые образы: `syncserver-syncserver:latest` = `8f2fc5eaa11d`, `warehouse_web-web:latest` = `ee7eb77d642b`.
+
+### Production smoke (частично)
+
+- `docker compose ps`: syncserver/warehouse_web up, pg-main healthy.
+- `GET /api/v1/health` → ok; `/healthz/` → 200; `/` → 302 (логин).
+- Read-only `GET /api/v1/operations?limit=1` → 200 (0.34s внутри сети; первые внешние запросы висли на stale keepalive nginx после recreate — самоустранилось).
+- `/api/v1/api/v1` в логах — 0. Диагностических 400/502 — 0 (до браузерной активности).
+- `diagnostics_ui_events` пуста — ждёт первого реального события из браузера (п.8/14).
+- Связки пользователей: 5 из 6 активных пользователей имеют `sync_user_token` (identity-резолв BFF заработает).
+
+### Ожидает пользователя
+
+- Push `prod` в origin (команды ниже) для сохранения состояния на GitHub.
+- Браузерный сценарий на проде для генерации реального diagnostic-события (п.8/14).
+
+```bash
+# с VPS (или dev-машины после pull) — выполняет пользователь:
+git -C ~/SyncServer push origin prod
+git -C ~/Warehouse_web push origin prod
+```
 
 ---
 

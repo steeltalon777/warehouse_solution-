@@ -7,10 +7,10 @@
 | Ветка | Назначение | Кто меняет |
 |---|---|---|
 | `dev` | Разработка, все изменения агентов и пользователя | Агенты + пользователь |
-| `main` | Релизное состояние — код, идентичный запущенному на проде | Только при деплое |
-| `prod` | Аварийный фолбек — предыдущий `main` | Только при деплое |
+| `main` | Релизное состояние (историческое) | Только при деплое |
+| `prod` | Deploy source прода: production checkout/build на VPS | Только при деплое/горячем фиксе |
 
-**Почему:** `main` = код на проде. Если на проде `git pull` случайно дёрнет `dev` — ничего не сломается. Если нужно откатиться — `prod` содержит последнюю стабильную версию.
+**Почему (hotfix #23):** production checkout application-репозиториев на VPS (`~/SyncServer`, `~/Warehouse_web`) работает из ветки `prod`. Перед каждым деплоем фиксируется предыдущий prod SHA — это rollback point. В `prod` попадает только утверждённый проверенный набор коммитов (fast-forward), без merge незавершённых dev-изменений.
 
 ## Decision Authority
 
@@ -123,23 +123,28 @@ stat -c '%Y' angular_static/index.html
 **⚠️ Критично:** Без этого шага на проде останется старый Angular-билд, даже если Django-код новый.
 Дефолтный `FRONTEND_BUILD_DIR=/app/angular_static` в образе — без volume-маунтов на VPS.
 
-### Шаг 3: Сохранить фолбек на VPS
+### Шаг 3: Зафиксировать rollback point на VPS
+
+Перед обновлением ветки `prod` записать текущие SHA и образы application-сервисов
+(см. журнал в `docs/TZ-HOTFIX_PROD_DIAGNOSTICS.md` и preflight-процедуру):
 
 ```bash
-cd ~/SyncServer && git branch -f prod main
-cd ~/Warehouse_web && git branch -f prod main
+git -C ~/SyncServer rev-parse prod && git -C ~/Warehouse_web rev-parse prod
+docker images --format "{{.Repository}}:{{.Tag}} {{.ID}}" | grep -E "syncserver|warehouse_web"
 ```
 
-### Шаг 4: Git pull dev → main на VPS
+### Шаг 4: Обновить ветку prod на VPS (fast-forward до проверенного коммита)
 
 ```bash
 cd ~/SyncServer
-git checkout main
-git pull origin dev   # или git reset --hard origin/dev если истории разошлись
+git fetch origin
+git checkout prod
+git merge --ff-only <verified_sha>   # или git pull --ff-only origin prod
 
 cd ~/Warehouse_web
-git checkout main
-git pull origin dev
+git fetch origin
+git checkout prod
+git merge --ff-only <verified_sha>
 ```
 
 ### Шаг 5: Пересборка контейнеров
@@ -205,16 +210,18 @@ docker builder prune -a -f
 При критическом сбое:
 
 ```bash
-# Вернуть код на prod (предыдущий стабильный)
+# Вернуть код на предыдущий зафиксированный prod SHA (rollback point)
 cd ~/SyncServer
 git checkout prod
+git reset --hard <previous_prod_sha>
 docker compose up -d --build
 
 cd ~/Warehouse_web
 git checkout prod
+git reset --hard <previous_prod_sha>
 docker compose up -d --build
 
-# Восстановить БД если миграции повредили данные
+# Восстановить БД если миграции повредили данные (только по отдельному решению)
 docker exec -i pg-main psql -U appuser -d syncserver_main < ~/backups/syncserver_main_*_predeploy.sql
 ```
 

@@ -15,13 +15,13 @@
 - [x] 5. Integration/DB tests complete (targeted; полный прогон отложен)
 - [x] 6. Stand smoke tests complete
 - [ ] 7. UI automation tests — N/A (обоснование в разделе 7)
-- [ ] 8. User scenario tests (production, после деплоя)
+- [x] 8. User scenario tests (production, после деплоя)
 - [ ] 9. Regression checks complete (полный прогон отложен по указанию пользователя — «запускай точечно»)
-- [ ] 10. Documentation updated (DEPLOYMENT.md)
+- [x] 10. Documentation updated (DEPLOYMENT.md)
 - [ ] 11. Branch `prod` prepared (SHAs зафиксированы, push — пользователем)
 - [x] 12. Prod backup gate passed (выполняет оператор/пользователь)
 - [x] 13. Production deployment из ветки `prod` (выполняет оператор/пользователь)
-- [ ] 14. Production smoke passed
+- [x] 14. Production smoke passed
 - [ ] 15. Final acceptance review complete
 
 ## Check Rules
@@ -392,10 +392,20 @@ docker exec -i pg-main pg_restore --list < ~/backups/syncserver_main_*_hotfix23.
 - `diagnostics_ui_events` пуста — ждёт первого реального события из браузера (п.8/14).
 - Связки пользователей: 5 из 6 активных пользователей имеют `sync_user_token` (identity-резолв BFF заработает).
 
+### Production smoke — подтверждено пользовательским сценарием (2026-08-18 04:34 UTC)
+
+Пользователь зашёл на prod (root-токен) и открыл экран операций. Результат:
+
+- nginx: `POST /bff/api/v1/diagnostics/ui-events/batch` × 3 → **204** (браузер Chrome, referer `horizonstorage.ru/operations`).
+- BFF-логи: `sync_url=http://syncserver:8000/api/v1/diagnostics/ui-events/batch` — **без удвоения**; `sync_status_code=204`.
+- SyncServer-логи: `POST /api/v1/diagnostics/ui-events/batch` → 204 × 3.
+- `diagnostics_ui_events`: появились реальные события `form_opened`, `draft_autosaved`, `form_closed`, `request_failed`, `response_processing_failed` (route `/operations`). Таблица больше не пуста.
+- События `request_failed`/`response_processing_failed` — бизнес-ошибка submit (HTTP 409, `error_code=unknown`, операция `fb65bff0-…`) — это scope задач #22/#14/#15 (error surface), НЕ сбой цепочки diagnostics; телеметрия их корректно зафиксировала.
+- Серийных 400/502 на diagnostics endpoint нет.
+
 ### Ожидает пользователя
 
 - Push `prod` в origin (команды ниже) для сохранения состояния на GitHub.
-- Браузерный сценарий на проде для генерации реального diagnostic-события (п.8/14).
 
 ```bash
 # с VPS (или dev-машины после pull) — выполняет пользователь:

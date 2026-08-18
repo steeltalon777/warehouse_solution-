@@ -1,0 +1,6 @@
+{
+ "detail": {
+  "code": "source_document_idempotency_conflict",
+  "message": "Source document conflict: source_ref 'sha256:deadbeef' was already used with a different payload"
+ }
+}

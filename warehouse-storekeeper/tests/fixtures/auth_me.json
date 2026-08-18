@@ -1,0 +1,13 @@
+{
+ "user": {
+  "id": "1fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "username": "storekeeper1",
+  "email": "st1@example.local",
+  "full_name": "Иван Кладовщиков",
+  "is_active": true,
+  "is_root": false,
+  "role": "storekeeper",
+  "default_site_id": 1
+ },
+ "device": null
+}

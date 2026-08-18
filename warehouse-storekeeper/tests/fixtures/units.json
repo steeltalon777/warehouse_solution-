@@ -1,0 +1,27 @@
+{
+ "units": [
+  {
+   "id": 1,
+   "name": "штука",
+   "symbol": "шт",
+   "is_active": true,
+   "updated_at": "2026-01-01T00:00:00Z"
+  },
+  {
+   "id": 2,
+   "name": "килограмм",
+   "symbol": "кг",
+   "is_active": true,
+   "updated_at": "2026-01-01T00:00:00Z"
+  },
+  {
+   "id": 3,
+   "name": "метр",
+   "symbol": "м",
+   "is_active": true,
+   "updated_at": "2026-01-01T00:00:00Z"
+  }
+ ],
+ "server_time": "2026-08-03T10:00:00Z",
+ "next_updated_after": null
+}

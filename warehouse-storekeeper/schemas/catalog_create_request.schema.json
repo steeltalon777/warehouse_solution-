@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://warehouse.local/schemas/catalog_create_request.schema.json",
+  "title": "CatalogCreateRequest",
+  "description": "Запрос на создание новой позиции каталога (chief_storekeeper, guarded, только после подтверждения пользователя и проверки дубликатов).",
+  "type": "object",
+  "required": ["name", "unit_id"],
+  "properties": {
+    "name": {"type": "string", "minLength": 1, "maxLength": 255, "description": "Каноническое название позиции"},
+    "unit_id": {"type": "integer", "minimum": 1, "description": "ID единицы измерения (из units list)"},
+    "sku": {"type": ["string", "null"], "maxLength": 100, "description": "Артикул/артикулы через запятую"},
+    "category_id": {"type": ["integer", "null"], "minimum": 1, "description": "ID категории (или null, если unresolved)"},
+    "description": {"type": ["string", "null"], "description": "Описание, тех. характеристики"},
+    "hashtags": {"type": ["array", "null"], "items": {"type": "string"}, "description": "Теги: производитель, тип, размерность"},
+    "source_case_id": {"type": ["string", "null"], "description": "case_id дела, в котором запрошено создание"},
+    "source_line_no": {"type": ["integer", "null"], "description": "line_no исходного документа, вызвавшая создание"},
+    "source_raw_name": {"type": ["string", "null"], "description": "raw_name из extracted_document"},
+    "confirmation_user": {"type": ["string", "null"], "description": "Пользователь, подтвердивший создание"}
+  }
+}

@@ -1,0 +1,27 @@
+{
+ "is_root": false,
+ "available_sites": [
+  {
+   "site_id": 1,
+   "code": "UGD",
+   "name": "Угдан",
+   "is_active": true,
+   "permissions": {
+    "can_view": true,
+    "can_operate": true,
+    "can_manage_catalog": false
+   }
+  },
+  {
+   "site_id": 2,
+   "code": "CHL",
+   "name": "Чулкан",
+   "is_active": true,
+   "permissions": {
+    "can_view": true,
+    "can_operate": false,
+    "can_manage_catalog": false
+   }
+  }
+ ]
+}

@@ -1,0 +1,13 @@
+{
+ "operation_type": "RECEIVE",
+ "site_id": 1,
+ "notes": "Приход по накладной №154",
+ "lines": [
+  {
+   "line_number": 1,
+   "item_id": 10,
+   "qty": 5,
+   "raw_name": "Подшипник 6205"
+  }
+ ]
+}

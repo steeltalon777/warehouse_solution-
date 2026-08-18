@@ -1,0 +1,26 @@
+{
+ "items": [
+  {
+   "site_id": 1,
+   "site_name": "Угдан",
+   "inventory_subject_id": 101,
+   "subject_type": "item",
+   "item_id": 10,
+   "temporary_item_id": null,
+   "resolved_item_id": 10,
+   "resolved_item_name": "Подшипник 6205-2RS",
+   "display_name": "Подшипник 6205-2RS",
+   "item_name": "Подшипник 6205-2RS",
+   "sku": "SKU-10",
+   "unit_id": 1,
+   "unit_symbol": "шт",
+   "category_id": 5,
+   "category_name": "Подшипники",
+   "qty": "25",
+   "updated_at": "2026-08-02T00:00:00Z"
+  }
+ ],
+ "total_count": 1,
+ "page": 1,
+ "page_size": 200
+}

@@ -1,0 +1,7 @@
+{
+ "error": {
+  "code": "CONFLICT",
+  "message": "cannot update operation with status submitted"
+ },
+ "request_id": "req-1"
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://warehouse.local/schemas/operation_intent.schema.json",
+  "title": "OperationIntent",
+  "description": "Назначение документа, выбранное кладовщиком (или указанное сразу в сообщении).",
+  "type": "object",
+  "required": ["intent", "operation_type"],
+  "properties": {
+    "intent": {
+      "type": "string",
+      "enum": ["receipt", "move", "issue", "write_off", "recognize_only"],
+      "description": "1=приход, 2=перемещение, 3=выдача, 4=списание, 5=только распознать"
+    },
+    "operation_type": {
+      "type": ["string", "null"],
+      "enum": ["RECEIVE", "MOVE", "ISSUE", "WRITE_OFF", null]
+    },
+    "site_query": {"type": ["string", "null"], "description": "Склад/площадка как назвал пользователь, напр. «Угдан»"},
+    "site_id": {"type": ["integer", "null"], "minimum": 1},
+    "source_site_id": {"type": ["integer", "null"], "minimum": 1, "description": "Для MOVE"},
+    "destination_site_id": {"type": ["integer", "null"], "minimum": 1, "description": "Для MOVE"},
+    "issued_to_name": {"type": ["string", "null"], "description": "Получатель для выдачи (ISSUE)"},
+    "answers": {
+      "type": "array",
+      "description": "Ответы на пакет уточнений",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question_no": {"type": "integer"},
+          "answer": {"type": "string"}
+        }
+      }
+    }
+  }
+}

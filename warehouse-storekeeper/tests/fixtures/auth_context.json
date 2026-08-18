@@ -1,0 +1,37 @@
+{
+ "user": {
+  "id": "1fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "username": "storekeeper1",
+  "role": "storekeeper"
+ },
+ "role": "storekeeper",
+ "is_root": false,
+ "default_site": {
+  "site_id": 1,
+  "code": "UGD",
+  "name": "Угдан",
+  "is_active": true
+ },
+ "available_sites": [
+  {
+   "site_id": 1,
+   "code": "UGD",
+   "name": "Угдан",
+   "is_active": true,
+   "permissions": {
+    "can_view": true,
+    "can_operate": true,
+    "can_manage_catalog": false
+   }
+  }
+ ],
+ "permissions_summary": {
+  "can_read_operations": true,
+  "can_create_operations": true,
+  "can_read_balances": true,
+  "can_manage_catalog": false,
+  "can_manage_root_admin": false,
+  "is_root": false
+ },
+ "device": null
+}

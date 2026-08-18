@@ -1,0 +1,15 @@
+{
+ "id": 10,
+ "sku": "SKU-10",
+ "name": "Подшипник 6205-2RS",
+ "category_id": 5,
+ "category_name": "Подшипники",
+ "unit_id": 1,
+ "unit_symbol": "шт",
+ "description": null,
+ "is_active": true,
+ "hashtags": null,
+ "requires_review": false,
+ "review_status": null,
+ "updated_at": "2026-08-01T00:00:00Z"
+}

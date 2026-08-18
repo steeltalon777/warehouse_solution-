@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://warehouse.local/schemas/draft_request.schema.json",
+  "title": "DraftRequest",
+  "description": "Входной файл команды `warehouse_api.py draft create --input`. При наличии блока source_document используется POST /api/v1/operations/from-source-document (дедуп по source_ref).",
+  "type": "object",
+  "required": ["operation_type", "site_id", "lines"],
+  "properties": {
+    "operation_type": {
+      "type": "string",
+      "enum": ["RECEIVE", "MOVE", "ISSUE", "ISSUE_RETURN", "EXPENSE", "WRITE_OFF"],
+      "description": "ADJUSTMENT запрещён политикой скилла"
+    },
+    "site_id": {"type": "integer", "minimum": 1},
+    "source_site_id": {"type": ["integer", "null"], "minimum": 1},
+    "destination_site_id": {"type": ["integer", "null"], "minimum": 1},
+    "issued_to_name": {"type": ["string", "null"], "maxLength": 255},
+    "effective_at": {"type": ["string", "null"], "format": "date-time"},
+    "notes": {"type": ["string", "null"], "maxLength": 1000},
+    "client_request_id": {"type": ["string", "null"], "maxLength": 100,
+      "description": "Ключ идемпотентности; если не задан — клиент сгенерирует и выведет в warnings"},
+    "source_document": {
+      "type": ["object", "null"],
+      "required": ["source_ref"],
+      "properties": {
+        "source_ref": {"type": "string", "minLength": 1, "maxLength": 255,
+          "description": "sha256:<hex исходного файла> — ключ серверной дедупликации"},
+        "source_document_type": {"type": "string", "enum": ["invoice", "ocr_scan", "csv_import", "json_import", "external_api"], "default": "ocr_scan"},
+        "source_document_date": {"type": ["string", "null"], "description": "Дата документа, ISO или как распознана"},
+        "number": {"type": ["string", "null"], "description": "Номер накладной (для notes)"},
+        "date": {"type": ["string", "null"], "description": "Дата как в документе (для notes)"},
+        "supplier": {"type": ["string", "null"], "description": "Поставщик (для notes)"}
+      }
+    },
+    "lines": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["qty"],
+        "properties": {
+          "line_number": {"type": ["integer", "null"], "minimum": 1},
+          "item_id": {"type": ["integer", "null"], "minimum": 1,
+            "description": "null → строка не отправляется (warning line_unresolved_skipped)"},
+          "qty": {"type": ["number", "string"], "description": "> 0"},
+          "batch": {"type": ["string", "null"]},
+          "comment": {"type": ["string", "null"]},
+          "raw_name": {"type": ["string", "null"], "maxLength": 255,
+            "description": "Наименование из документа; уходит в source_item_name / comment"},
+          "raw_sku": {"type": ["string", "null"], "maxLength": 100},
+          "raw_unit": {"type": ["string", "null"], "maxLength": 100}
+        }
+      }
+    }
+  }
+}

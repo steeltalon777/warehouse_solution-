@@ -228,8 +228,8 @@ form change 03.09.2026):
 |---|---|---|---|
 | MOVE | `driver` | `Водитель` | driver |
 | MOVE | `goods-received` | `Груз принял` | standard |
-| ISSUE / ISSUE_RETURN / EXPENSE / WRITE_OFF | `write-off-received` | `Имущество принял на списание` | standard |
-| ISSUE / ISSUE_RETURN / EXPENSE / WRITE_OFF | `write-off-approved` | `Списание разрешил` | standard |
+| ISSUE / ISSUE_RETURN / EXPENSE | `received` | `Принял` | standard |
+| WRITE_OFF | `write-off-approved` | `Списание разрешил` | standard |
 | RECEIVE / ADJUSTMENT / CORRECTION | — | (storekeeper only) | — |
 
 The storekeeper line (`Кладовщик`) is prepended to every last-page

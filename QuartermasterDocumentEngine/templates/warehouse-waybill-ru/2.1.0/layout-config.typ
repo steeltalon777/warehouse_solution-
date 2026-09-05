@@ -40,22 +40,23 @@
   // Capacities for the last/single page roles by operation type.
   // "default" is the fallback for unknown operation types.
   // 2.1.0 deltas vs 2.0.0: MOVE lost two standard blocks (19 -> 22);
-  // ISSUE/EXPENSE/WRITE_OFF/ISSUE_RETURN gained one standard block
-  // (25 -> 23); default keeps storekeeper only (unchanged).
+  // ISSUE/ISSUE_RETURN/EXPENSE/WRITE_OFF carry exactly one standard
+  // block each (review round 2), same budget as 2.0.0 (25/19);
+  // default keeps storekeeper only (unchanged).
   operation-last-rows: (
     MOVE: 22,
-    ISSUE: 23,
-    ISSUE_RETURN: 23,
-    EXPENSE: 23,
-    WRITE_OFF: 23,
+    ISSUE: 25,
+    ISSUE_RETURN: 25,
+    EXPENSE: 25,
+    WRITE_OFF: 25,
     "default": 26,
   ),
   operation-single-rows: (
     MOVE: 18,
-    ISSUE: 17,
-    ISSUE_RETURN: 17,
-    EXPENSE: 17,
-    WRITE_OFF: 17,
+    ISSUE: 19,
+    ISSUE_RETURN: 19,
+    EXPENSE: 19,
+    WRITE_OFF: 19,
     "default": 21,
   ),
 
@@ -110,11 +111,14 @@
     gap-y: 4mm,
   ),
   // Declarative signature sets per operation type (customer form
-  // 03.09.2026):
+  // 03.09.2026, review round 2):
   //   * MOVE  — Водитель + Груз принял;
-  //   * ISSUE / ISSUE_RETURN / EXPENSE / WRITE_OFF — Имущество принял
-  //     на списание + Списание разрешил;
+  //   * ISSUE / ISSUE_RETURN / EXPENSE — Принял;
+  //   * WRITE_OFF — Списание разрешил;
   //   * RECEIVE / ADJUSTMENT / CORRECTION — only the storekeeper.
+  // The storekeeper line is always present on the last page for every
+  // operation type; exactly ONE type-dependent block follows it (the
+  // third block of review round 1 is dropped by customer request).
   // A block with "driver: true" renders as a single placeholder line;
   // other blocks render label + position/signature hints + placeholders.
   operation-signature-sets: (
@@ -134,13 +138,6 @@
     ),
     WRITE_OFF: (
       (
-        key: "write-off-received",
-        label: "Имущество принял на списание",
-        position-label: "должность",
-        signature-label: "фио/подпись",
-        driver: false,
-      ),
-      (
         key: "write-off-approved",
         label: "Списание разрешил",
         position-label: "должность",
@@ -150,15 +147,8 @@
     ),
     ISSUE: (
       (
-        key: "write-off-received",
-        label: "Имущество принял на списание",
-        position-label: "должность",
-        signature-label: "фио/подпись",
-        driver: false,
-      ),
-      (
-        key: "write-off-approved",
-        label: "Списание разрешил",
+        key: "received",
+        label: "Принял",
         position-label: "должность",
         signature-label: "фио/подпись",
         driver: false,
@@ -166,15 +156,8 @@
     ),
     ISSUE_RETURN: (
       (
-        key: "write-off-received",
-        label: "Имущество принял на списание",
-        position-label: "должность",
-        signature-label: "фио/подпись",
-        driver: false,
-      ),
-      (
-        key: "write-off-approved",
-        label: "Списание разрешил",
+        key: "received",
+        label: "Принял",
         position-label: "должность",
         signature-label: "фио/подпись",
         driver: false,
@@ -182,15 +165,8 @@
     ),
     EXPENSE: (
       (
-        key: "write-off-received",
-        label: "Имущество принял на списание",
-        position-label: "должность",
-        signature-label: "фио/подпись",
-        driver: false,
-      ),
-      (
-        key: "write-off-approved",
-        label: "Списание разрешил",
+        key: "received",
+        label: "Принял",
         position-label: "должность",
         signature-label: "фио/подпись",
         driver: false,

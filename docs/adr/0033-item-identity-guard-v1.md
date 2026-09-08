@@ -1,6 +1,6 @@
 # ADR-0033 — Item Identity Guard v1: предотвращение дублей ТМЦ в каталоге при создании
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-09-08
 - **Deciders:** пользователь, Architect Agent
 - **Scope:** SyncServer (основной), Warehouse_web (BFF, аддитивно), Warehouse_frontend (минимально); релиз Quartermaster 4.0
@@ -10,15 +10,15 @@
 
 ## Execution Checklist
 
-- [ ] 0. Контекст проверен (файлы/строки из раздела «Контекст» соответствуют текущему `dev`)
-- [ ] 1. Архитектурные границы подтверждены (ItemIdentityService + repo-метод, без миграций)
-- [ ] 2. Этап 1: ядро — `item_identity_service.py`, `catalog_repo.find_identity_candidates`, схема и класс `item_identity_duplicate`
-- [ ] 3. Этап 2: guard на точках входа — materialize (submit), admin create/update, review confirm, legacy approve (flag-only), intra-batch
-- [ ] 4. Этап 3: read-контракты — `GET /catalog/items/identity-candidates`, поле `identity_candidates` в review-item detail
-- [ ] 5. Этап 4: BFF + Angular (pass-through, parser `item_identity_duplicate`, candidates в review detail, warning в inline-модалке)
-- [ ] 6. Unit-тесты завершены (классификация, intra-batch, self-exclusion)
-- [ ] 7. Интеграционные тесты с БД завершены (все точки входа + read-контракты)
-- [ ] 8. Stand smoke тесты завершены (SyncServer :8000, Django :8001)
+- [x] 0. Контекст проверен (файлы/строки из раздела «Контекст» соответствуют текущему `dev`)
+- [x] 1. Архитектурные границы подтверждены (ItemIdentityService + repo-метод, без миграций)
+- [x] 2. Этап 1: ядро — `item_identity_service.py`, `catalog_repo.find_identity_candidates`, схема и класс `item_identity_duplicate`
+- [x] 3. Этап 2: guard на точках входа — materialize (submit), admin create/update, review confirm, legacy approve (flag-only), intra-batch
+- [x] 4. Этап 3: read-контракты — `GET /catalog/items/identity-candidates`, поле `identity_candidates` в review-item detail
+- [ ] 5. Этап 4: BFF + Angular (pass-through, parser `item_identity_duplicate`, candidates в review detail, warning в inline-модалке) — вне Scope backend-задачи 4.0; не выполнено
+- [x] 6. Unit-тесты завершены (классификация, intra-batch, self-exclusion)
+- [x] 7. Интеграционные тесты с БД завершены (все точки входа + read-контракты)
+- [ ] 8. Stand smoke тесты завершены (SyncServer :8000 — пройдено; Django :8001 — BFF вне объёма backend-задачи)
 - [ ] 9. UI automation завершена (`make test-e2e`, Playwright)
 - [ ] 10. Пользовательские сценарии завершены (RECEIVE с дублем → block; partial → flag; merge через review)
 - [ ] 11. Регрессия завершена (`test_temporary_items_phase1.py`, `test_temporary_items_stage3a.py`, `test_operations_service_inventory_subject_write_path.py` — зелёные)

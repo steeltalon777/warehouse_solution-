@@ -158,6 +158,7 @@ Notes:
 | `GET` | `/catalog/read/categories/{category_id}/items` | `X-User-Token` | query: `search`, `page`, `page_size`, `site_id` | `{items, total_count, page, page_size}` |
 | `GET` | `/catalog/read/categories/{category_id}/children` | `X-User-Token` | query: `page`, `page_size`, `include`, `items_preview_limit`, `site_id` | `{categories, total_count, page, page_size}` |
 | `GET` | `/catalog/read/categories/{category_id}/parent-chain` | `X-User-Token` | query: `site_id` | `{category_id, parent_chain_summary}` |
+| `GET` | `/catalog/items/identity-candidates` | `X-User-Token` | query: `name` (required), `unit_id`, `category_id` | `{candidates: [{id, name, sku, unit, category, is_active, requires_review, match}]}` — ADR-0033 Item Identity Guard; `match` ∈ `exact`/`partial` |
 
 ---
 

@@ -21,7 +21,7 @@
 - [ ] 8. Stand smoke тесты завершены (SyncServer :8000 — пройдено; Django :8001 — BFF вне объёма backend-задачи)
 - [ ] 9. UI automation завершена (`make test-e2e`, Playwright)
 - [ ] 10. Пользовательские сценарии завершены (RECEIVE с дублем → block; partial → flag; merge через review)
-- [ ] 11. Регрессия завершена (`test_temporary_items_phase1.py`, `test_temporary_items_stage3a.py`, `test_operations_service_inventory_subject_write_path.py` — зелёные)
+- [x] 11. Регрессия завершена (`test_temporary_items_phase1.py`, `test_temporary_items_stage3a.py`, `test_operations_service_inventory_subject_write_path.py` — зелёные)
 - [ ] 12. Документация обновлена (этот ADR → Accepted, `Functional and WorkLogik.md` сверка, при необходимости README/ARCHITECTURE)
 - [ ] 13. Финальное приёмочное ревью (evidence-таблица проверена)
 

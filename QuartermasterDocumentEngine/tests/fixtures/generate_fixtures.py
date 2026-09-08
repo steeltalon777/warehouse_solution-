@@ -40,6 +40,11 @@ WAYBILL_TYPST_TEMPLATE_VERSION = "0.1.0"
 # production Typst template.
 WAYBILL_QDE_TYPST_TEMPLATE_ID = "warehouse-waybill-ru"
 WAYBILL_QDE_TYPST_TEMPLATE_VERSION = "2.0.0"
+# 2.2.0 measurable-pagination template (TZ-QDE_WAYBILL_PAGINATION_REBALANCE):
+# typst-only fixtures in a SEPARATE directory (the frozen
+# tests/unit/test_fixtures.py contract for tests/fixtures/waybill/ —
+# 14 logical pairs / 28 files — must stay untouched).
+WAYBILL_QDE22_TYPST_TEMPLATE_VERSION = "2.2.0"
 
 ROUTE_SHEET_WEASY_TEMPLATE_ID = "spike-route-sheet-weasy"
 ROUTE_SHEET_TYPST_TEMPLATE_ID = "spike-route-sheet-typst"
@@ -50,6 +55,7 @@ FUEL_TYPST_TEMPLATE_ID = "spike-fuel-report-typst"
 
 REPO = Path(__file__).resolve().parents[2]
 WAYBILL_DIR = REPO / "tests" / "fixtures" / "waybill"
+WAYBILL_QDE22_DIR = REPO / "tests" / "fixtures" / "waybill-qde22"
 ROUTE_DIR = REPO / "tests" / "fixtures" / "route-sheet"
 FUEL_DIR = REPO / "tests" / "fixtures" / "fuel"
 
@@ -1030,6 +1036,24 @@ def main() -> int:
                 typst_template_version=WAYBILL_QDE_TYPST_TEMPLATE_VERSION,
             )
         )
+
+    # Waybills pinned to the 2.2.0 measurable-pagination template:
+    # document bodies identical to the waybill-qde-* pair (the same
+    # freshly-seeded builder call); only the .typst member is written,
+    # into its own directory.
+    WAYBILL_QDE22_DIR.mkdir(parents=True, exist_ok=True)
+    for n in (1, 20, 75, 200, 500):
+        payload = build_waybill_envelope(
+            n,
+            template_id=WAYBILL_WEASY_TEMPLATE_ID,
+            template_version=WAYBILL_WEASY_TEMPLATE_VERSION,
+        )
+        typst = dict(payload)
+        typst["template_id"] = WAYBILL_QDE_TYPST_TEMPLATE_ID
+        typst["template_version"] = WAYBILL_QDE22_TYPST_TEMPLATE_VERSION
+        path = WAYBILL_QDE22_DIR / f"waybill-qde22-{n}.typst.json"
+        _write_json(path, typst)
+        pairs.append((path,))
 
     # Vehicle route sheet (one logical fixture, two envelopes).
     rs_payload = build_route_sheet_envelope(

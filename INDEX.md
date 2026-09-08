@@ -75,6 +75,7 @@
 - `docs/adr/0030-qde-primary-rendering-backend-typst.md` - **Proposed (2026-08-15):** QDE primary rendering backend = Typst 0.15.1.
 - `docs/adr/0031-qde-ownership-and-versioning.md` - **Proposed (2026-08-15):** QDE as monorepo component, closes AUDIT ARC-08.
 - `docs/adr/0032-qde-warehouse-integration-contract.md` - **Proposed (2026-08-15):** Warehouse → QDE integration seam (Phase 6).
+- `docs/adr/0033-item-identity-guard-v1.md` - **Proposed (2026-09-08):** Item Identity Guard v1 — блокировка детерминированных дублей ТМЦ (exact normalized_name + unit + category) на materialize/review-confirm/admin-create, flag для partial-совпадений, без миграций; Quartermaster 4.0.
 
 ### Active Technical Assignments
 

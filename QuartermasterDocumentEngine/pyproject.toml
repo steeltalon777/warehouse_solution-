@@ -77,6 +77,26 @@ qm_engine = ["py.typed"]
     "templates/warehouse-waybill-ru/2.0.0/components/pagination.typ",
     "templates/warehouse-waybill-ru/2.0.0/components/signatures.typ",
 ]
+"share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.1.0" = [
+    "templates/warehouse-waybill-ru/2.1.0/manifest.yaml",
+    "templates/warehouse-waybill-ru/2.1.0/main.typ",
+    "templates/warehouse-waybill-ru/2.1.0/layout-config.typ",
+    "templates/warehouse-waybill-ru/2.1.0/LAYOUT.md",
+]
+"share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.1.0/components" = [
+    "templates/warehouse-waybill-ru/2.1.0/components/pagination.typ",
+    "templates/warehouse-waybill-ru/2.1.0/components/signatures.typ",
+]
+"share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.0" = [
+    "templates/warehouse-waybill-ru/2.2.0/manifest.yaml",
+    "templates/warehouse-waybill-ru/2.2.0/main.typ",
+    "templates/warehouse-waybill-ru/2.2.0/layout-config.typ",
+    "templates/warehouse-waybill-ru/2.2.0/LAYOUT.md",
+]
+"share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.0/components" = [
+    "templates/warehouse-waybill-ru/2.2.0/components/pagination.typ",
+    "templates/warehouse-waybill-ru/2.2.0/components/signatures.typ",
+]
 "share/quartermaster_document_engine/contracts/envelope/v1" = [
     "contracts/envelope/v1/*.json",
 ]

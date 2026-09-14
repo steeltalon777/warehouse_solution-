@@ -57,6 +57,11 @@ WHEEL_REQUIRED_SUBSTRINGS = (
     "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.1/layout-config.typ",
     "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.1/components/pagination.typ",
     "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.1/components/signatures.typ",
+    "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.2/manifest.yaml",
+    "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.2/main.typ",
+    "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.2/layout-config.typ",
+    "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.2/components/pagination.typ",
+    "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.2/components/signatures.typ",
     "share/quartermaster_document_engine/contracts/envelope/v1/envelope.schema.json",
     "share/quartermaster_document_engine/contracts/warehouse.operation-document/v2/schema.json",
     "share/quartermaster_document_engine/contracts/fuel.monthly-report/v1/schema.json",
@@ -299,6 +304,22 @@ def test_install_into_venv_resolves_installed_share_paths(
     manifest221 = (pkg221 / "manifest.yaml").read_text(encoding="utf-8")
     assert "id: warehouse-waybill-ru" in manifest221
     assert "version: 2.2.1" in manifest221
+
+    # 2.2.2 (global pagination balance): the mapped production version
+    # must be self-sufficient in the installed package.
+    pkg222 = share_root / "templates" / "warehouse-waybill-ru" / "2.2.2"
+    for rel in (
+        "manifest.yaml",
+        "main.typ",
+        "layout-config.typ",
+        "LAYOUT.md",
+        "components/pagination.typ",
+        "components/signatures.typ",
+    ):
+        assert (pkg222 / rel).is_file(), f"installed 2.2.2 resource missing: {rel}"
+    manifest222 = (pkg222 / "manifest.yaml").read_text(encoding="utf-8")
+    assert "id: warehouse-waybill-ru" in manifest222
+    assert "version: 2.2.2" in manifest222
 
     # The superseded 2.1.0 stays on disk (frozen, unaccepted).
     pkg21 = share_root / "templates" / "warehouse-waybill-ru" / "2.1.0"

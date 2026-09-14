@@ -149,6 +149,60 @@
       "expected": "tests/golden/warehouse-waybill-ru-2.2.1/waybill-qde221-75.expected.json",
       "lfs": false,
       "t9_compare": false
+    },
+    {
+      "id": "warehouse-waybill-ru-2.2.2-waybill222-receiver",
+      "template": "warehouse-waybill-ru@2.2.2",
+      "backend": "typst",
+      "fixture": "tests/fixtures/waybill-222/waybill222-receiver.typst.json",
+      "expected": "tests/golden/warehouse-waybill-ru-2.2.2/waybill222-receiver.expected.json",
+      "lfs": false,
+      "t9_compare": false
+    },
+    {
+      "id": "warehouse-waybill-ru-2.2.2-waybill222-sender",
+      "template": "warehouse-waybill-ru@2.2.2",
+      "backend": "typst",
+      "fixture": "tests/fixtures/waybill-222/waybill222-sender.typst.json",
+      "expected": "tests/golden/warehouse-waybill-ru-2.2.2/waybill222-sender.expected.json",
+      "lfs": false,
+      "t9_compare": false
+    },
+    {
+      "id": "warehouse-waybill-ru-2.2.2-waybill222-operation",
+      "template": "warehouse-waybill-ru@2.2.2",
+      "backend": "typst",
+      "fixture": "tests/fixtures/waybill-222/waybill222-operation.typst.json",
+      "expected": "tests/golden/warehouse-waybill-ru-2.2.2/waybill222-operation.expected.json",
+      "lfs": false,
+      "t9_compare": false
+    },
+    {
+      "id": "warehouse-waybill-ru-2.2.2-waybill222-basis",
+      "template": "warehouse-waybill-ru@2.2.2",
+      "backend": "typst",
+      "fixture": "tests/fixtures/waybill-222/waybill222-basis.typst.json",
+      "expected": "tests/golden/warehouse-waybill-ru-2.2.2/waybill222-basis.expected.json",
+      "lfs": false,
+      "t9_compare": false
+    },
+    {
+      "id": "warehouse-waybill-ru-2.2.2-waybill222-minimal",
+      "template": "warehouse-waybill-ru@2.2.2",
+      "backend": "typst",
+      "fixture": "tests/fixtures/waybill-222/waybill222-minimal.typst.json",
+      "expected": "tests/golden/warehouse-waybill-ru-2.2.2/waybill222-minimal.expected.json",
+      "lfs": false,
+      "t9_compare": false
+    },
+    {
+      "id": "warehouse-waybill-ru-2.2.2-waybill222-qde75",
+      "template": "warehouse-waybill-ru@2.2.2",
+      "backend": "typst",
+      "fixture": "tests/fixtures/waybill-222/waybill222-qde75.typst.json",
+      "expected": "tests/golden/warehouse-waybill-ru-2.2.2/waybill222-qde75.expected.json",
+      "lfs": false,
+      "t9_compare": false
     }
   ]
 }

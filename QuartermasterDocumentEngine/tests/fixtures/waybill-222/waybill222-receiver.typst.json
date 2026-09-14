@@ -1,0 +1,130 @@
+{
+  "document": {
+    "basis": {
+      "date": null,
+      "number": null,
+      "type": null
+    },
+    "created_by": {
+      "full_name": "Тестовый Пользователь",
+      "role": "chief_storekeeper",
+      "user_id": "00000000-0000-4000-8000-000000000001",
+      "username": "test-user"
+    },
+    "destination_label": "Акша",
+    "destination_site": null,
+    "document_heading": "Товарная накладная ООО АС \"Горизонт\"",
+    "document_title": "Товарная накладная",
+    "generated_at": "2026-06-12T05:50:12.897852+00:00",
+    "issued_to": null,
+    "language": "ru",
+    "lines": [
+      {
+        "batch": null,
+        "category_name": "Без категории",
+        "comment": null,
+        "item_id": 1791,
+        "item_name": "к/т прокладок двигателя Д-21, Д-120 (полный)",
+        "item_sku": "",
+        "line_number": 1,
+        "quantity": 1.0,
+        "unit_name": "Комплект",
+        "unit_symbol": "компл"
+      },
+      {
+        "batch": null,
+        "category_name": "Без категории",
+        "comment": null,
+        "item_id": 1792,
+        "item_name": "Вкладыши ЯМЗ-240 ш СТ (88,00 мм)",
+        "item_sku": "240-1000104СТ",
+        "line_number": 2,
+        "quantity": 1.0,
+        "unit_name": "Комплект",
+        "unit_symbol": "компл"
+      },
+      {
+        "batch": null,
+        "category_name": "Без категории",
+        "comment": null,
+        "item_id": 1793,
+        "item_name": "Сальник 50х70-1,2",
+        "item_sku": "240-1002055",
+        "line_number": 3,
+        "quantity": 1.0,
+        "unit_name": "Штука",
+        "unit_symbol": "шт"
+      }
+    ],
+    "localization": {
+      "currency": "RUB",
+      "date_format": "%d.%m.%Y",
+      "datetime_format": "%d.%m.%Y %H:%M:%S",
+      "language": "ru",
+      "number_decimal_separator": ",",
+      "thousands_separator": " "
+    },
+    "operation_acceptance_state": "pending",
+    "operation_created_at": "2026-06-12T05:50:10.919776+00:00",
+    "operation_effective_at": "2026-06-12T05:42:00+00:00",
+    "operation_id": "c519f71c-c2a3-4ad5-9fe1-7800c05e83de",
+    "operation_notes": "ООО \"Тестовый Поставщик\" с/ф №ТЕСТ-0001 от 05.06.2026",
+    "operation_status": "submitted",
+    "operation_submitted_at": "2026-06-12T05:50:12.869645+00:00",
+    "operation_type": "RECEIVE",
+    "operation_type_label": "Поступление",
+    "organization": {
+      "full_name": "Общество с ограниченной ответственностью Автоматизированные системы \"Горизонт\"",
+      "legal_name": "Общество с ограниченной ответственностью Автоматизированные системы \"Горизонт\"",
+      "short_name": "ООО АС \"Горизонт\""
+    },
+    "receiver": null,
+    "recipient": null,
+    "sender": {
+      "description": "",
+      "organization": {
+        "address": "",
+        "contacts": null,
+        "legal_name": "Общество с ограниченной ответственностью Автоматизированные системы \"Горизонт\"",
+        "short_name": "ООО АС \"Горизонт\"",
+        "tax_id": null
+      },
+      "site_code": "2",
+      "site_id": 2,
+      "site_name": "Акша"
+    },
+    "signatures": {
+      "created_by": "Тестовый Пользователь",
+      "roles": {
+        "accepted_by": null,
+        "chief_accountant": "________________",
+        "handed_over": "Тестовый Пользователь"
+      },
+      "submitted_by": "Тестовый Пользователь"
+    },
+    "source_label": "Акша",
+    "source_site": {
+      "description": "",
+      "site_code": "2",
+      "site_id": 2,
+      "site_name": "Акша"
+    },
+    "submitted_by": {
+      "full_name": "Тестовый Пользователь",
+      "role": "chief_storekeeper",
+      "user_id": "00000000-0000-4000-8000-000000000001",
+      "username": "test-user"
+    },
+    "total_lines": 3,
+    "warehouse_keeper": "Тестовый Пользователь"
+  },
+  "document_contract": "warehouse.operation-document/v2",
+  "document_id": "0385ae37-b269-4ebb-b865-6a1af1e715f9",
+  "document_number": "WB-2-20260612-36f5",
+  "document_type": "waybill",
+  "engine_contract_version": "1.0.0",
+  "locale": "ru-RU",
+  "render_profile": "print",
+  "template_id": "warehouse-waybill-ru",
+  "template_version": "2.2.2"
+}

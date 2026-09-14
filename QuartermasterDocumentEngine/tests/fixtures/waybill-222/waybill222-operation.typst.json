@@ -1,0 +1,148 @@
+{
+  "assets": {},
+  "document": {
+    "basis": {
+      "date": null,
+      "label": "Перемещение Угдан → ДЭУ (КСК)",
+      "number": null,
+      "operation_type_label": "Перемещение",
+      "type": null
+    },
+    "basis_label": "Перемещение Угдан → ДЭУ (КСК)",
+    "consignee_label": "ДЭУ (КСК)",
+    "created_by": {
+      "full_name": "Светлана Викторовна",
+      "role": "chief_storekeeper",
+      "user_id": "7337709e-a82b-4813-8b4d-283addc7a9c3",
+      "username": "Svetlana"
+    },
+    "destination_site": {
+      "description": "",
+      "organization": {
+        "address": "",
+        "contacts": null,
+        "legal_name": "ДЭУ (КСК)",
+        "tax_id": null
+      },
+      "site_code": "4",
+      "site_id": 4,
+      "site_name": "ДЭУ (КСК)"
+    },
+    "document_title": "Товарная накладная",
+    "generated_at": "2026-08-10T03:43:53.693546+00:00",
+    "issued_to": null,
+    "language": "ru",
+    "lines": [
+      {
+        "batch": null,
+        "category_name": "Аксессуары",
+        "comment": null,
+        "item_id": 100008,
+        "item_name": "Болт колеса М18х1.5 с внутренним шестигранником, класс прочности 10.9, оцинкованный, для дисковых и бездисковых колёс грузовых а/м",
+        "item_sku": "",
+        "line_number": 1,
+        "quantity": 14.0,
+        "unit_name": "Штука",
+        "unit_symbol": "шт"
+      },
+      {
+        "batch": null,
+        "category_name": "Топливная система",
+        "comment": null,
+        "item_id": 100016,
+        "item_name": "Фильтр топливный грубой очистки для дизельных двигателей КамАЗ-740, сменный элемент в металлическом корпусе с отстойником",
+        "item_sku": "FUEL-FLT-0002",
+        "line_number": 2,
+        "quantity": 12.75,
+        "unit_name": "Штука",
+        "unit_symbol": "шт"
+      },
+      {
+        "batch": null,
+        "category_name": "ГСМ",
+        "comment": null,
+        "item_id": 100024,
+        "item_name": "Комплект для ремонта бескамерных шин R17-R20, включающий жгуты, вулканизирующую химию и монтажный инструмент в металлическом кейсе",
+        "item_sku": "",
+        "line_number": 3,
+        "quantity": 8.0,
+        "unit_name": "Штука",
+        "unit_symbol": "упак"
+      }
+    ],
+    "localization": {
+      "currency": "RUB",
+      "date_format": "%d.%m.%Y",
+      "datetime_format": "%d.%m.%Y %H:%M:%S",
+      "language": "ru",
+      "number_decimal_separator": ",",
+      "thousands_separator": " "
+    },
+    "operation": null,
+    "operation_acceptance_state": "pending",
+    "operation_effective_at": "2026-08-10T03:42:00+00:00",
+    "operation_id": "867f0f48-f8d2-42d0-955f-65a25d0885c3",
+    "operation_notes": null,
+    "operation_status": "draft",
+    "operation_submitted_at": null,
+    "operation_type": "MOVE",
+    "operation_type_label": "Перемещение",
+    "receiver": {
+      "description": "",
+      "organization": {
+        "address": "",
+        "contacts": null,
+        "legal_name": "ДЭУ (КСК)",
+        "tax_id": null
+      },
+      "site_code": "4",
+      "site_id": 4,
+      "site_name": "ДЭУ (КСК)"
+    },
+    "recipient": null,
+    "sender": {
+      "description": "",
+      "organization": {
+        "address": "",
+        "contacts": null,
+        "legal_name": "Угдан",
+        "tax_id": null
+      },
+      "site_code": "1",
+      "site_id": 1,
+      "site_name": "Угдан"
+    },
+    "signatures": {
+      "created_by": "Светлана Викторовна",
+      "roles": {
+        "accepted_by": null,
+        "chief_accountant": "________________",
+        "handed_over": null
+      },
+      "submitted_by": null
+    },
+    "source_site": {
+      "description": "",
+      "organization": {
+        "address": "",
+        "contacts": null,
+        "legal_name": "Угдан",
+        "tax_id": null
+      },
+      "site_code": "1",
+      "site_id": 1,
+      "site_name": "Угдан"
+    },
+    "submitted_by": null,
+    "total_lines": 3
+  },
+  "document_contract": "warehouse.operation-document/v2",
+  "document_id": "8c2ef0d8-695f-4d57-8073-a9aba81b16ca",
+  "document_number": "WB-FIX-3",
+  "document_type": "waybill",
+  "engine_contract_version": "1.0.0",
+  "locale": "ru-RU",
+  "render_profile": "print",
+  "template_id": "warehouse-waybill-ru",
+  "template_version": "2.2.2"
+}

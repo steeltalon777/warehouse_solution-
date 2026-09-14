@@ -2,6 +2,7 @@
 
 **Дата:** 2026-09-14
 **Reviewer:** Architect (Stage 1 — analysis only, код не менялся)
+**Closure:** 2026-09-14 (Stage 2A–2D) — D1/D2/D3 реализованы, верифицированы и закоммичены; документ переведён в READY FOR 4.0.
 **Контекст:** ADR-0033 frontend принят и закрыт. При приёмке обнаружены три pre-existing backend/BFF дефекта. Angular в этой задаче не меняется.
 **Метод:** доменная политика определена по `Functional and WorkLogik.md` (канонический FR), ADR-0012/0028/0033, коду SyncServer, легаси-сервису `TemporaryItemsResolutionService`, тестам и живому воспроизведению на изолированной тестовой схеме Postgres (in-process ASGI, scratch-скрипт через stdin, схема удалена после прогона; файлы репозитория не создавались).
 
@@ -9,16 +10,40 @@
 
 ## Verdict
 
-> ## Review Item backend **BLOCKS 4.0**
+> ## Review Item backend **READY FOR 4.0**
 >
-> Два RELEASE BLOCKER (D1 — гарантированный 500 на shipped API surface; D3 — молчаливая перманентная порча складского учёта, достижимая через API/BFF в обход UI-блокировки) и один FIX BEFORE 4.0 (D2 — несоответствие каноническому FR §IV.2.1 + инвертированные action flags). Все три исправления — малые, аддитивные, с хорошо определёнными контрактами. После D1+D3 (минимум) вердикт меняется на SAFE FOR 4.0.
+> Закрытие 2026-09-14 (Stage 2A–2C): оба RELEASE BLOCKER (D1, D3) и FIX BEFORE 4.0 (D2) исправлены и верифицированы — targeted и полные тесты, BFF, Angular unit + build, stand smoke. D4 остаётся 4.1 FOLLOW-UP. Перед production release — обязательный read-only аудит прод-БД на ранее возникшие данные (см. «Remediation note» в D3); auto-fix нет.
 
-| # | Дефект | Severity |
+| # | Дефект | Статус | Commit(s) |
+|---|---|---|---|
+| D1 | `GET /review-items/{id}/operations` → 500 MissingGreenlet | ✅ **FIXED** | `ba63ad2` (SyncServer) |
+| D2 | List DTO без `total_balance` / `has_pending_acceptance` | ✅ **FIXED** | `b9e5137` (SyncServer), `0f8f5f4` (Warehouse_frontend), `b98ed92` (Warehouse_web) |
+| D3 | Merge review-item при активном pending acceptance | ✅ **FIXED** | `85ff707` (SyncServer) |
+| D4 (наблюдение) | Detail DTO усекает дробные остатки до `int` | 4.1 FOLLOW-UP | — |
+
+## Implementation closure (Stage 2A–2C)
+
+**D1 (commit `ba63ad2`).** `get_operations_by_item_id` переведён на каноническую eager-load цепочку (`lines→item→temporary_item→resolved_item`; `lines→inventory_subject→temporary_item→resolved_item`), зеркально `list_operations`, без новых абстракций. HTTP-регрессия `tests/test_review_items_operations_greenlet_regression.py`: modern `catalog_item`-строка и реальная legacy `temporary_item`-строка (active + `merged_to_item` resolved-проекции).
+
+**D2 (commits `b9e5137`, `0f8f5f4`, `b98ed92`).** List DTO отдаёт серверные `total_balance: Decimal` (сумма остатков по subject item'а), `has_pending_acceptance` (только pending qty>0) и `has_active_registers` (pending|lost|issued — enforcement-предикат). Агрегация страницы: subjects-map + `SUM(balances)` + `UNION ALL` регистров → константное число запросов; тест `tests/test_review_items_list_action_state.py` (6 сценариев, DB cross-check, list/detail parity, N+1-гард). Angular потребляет server-поля и блокирует destructive actions при `has_active_registers=true`; BFF — pass-through + контракт-тест.
+
+**D3 (commit `85ff707`).** Guard `has_active_registers(source_subject)` → 409 до любых мутаций merge (паритет с `delete_review_item` и legacy-политикой); тесты `tests/test_review_items_merge_guards.py` (8 тестов: pending/lost/issued, state-unchanged, RECEIVE→pending→409→accept→200).
+
+### Verification evidence
+
+| Проверка | Команда | Результат |
 |---|---|---|
-| D1 | `GET /review-items/{id}/operations` → 500 MissingGreenlet | **RELEASE BLOCKER** |
-| D2 | List DTO без `total_balance` / `has_pending_acceptance` | **FIX BEFORE 4.0** |
-| D3 | Merge review-item при активном pending acceptance | **RELEASE BLOCKER** |
-| D4 (наблюдение) | Detail DTO усекает дробные остатки до `int` | 4.1 FOLLOW-UP |
+| SyncServer full | `.venv/bin/python -m pytest -q` | **1004 passed**, 3 skipped, 13 deselected, 6 xfailed |
+| BFF | `python manage.py test apps.bff_api` (Docker) | **126 OK** |
+| Angular unit | `npm run test:unit` | **255 passed** (26 files) |
+| Angular build | `npm run build` | OK |
+| Stand smoke D1 | `GET /review-items/{id}/operations` → 200 (modern item 4768; legacy 849/839 resolved-проекции) | SMOKE_OK |
+| Stand smoke D2 | `GET /review-items` (page 50) — SQL cross-check 50/50, detail parity | SMOKE_OK |
+| Stand smoke D3 | RECEIVE→pending→merge **409**→accept→merge **200** (item 4767) | SMOKE_OK |
+
+### ADR-0033 checklist impact
+
+Отдельных пунктов «§7.1/§7.2» в Execution Checklist ADR-0033 нет: пункт 5 («Этап 4: BFF + Angular…») объединяет обязательные §7.1/§7.2-поверхности и optional §7.3 (warning в inline-модалке). Обязательные поверхности подтверждены прогонами этого closure (BFF 126 OK, включая identity-BFF тесты; Angular 255 passed), однако чек-боксы ADR-0033 в этой docs-only задаче не изменяются — исполнитель/верификатор ADR-0033 является отдельной ролью. **§7.3/optional не закрывается.**
 
 ---
 
@@ -44,6 +69,8 @@
 ---
 
 ## D1 — `GET /review-items/{id}/operations` → 500 MissingGreenlet
+
+> **Статус: ✅ FIXED — commit `ba63ad2` (2026-09-14).** Реализация и verification — в «Implementation closure» выше.
 
 ### Root cause (подтверждён живым воспроизведением)
 
@@ -115,6 +142,8 @@ HTTP status as seen by client: 500
 
 ## D2 — List DTO без `total_balance` / `has_pending_acceptance`
 
+> **Статус: ✅ FIXED — commits `b9e5137` (SyncServer), `0f8f5f4` (Warehouse_frontend), `b98ed92` (Warehouse_web).** Реализация и verification — в «Implementation closure» выше.
+
 ### Root cause
 
 Контракт list-ответа никогда не содержал этих полей ни в одной версии backend:
@@ -169,6 +198,8 @@ HTTP status as seen by client: 500
 ---
 
 ## D3 — Merge review-item при существующем pending acceptance
+
+> **Статус: ✅ FIXED — commit `85ff707` (2026-09-14).** Реализация и verification — в «Implementation closure» выше.
 
 ### Сценарий и живое воспроизведение (2026-09-14, dev HEAD)
 
@@ -255,11 +286,20 @@ WHERE s.archived_at IS NOT NULL AND b.qty <> 0 AND i.is_active = false;
 
 При находках — точечная ручная коррекция через штатные adjustment-операции с аудитом (не прямой UPDATE). Решение о ремедиации принимает пользователь.
 
+**Подтверждённый инцидент (dev-стенд, read-only аудит 2026-09-14):** запрос №1 — 0 строк; запрос №2 — 2 строки:
+
+- **item 4729** — срабатывание D3 на старом коде: `review_item.merge` 2026-09-14 04:26:28 выполнен при активном pending → accept 04:27:06 → принятые `5.000` легли на архивированный subject (target не пополнён; мёртвый остаток, integrity CLI не детектирует);
+- item 3659 — legacy non-review (`review_status` NULL, subject archived 2026-07-31, остаток 1.000), не D3-класс; решение по нему — отдельно.
+
+**Обязательное условие production release:** выполнить оба аудита выше **read-only** на прод-БД (или её копии) до релиза. **Никакого auto-fix.** При находках решение о ремедиации принимает пользователь; коррекция — только штатными adjustment-операциями с аудитом, не прямым UPDATE.
+
 ---
 
-## D4 (наблюдение, вне трёх заявленных дефектов) — 4.1 FOLLOW-UP
+## 4.1 FOLLOW-UP (после закрытия D1–D3)
 
-`ReviewItemBalanceDto.qty: int` (`app/schemas/review_item.py:71-74`) и `qty=int(br.qty)` в detail-ручке (`routes_review_items.py:123`) **усекают** дробные остатки `Numeric(18,3)` (5.750 → 5). 500 не возникает (явный int-каст), но detail-экран показывает неверные дробные остатки. Фикс: `qty: Decimal` — аддитивно, но меняет JSON-тип поля → согласовать с потребителями в 4.1. В list-фиксе D2 не повторять (там сразу Decimal).
+1. **`ReviewItemBalanceDto.qty` → Decimal (D4).** `ReviewItemBalanceDto.qty: int` (`SyncServer/app/schemas/review_item.py:71-74`) и `qty=int(br.qty)` в detail-ручке (`routes_review_items.py:123`) **усекают** дробные остатки `Numeric(18,3)` (5.750 → 5). 500 не возникает (явный int-каст), но detail-экран показывает неверные дробные остатки. Фикс аддитивен, но меняет JSON-тип поля → согласовать с потребителями в 4.1. В list-контракте D2 исправлено сразу (Decimal).
+2. **Register guard TOCTOU/concurrency.** Проверка `has_active_registers` не берёт `FOR UPDATE` на register-строках — унаследованный паритет с legacy `_check_no_active_registers` и `delete_review_item`; этой задачей риск не введён и не ухудшен. При необходимости — отдельный дизайн блокировок (последовательная проверка под блокировкой subject/register-строк).
+3. **Modern review-item vs legacy TemporaryItem projections.** `review-items` confirm/merge не выставляют `TemporaryItem.status`/`resolved_item_id` — проекции заполняются только legacy-потоком (`/temporary-items/*`); у современных review-item линий `temporary_item_id/status` и `resolved_item_id/name` остаются null. Требует отдельного решения о консистентности read-модели (не менять в 4.0 без ADR).
 
 ---
 

@@ -135,7 +135,9 @@ def _blocks_and_signers_for_template(
     family: str,
 ) -> tuple[dict[str, list[str]], list[str]]:
     """Return (block expectations, signer labels) for an entry."""
-    if template == CANONICAL_WAYBILL_TEMPLATE:
+    # The whole warehouse-waybill-ru 2.x line renders the canonical
+    # production form (2.2.1 is the ADR-0034 null-safety patch over 2.2.0).
+    if template == CANONICAL_WAYBILL_TEMPLATE or template.startswith("warehouse-waybill-ru@2."):
         return CANONICAL_WAYBILL_BLOCKS, CANONICAL_WAYBILL_SIGNERS
     return FAMILY_BLOCKS[family], FAMILY_SIGNERS_EXPECTED[family]
 

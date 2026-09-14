@@ -1,0 +1,130 @@
+{
+  "engine_contract_version": "1.0.0",
+  "document_contract": "warehouse.operation-document/v2",
+  "document_type": "waybill",
+  "template_id": "warehouse-waybill-ru",
+  "template_version": "2.2.1",
+  "locale": "ru-RU",
+  "render_profile": "print",
+  "document_id": "0385ae37-b269-4ebb-b865-6a1af1e715f9",
+  "document_number": "WB-2-20260612-36f5",
+  "document": {
+    "basis": {
+      "date": null,
+      "type": null,
+      "number": null
+    },
+    "lines": [
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 1791,
+        "item_sku": "",
+        "quantity": 1.0,
+        "item_name": "к/т прокладок двигателя Д-21, Д-120 (полный)",
+        "unit_name": "Комплект",
+        "line_number": 1,
+        "unit_symbol": "компл",
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 1792,
+        "item_sku": "240-1000104СТ",
+        "quantity": 1.0,
+        "item_name": "Вкладыши ЯМЗ-240 ш СТ (88,00 мм)",
+        "unit_name": "Комплект",
+        "line_number": 2,
+        "unit_symbol": "компл",
+        "category_name": "Без категории"
+      },
+      {
+        "batch": null,
+        "comment": null,
+        "item_id": 1793,
+        "item_sku": "240-1002055",
+        "quantity": 1.0,
+        "item_name": "Сальник 50х70-1,2",
+        "unit_name": "Штука",
+        "line_number": 3,
+        "unit_symbol": "шт",
+        "category_name": "Без категории"
+      }
+    ],
+    "sender": {
+      "site_id": 2,
+      "site_code": "2",
+      "site_name": "Акша",
+      "description": "",
+      "organization": {
+        "tax_id": null,
+        "address": "",
+        "contacts": null,
+        "legal_name": "Общество с ограниченной ответственностью Автоматизированные системы \"Горизонт\"",
+        "short_name": "ООО АС \"Горизонт\""
+      }
+    },
+    "language": "ru",
+    "receiver": null,
+    "issued_to": null,
+    "recipient": null,
+    "created_by": {
+      "role": "chief_storekeeper",
+      "user_id": "00000000-0000-4000-8000-000000000001",
+      "username": "test-user",
+      "full_name": "Тестовый Пользователь"
+    },
+    "signatures": {
+      "roles": {
+        "accepted_by": null,
+        "handed_over": "Тестовый Пользователь",
+        "chief_accountant": "________________"
+      },
+      "created_by": "Тестовый Пользователь",
+      "submitted_by": "Тестовый Пользователь"
+    },
+    "source_site": {
+      "site_id": 2,
+      "site_code": "2",
+      "site_name": "Акша",
+      "description": ""
+    },
+    "total_lines": 3,
+    "generated_at": "2026-06-12T05:50:12.897852+00:00",
+    "localization": {
+      "currency": "RUB",
+      "language": "ru",
+      "date_format": "%d.%m.%Y",
+      "datetime_format": "%d.%m.%Y %H:%M:%S",
+      "thousands_separator": " ",
+      "number_decimal_separator": ","
+    },
+    "operation_id": "c519f71c-c2a3-4ad5-9fe1-7800c05e83de",
+    "organization": {
+      "full_name": "Общество с ограниченной ответственностью Автоматизированные системы \"Горизонт\"",
+      "legal_name": "Общество с ограниченной ответственностью Автоматизированные системы \"Горизонт\"",
+      "short_name": "ООО АС \"Горизонт\""
+    },
+    "source_label": "Акша",
+    "submitted_by": {
+      "role": "chief_storekeeper",
+      "user_id": "00000000-0000-4000-8000-000000000001",
+      "username": "test-user",
+      "full_name": "Тестовый Пользователь"
+    },
+    "document_title": "Товарная накладная",
+    "operation_type": "RECEIVE",
+    "operation_notes": "ООО \"Тестовый Поставщик\" с/ф №ТЕСТ-0001 от 05.06.2026",
+    "destination_site": null,
+    "document_heading": "Товарная накладная ООО АС \"Горизонт\"",
+    "operation_status": "submitted",
+    "warehouse_keeper": "Тестовый Пользователь",
+    "destination_label": "Акша",
+    "operation_created_at": "2026-06-12T05:50:10.919776+00:00",
+    "operation_type_label": "Поступление",
+    "operation_effective_at": "2026-06-12T05:42:00+00:00",
+    "operation_submitted_at": "2026-06-12T05:50:12.869645+00:00",
+    "operation_acceptance_state": "pending"
+  }
+}

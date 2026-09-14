@@ -36,7 +36,7 @@ REQUIRED_KEYS = {
     "semantic",
 }
 
-EXPECTED_ENTRY_COUNT = 11
+EXPECTED_ENTRY_COUNT = 17
 
 
 # ---------------------------------------------------------------------------
@@ -123,6 +123,12 @@ def test_golden_expected_values_match_t9_output() -> None:
     payload = json.loads(INDEX_PATH.read_text(encoding="utf-8"))
     entries = payload.get("entries", [])
     for entry in entries:
+        if not entry.get("t9_compare", True):
+            # Entries explicitly excluded from the T9 (Phase 2/6C)
+            # cross-check: T9 outputs exist only for the baseline
+            # fixtures, while the 2.2.x page counts intentionally
+            # differ from the frozen legacy baseline.
+            continue
         fixture_rel = entry["fixture"]
         fixture_stem = Path(fixture_rel).stem
         # waybill-75.weasy.json → "waybill-75" (compare dir uses logical name).

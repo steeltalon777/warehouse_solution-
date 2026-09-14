@@ -52,6 +52,11 @@ WHEEL_REQUIRED_SUBSTRINGS = (
     "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.0/layout-config.typ",
     "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.0/components/pagination.typ",
     "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.0/components/signatures.typ",
+    "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.1/manifest.yaml",
+    "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.1/main.typ",
+    "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.1/layout-config.typ",
+    "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.1/components/pagination.typ",
+    "share/quartermaster_document_engine/templates/warehouse-waybill-ru/2.2.1/components/signatures.typ",
     "share/quartermaster_document_engine/contracts/envelope/v1/envelope.schema.json",
     "share/quartermaster_document_engine/contracts/warehouse.operation-document/v2/schema.json",
     "share/quartermaster_document_engine/contracts/fuel.monthly-report/v1/schema.json",
@@ -262,9 +267,10 @@ def test_install_into_venv_resolves_installed_share_paths(
     assert "id: warehouse-waybill-ru" in manifest_text
     assert "version: 2.0.0" in manifest_text
 
-    # 2.2.0 (TZ-QDE_WAYBILL_PAGINATION_REBALANCE): the mapped production
-    # version must be self-sufficient in the installed package — a
-    # separate QDE deployment installs ONLY this wheel/share layout.
+    # 2.2.0 (TZ-QDE_WAYBILL_PAGINATION_REBALANCE): the superseded
+    # production version stays frozen and self-sufficient in the
+    # installed package — a separate QDE deployment installs ONLY this
+    # wheel/share layout.
     pkg22 = share_root / "templates" / "warehouse-waybill-ru" / "2.2.0"
     for rel in (
         "manifest.yaml",
@@ -278,6 +284,22 @@ def test_install_into_venv_resolves_installed_share_paths(
     manifest22 = (pkg22 / "manifest.yaml").read_text(encoding="utf-8")
     assert "id: warehouse-waybill-ru" in manifest22
     assert "version: 2.2.0" in manifest22
+    # 2.2.1 (ADR-0034 null-safety patch): the mapped production version
+    # must be self-sufficient in the installed package.
+    pkg221 = share_root / "templates" / "warehouse-waybill-ru" / "2.2.1"
+    for rel in (
+        "manifest.yaml",
+        "main.typ",
+        "layout-config.typ",
+        "LAYOUT.md",
+        "components/pagination.typ",
+        "components/signatures.typ",
+    ):
+        assert (pkg221 / rel).is_file(), f"installed 2.2.1 resource missing: {rel}"
+    manifest221 = (pkg221 / "manifest.yaml").read_text(encoding="utf-8")
+    assert "id: warehouse-waybill-ru" in manifest221
+    assert "version: 2.2.1" in manifest221
+
     # The superseded 2.1.0 stays on disk (frozen, unaccepted).
     pkg21 = share_root / "templates" / "warehouse-waybill-ru" / "2.1.0"
     assert (pkg21 / "manifest.yaml").is_file()

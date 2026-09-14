@@ -82,19 +82,24 @@ BLOCK_EXPECTATIONS: dict[str, dict[str, list[str]]] = {
 # reproduces the legacy Django/WeasyPrint form, whose wording differs
 # from the Phase 1 spike baseline (header "Накладная № …", 4-column
 # table with "Наименование ТМЦ", MOVE signature labels).
+_CANONICAL_WAYBILL_BLOCKS: dict[str, list[str]] = {
+    "header": ["Накладная №"],
+    "table": ["Наименование ТМЦ", "Кол-во"],
+    "signatures": [
+        "Кладовщик",
+        "Операцию разрешил",
+        "Водитель",
+        "Начальник базы",
+        "Груз принял",
+    ],
+    "footer": ["Лист"],
+}
+
+# The whole 2.x production line renders the same canonical form
+# (2.2.1 is the ADR-0034 null-safety patch over 2.2.0).
 TEMPLATE_BLOCK_EXPECTATIONS: dict[tuple[str, str], dict[str, list[str]]] = {
-    ("warehouse-waybill-ru", "2.0.0"): {
-        "header": ["Накладная №"],
-        "table": ["Наименование ТМЦ", "Кол-во"],
-        "signatures": [
-            "Кладовщик",
-            "Операцию разрешил",
-            "Водитель",
-            "Начальник базы",
-            "Груз принял",
-        ],
-        "footer": ["Лист"],
-    },
+    ("warehouse-waybill-ru", "2.0.0"): _CANONICAL_WAYBILL_BLOCKS,
+    ("warehouse-waybill-ru", "2.2.1"): _CANONICAL_WAYBILL_BLOCKS,
 }
 
 

@@ -1,0 +1,34 @@
+{
+  "engine_contract_version": "1.0.0",
+  "document_contract": "warehouse.operation-document/v2",
+  "document_type": "waybill",
+  "template_id": "warehouse-waybill-ru",
+  "template_version": "2.2.1",
+  "locale": "ru-RU",
+  "render_profile": "print",
+  "document_id": "00000000-0000-4000-8000-000000000001",
+  "document_number": "WB-MIN-1",
+  "document": {
+    "lines": [
+      {
+        "line_number": 1,
+        "item_name": "ТМЦ 1",
+        "unit_symbol": "шт",
+        "quantity": 1
+      },
+      {
+        "line_number": 2,
+        "item_name": "ТМЦ 2",
+        "unit_symbol": "шт",
+        "quantity": 1
+      },
+      {
+        "line_number": 3,
+        "item_name": "ТМЦ 3",
+        "unit_symbol": "шт",
+        "quantity": 1
+      }
+    ]
+  },
+  "assets": {}
+}

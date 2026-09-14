@@ -16,18 +16,31 @@ Structural + semantic регрессия для Quartermaster Document Engine
 
 ## Acceptance set
 
-Шесть `(template × backend)` × шесть фикстур = **6 entries**
-(одна фикстура на каждую пару backend'ов; см. TZ §13.6 — без полной
-матрицы размеров). Полный список — в `index.json`.
+**17 entries** (полный список — `index.json`):
 
-| template@version | backend | fixture |
-|---|---|---|
-| `warehouse-waybill-ru@1.0` | weasyprint | `tests/fixtures/waybill/waybill-75.weasy.json` |
-| `spike-waybill-typst@0.1.0` | typst | `tests/fixtures/waybill/waybill-75.typst.json` |
-| `spike-route-sheet-weasy@0.1.0` | weasyprint | `tests/fixtures/route-sheet/vehicle-route-sheet-1.weasy.json` |
-| `spike-route-sheet-typst@0.1.0` | typst | `tests/fixtures/route-sheet/vehicle-route-sheet-1.typst.json` |
-| `spike-fuel-report-weasy@0.1.0` | weasyprint | `tests/fixtures/fuel/fuel-report-500.weasy.json` |
-| `spike-fuel-report-typst@0.1.0` | typst | `tests/fixtures/fuel/fuel-report-500.typst.json` |
+| Набор | template@version | entries | fixtures |
+|---|---|---|---|
+| Phase 2 spike-матрица | `warehouse-waybill-ru@1.0`, `spike-*@0.1.0` | 6 | `tests/fixtures/{waybill,route-sheet,fuel}/*` |
+| Каноническая продакшн-форма | `warehouse-waybill-ru@2.0.0` | 5 | `tests/fixtures/waybill/waybill-qde-{1,20,75,200,500}.typst.json` |
+| Null-safety патч (ADR-0034) | `warehouse-waybill-ru@2.2.1` | 6 | `tests/fixtures/waybill-null/*.typst.json`, `tests/fixtures/waybill-221/waybill-qde221-75.typst.json` |
+
+### `t9_compare`
+
+T9-артефакты (`spike-out/compare/<fixture>/{structural,semantic}.json`)
+зафиксированы только для базовых фикстур Phase 2 / 6C. Записи с
+`"t9_compare": false` исключены из проверки
+`test_golden_expected_values_match_t9_output`: страницы 2.2.x
+намеренно отличаются от замороженного legacy-базлайна
+(measurable pagination rebalance, LAYOUT.md §10), поэтому сравнение с
+T9 для них не имеет смысла. Все остальные golden-гейты
+(`golden_update.py --check`, required keys, LFS-флаг) применяются к
+ним в полном объёме.
+
+Для null-safety записей `pass: false` в отдельных полях — это
+**ожидаемый** результат, а не дефект: исторический receiver=null
+capture и sender=null вариант сознательно уходят в computed-title
+fallback, поэтому `semantic.document_number` не совпадает с
+envelope-номером (запись фиксируется «как есть», см. ниже).
 
 Каталог шаблона = `<id>-<version>` в нижнем регистре
 (`warehouse-waybill-ru-1.0`, `spike-fuel-report-typst-0.1.0` и т.п.).

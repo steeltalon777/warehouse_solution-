@@ -14,11 +14,15 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+from typing import Any
 
 from qm_engine.envelope import parse_envelope
 
 from tests.fixtures.generate_fixtures import (
     SPIKE_TEMPLATE_VERSION,
+    WAYBILL_221_DIR,
+    WAYBILL_221_TYPST_TEMPLATE_VERSION,
+    WAYBILL_NULL_DIR,
     WAYBILL_QDE_TYPST_TEMPLATE_ID,
     WAYBILL_QDE_TYPST_TEMPLATE_VERSION,
     WAYBILL_TYPST_TEMPLATE_ID,
@@ -214,3 +218,72 @@ def test_committed_waybill_lines_satisfy_tz_diversity() -> None:
     # Long comment on line 50.
     comment_50 = lines[49].get("comment")
     assert isinstance(comment_50, str) and len(comment_50) > 100
+
+
+# ---------------------------------------------------------------------------
+# ADR-0034: 2.2.1 null-safety fixtures (contract validation, no Typst).
+# ---------------------------------------------------------------------------
+
+
+def _parse_fixture(path: Path) -> Any:
+    return parse_envelope(path.read_text(encoding="utf-8"))
+
+
+def test_null_safety_fixtures_are_valid_and_isolate_the_guards() -> None:
+    """The 2.2.1 fixtures parse, pin the patch version and isolate one null chain each.
+
+    These checks run WITHOUT Typst (fixture contract validation only);
+    the render-level assertions live in
+    ``tests/integration/test_waybill_null_safety.py``.
+    """
+    expected_null_files = {
+        "waybill-null-receiver.typst.json",
+        "waybill-null-sender.typst.json",
+        "waybill-null-operation.typst.json",
+        "waybill-null-basis.typst.json",
+        "waybill-minimal.typst.json",
+    }
+    assert {p.name for p in WAYBILL_NULL_DIR.glob("*.json")} == expected_null_files
+    assert {p.name for p in WAYBILL_221_DIR.glob("*.json")} == {
+        "waybill-qde221-75.typst.json"
+    }
+
+    for path in sorted(WAYBILL_NULL_DIR.glob("*.json")) + sorted(WAYBILL_221_DIR.glob("*.json")):
+        env = _parse_fixture(path)
+        assert env.template_id == WAYBILL_QDE_TYPST_TEMPLATE_ID, path.name
+        assert env.template_version == WAYBILL_221_TYPST_TEMPLATE_VERSION, path.name
+
+    receiver_raw = (WAYBILL_NULL_DIR / "waybill-null-receiver.typst.json").read_text(
+        encoding="utf-8"
+    )
+    # The historical capture is scrubbed: no personal names / usernames.
+    for token in ("Светлана", "Svetlana", "7337709e"):
+        assert token not in receiver_raw
+    receiver = _parse_fixture(WAYBILL_NULL_DIR / "waybill-null-receiver.typst.json")
+    assert receiver.data["document_id"] == "0385ae37-b269-4ebb-b865-6a1af1e715f9"
+    assert receiver.document["receiver"] is None
+    assert "consignee_label" not in receiver.document
+    assert receiver.document["operation_type"] == "RECEIVE"
+    assert receiver.document["sender"]["site_name"] == "Акша"
+    assert len(receiver.document["lines"]) == 3
+
+    sender = _parse_fixture(WAYBILL_NULL_DIR / "waybill-null-sender.typst.json").document
+    assert sender["sender"] is None
+    assert "operation_display_number" not in sender
+    assert sender["operation"]["display_number"] is None
+
+    operation = _parse_fixture(WAYBILL_NULL_DIR / "waybill-null-operation.typst.json").document
+    assert operation["operation"] is None
+    assert "operation_display_number" not in operation
+    assert "operation_created_at" not in operation
+
+    basis = _parse_fixture(WAYBILL_NULL_DIR / "waybill-null-basis.typst.json").document
+    assert basis["basis"] is None
+    assert "basis_label" not in basis
+
+    minimal = _parse_fixture(WAYBILL_NULL_DIR / "waybill-minimal.typst.json").document
+    assert set(minimal) == {"lines"}
+    assert len(minimal["lines"]) == 3
+
+    normal = _parse_fixture(WAYBILL_221_DIR / "waybill-qde221-75.typst.json")
+    assert len(normal.document["lines"]) == 75

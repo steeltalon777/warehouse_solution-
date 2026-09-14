@@ -45,6 +45,12 @@ WAYBILL_QDE_TYPST_TEMPLATE_VERSION = "2.0.0"
 # tests/unit/test_fixtures.py contract for tests/fixtures/waybill/ —
 # 14 logical pairs / 28 files — must stay untouched).
 WAYBILL_QDE22_TYPST_TEMPLATE_VERSION = "2.2.0"
+# 2.2.1 null-safety patch (ADR-0034): typst-only fixtures in separate
+# directories so the frozen tests/fixtures/waybill/ contract stays
+# untouched. The receiver=null historical capture in waybill-null/ is
+# hand-maintained (a scrubbed production payload) and intentionally NOT
+# regenerated here; the synthetic variants below are.
+WAYBILL_221_TYPST_TEMPLATE_VERSION = "2.2.1"
 
 ROUTE_SHEET_WEASY_TEMPLATE_ID = "spike-route-sheet-weasy"
 ROUTE_SHEET_TYPST_TEMPLATE_ID = "spike-route-sheet-typst"
@@ -56,6 +62,8 @@ FUEL_TYPST_TEMPLATE_ID = "spike-fuel-report-typst"
 REPO = Path(__file__).resolve().parents[2]
 WAYBILL_DIR = REPO / "tests" / "fixtures" / "waybill"
 WAYBILL_QDE22_DIR = REPO / "tests" / "fixtures" / "waybill-qde22"
+WAYBILL_221_DIR = REPO / "tests" / "fixtures" / "waybill-221"
+WAYBILL_NULL_DIR = REPO / "tests" / "fixtures" / "waybill-null"
 ROUTE_DIR = REPO / "tests" / "fixtures" / "route-sheet"
 FUEL_DIR = REPO / "tests" / "fixtures" / "fuel"
 
@@ -712,6 +720,102 @@ def build_waybill_envelope(
     }
 
 
+def write_null_safety_fixtures() -> list[Path]:
+    """Write the ADR-0034 2.2.1 normal-path + null-safety fixtures.
+
+    Returns the list of written paths (for ``main()`` reporting). The
+    receiver=null historical capture is intentionally absent: it is a
+    hand-maintained scrubbed production payload, see
+    ``tests/integration/test_waybill_null_safety.py``.
+    """
+
+    written: list[Path] = []
+    WAYBILL_221_DIR.mkdir(parents=True, exist_ok=True)
+    WAYBILL_NULL_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Normal-path member pinned to 2.2.1: identical body to
+    # waybill-qde22-75, only the template version differs.
+    payload_75 = build_waybill_envelope(
+        75,
+        template_id=WAYBILL_WEASY_TEMPLATE_ID,
+        template_version=WAYBILL_WEASY_TEMPLATE_VERSION,
+    )
+    typst_75 = dict(payload_75)
+    typst_75["template_id"] = WAYBILL_QDE_TYPST_TEMPLATE_ID
+    typst_75["template_version"] = WAYBILL_221_TYPST_TEMPLATE_VERSION
+    path_75 = WAYBILL_221_DIR / "waybill-qde221-75.typst.json"
+    _write_json(path_75, typst_75)
+    written.append(path_75)
+
+    def _write_null_variant(name: str, mutate: Any) -> None:
+        envelope = build_waybill_envelope(
+            3,
+            template_id=WAYBILL_QDE_TYPST_TEMPLATE_ID,
+            template_version=WAYBILL_221_TYPST_TEMPLATE_VERSION,
+        )
+        mutate(envelope["document"])
+        path = WAYBILL_NULL_DIR / f"{name}.typst.json"
+        _write_json(path, envelope)
+        written.append(path)
+
+    def _null_sender(document: dict[str, Any]) -> None:
+        # Title must reach the computed ddMMyy/HHmm/site_id branch:
+        # no operation_display_number / operation.display_number, and
+        # the guarded sender read yields site_id "0".
+        document.pop("operation_display_number", None)
+        document["operation"]["display_number"] = None
+        document["sender"] = None
+
+    def _null_operation(document: dict[str, Any]) -> None:
+        # No operation object, no operation_display_number and no
+        # operation_created_at -> the title falls back to the envelope
+        # document_number.
+        document.pop("operation_display_number", None)
+        document.pop("operation_created_at", None)
+        document["operation"] = None
+
+    def _null_basis(document: dict[str, Any]) -> None:
+        # No basis object, no basis_label -> "Основание:" falls back to
+        # operation_type_label.
+        document.pop("basis_label", None)
+        document["basis"] = None
+
+    _write_null_variant("waybill-null-sender", _null_sender)
+    _write_null_variant("waybill-null-operation", _null_operation)
+    _write_null_variant("waybill-null-basis", _null_basis)
+
+    # Phase1-minimal envelope: the contract requires ONLY ``lines``
+    # (header fields live at the envelope level).
+    minimal = {
+        "engine_contract_version": "1.0.0",
+        "document_contract": "warehouse.operation-document/v2",
+        "document_type": "waybill",
+        "template_id": WAYBILL_QDE_TYPST_TEMPLATE_ID,
+        "template_version": WAYBILL_221_TYPST_TEMPLATE_VERSION,
+        "locale": "ru-RU",
+        "render_profile": "print",
+        "document_id": "00000000-0000-4000-8000-000000000001",
+        "document_number": "WB-MIN-1",
+        "document": {
+            "lines": [
+                {
+                    "line_number": idx,
+                    "item_name": f"ТМЦ {idx}",
+                    "unit_symbol": "шт",
+                    "quantity": 1,
+                }
+                for idx in (1, 2, 3)
+            ],
+        },
+        "assets": {},
+    }
+    path_min = WAYBILL_NULL_DIR / "waybill-minimal.typst.json"
+    _write_json(path_min, minimal)
+    written.append(path_min)
+
+    return written
+
+
 # ---------------------------------------------------------------------------
 # Vehicle route sheet (§9.2).
 # ---------------------------------------------------------------------------
@@ -986,7 +1090,7 @@ def make_pair(
 
 
 def main() -> int:
-    """Generate all 28 fixtures. Returns ``0``. Run from repo root."""
+    """Generate the frozen pair fixtures + the ADR-0034 null-safety set. Returns ``0``."""
 
     WAYBILL_DIR.mkdir(parents=True, exist_ok=True)
     ROUTE_DIR.mkdir(parents=True, exist_ok=True)
@@ -1054,6 +1158,9 @@ def main() -> int:
         path = WAYBILL_QDE22_DIR / f"waybill-qde22-{n}.typst.json"
         _write_json(path, typst)
         pairs.append((path,))
+
+    # 2.2.1 null-safety fixtures (ADR-0034).
+    pairs.extend(write_null_safety_fixtures())
 
     # Vehicle route sheet (one logical fixture, two envelopes).
     rs_payload = build_route_sheet_envelope(

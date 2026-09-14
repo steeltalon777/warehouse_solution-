@@ -247,12 +247,18 @@ def check_waybill_semantic(
     pass the gate without forcing a Phase 1 template change.
     """
     all_text = "\n".join(page_texts)
-    is_canonical = template_key(envelope) == CANONICAL_WAYBILL_TEMPLATE
+    # The 2.x production line (2.0.0 / 2.1.0 / 2.2.x) shares the legacy
+    # form: no totals row, MOVE signature set.
+    template_id, template_version = template_key(envelope)
+    is_canonical = (
+        template_id == CANONICAL_WAYBILL_TEMPLATE[0] and template_version.startswith("2.")
+    )
     fields: dict[str, SemanticFieldResult] = {}
 
     doc_number = envelope.get("document_number", "") or ""
     alternatives: list[str] = [doc_number] if doc_number else []
-    display_number = envelope.get("document", {}).get("operation", {}).get("display_number", "")
+    operation = envelope.get("document", {}).get("operation") or {}
+    display_number = operation.get("display_number", "")
     if display_number and display_number not in alternatives:
         # Phase 1 WeasyPrint baseline prefers
         # ``operation.display_number``; the Typst template renders

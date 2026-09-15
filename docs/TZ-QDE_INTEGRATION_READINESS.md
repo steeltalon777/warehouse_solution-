@@ -41,17 +41,44 @@
 - [x] 2. Phase 6A tests (unit + integration + stand smoke)
 - [x] 3. Phase 6B complete — RenderedDocumentArtifact v2 + cache key
 - [x] 4. Phase 6B tests (unit + integration + migration roundtrip + stand smoke)
-- [x] 5. Phase 6C complete — production Typst waybill template `warehouse-waybill-ru@2.0.0`
+- [x] 5. Phase 6C complete — production Typst waybill template (2.0.0 → принята эволюция до `warehouse-waybill-ru@2.2.2`)
 - [x] 6. Phase 6C tests (golden + QDE unit/component + harness)
-- [ ] 7. Phase 6D complete — SHADOW integration (legacy primary, QDE shadow)
-- [ ] 8. Phase 6D tests (visual diff collected, hash comparison, stand smoke)
-- [ ] 9. Phase 6E complete — acceptance / visual verification
-- [ ] 10. Phase 6E tests (golden regression + manual sign-off + Playwright E2E)
-- [ ] 11. Phase 6F complete — QDE primary cutover
-- [ ] 12. Phase 6F tests (production smoke + rollback dry-run + latency comparison)
-- [ ] 13. Regression checks: SyncServer pytest + Django manage.py test + QDE pytest зелёные
-- [ ] 14. Documentation updated (README.md, ARCHITECTURE.md, INDEX.md, AI_ENTRY_POINTS.md)
-- [ ] 15. Final acceptance review с evidence table
+- [x] 7. Phase 6D complete — SHADOW integration (legacy primary, QDE shadow); принято 2.2.2, corpus 5768/5768
+- [x] 8. Phase 6D tests (visual diff collected, hash comparison, stand smoke) — evidence: `Warehouse_web/spike-out/waybill-qde-vs-django/phase6d-2.2.2-20260914T084902Z/`
+- [x] 9. Phase 6E complete — acceptance / visual verification; deterministic set + independent visual acceptance (user verdict)
+- [ ] 10. Phase 6E tests (golden regression + manual sign-off + Playwright E2E) — golden + manual sign-off подтверждены; Playwright E2E для PDF-потока не собирался (browser download flow не менялся) — см. executor notes
+- [ ] 11. Phase 6F complete — QDE primary cutover; **код и stand-верификация завершены**, production-переключение и 7-дневное наблюдение — за пользователем (deploy — решение пользователя)
+- [ ] 12. Phase 6F tests (production smoke + rollback dry-run + latency comparison) — rollback dry-run и latency comparison выполнены на dev-стенде; production smoke ожидает deploy
+- [x] 13. Regression checks: SyncServer pytest (1004 passed) + Django manage.py test (764 passed) + QDE pytest (unit 152 / golden 7 / canonical 30) зелёные
+- [ ] 14. Documentation updated — для 6F roles/entry points не менялись; root docs уже описывают QDE; обновлён комментарий `DOCUMENTS_RENDER_MODE` в settings
+- [ ] 15. Final acceptance review с evidence table — за архитектором/QA/пользователем
+
+### Executor notes — Phase 6F (2026-09-15)
+
+**Контракт:** §6.4 + §10.6. Реализовано:
+- `render_qde_primary()` — QDE primary render + immutable artifact (`render_role="primary"`); reuse READY-артефакта по полной render-identity, включая ранее созданные shadow-артефакты (роль не переписывается — §6.6); ошибки QDE пробрасываются без подмены legacy PDF.
+- `render_document_pdf(..., render_role=...)` — legacy renderer по умолчанию сохраняет роль `legacy`; emergency fallback пишет `emergency_fallback`.
+- `DocumentPdfView` при `DOCUMENTS_RENDER_MODE=qde`: QDE primary; при ошибке и `QDE_EMERGENCY_FALLBACK_ENABLED=false` — статус по §7.4 (`RENDER_FAILED`→500, timeout→503 + `Retry-After`) без legacy PDF; при `true` — legacy PDF + заголовок `X-QDE-Fallback: emergency`.
+- Rollback: `DOCUMENTS_RENDER_MODE=legacy` + restart; данные не меняются, legacy renderer не удаляется.
+
+**Изменённые файлы:**
+- `Warehouse_web/apps/documents/services.py`
+- `Warehouse_web/apps/documents/views.py`
+- `Warehouse_web/config/settings/base.py`
+- `Warehouse_web/apps/documents/tests/test_qde_primary.py` (новый, 16 тестов)
+
+**Тестовая лестница:** `apps.documents` 195 OK; полный Django `manage.py test` 764 OK; QDE unit 152 OK, golden 7 OK, canonical 2.0.0 30 OK; SyncServer 1004 passed / 3 skipped / 6 xfailed. Runtime identity — sha ответов совпадают с принятым Phase 6E набором (`warehouse-waybill-ru@2.2.2`).
+
+**Stand smoke (dev, Docker):** representative-set (small / 32 / 44 / 69 / 143 / nullable receiver) отдан из принятых 2.2.2 shadow-артефактов (sha == 6E accepted; stale 2.2.0/2.2.1 не переиспользован); fresh-документы: pass 1 — miss (fresh QDE render), pass 2 — hit (reuse без повторного рендера); no-fallback (сломанный `QM_TEMPLATES_DIR`): 503 `TEMPLATE_NOT_INSTALLED`, ноль legacy PDF и артефактов; fallback: 200 legacy PDF + `X-QDE-Fallback: emergency` + артефакт `django-legacy/weasyprint/.../emergency_fallback`; rollback: mode=legacy, sha совпали с before-state. Стенд оставлен в исходном режиме `legacy`; production-переключение — за пользователем.
+
+**Latency:** legacy p95 (n=12, cold) ≈ 359 ms; QDE первый проход p95 (включая cold render) ≈ 339 ms; QDE steady-state (artifact hit, 6 representative) p95 ≈ 52 ms. Gate §6.4.5 `p95 ≤ 2× legacy` выполнен; corpus 6D p95 = 240 ms (n=5768).
+
+**Findings (non-blocking, не чинились):**
+1. BFF `DocumentRenderView` (`apps/bff_api/documents_views.py`, `GET /api/.../documents/<id>/render?format=pdf`) вне явного file-scope §10.6 остаётся на legacy-рендере при mode=`qde`; Angular waybill flow его не использует (открывает `documents:pdf`). Требуется решение о включении в cutover.
+2. `FileField(upload_to="documents/pdf/")` + явный префикс `documents/pdf/...` в коде даёт двойной путь (`documents/pdf/documents/pdf/...`) для shadow и primary артефактов — косметика, файлы читаются через ORM. Для shadow — pre-existing.
+3. `QM_TYPST_BINARY=/nonexistent` не ломает рендер: QDE резолвит binary по цепочке env → pinned `.spike` → `which typst`; для проверки недоступности backend нужно ломать все ступени (или использовать `QM_TEMPLATES_DIR`).
+
+**Residual:** production `DOCUMENTS_RENDER_MODE=qde` + 7-дневное наблюдение без emergency fallback; production smoke; manual sign-off cutover.
 
 ---
 

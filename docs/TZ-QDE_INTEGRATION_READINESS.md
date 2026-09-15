@@ -71,7 +71,7 @@
 
 **Stand smoke (dev, Docker):** representative-set (small / 32 / 44 / 69 / 143 / nullable receiver) отдан из принятых 2.2.2 shadow-артефактов (sha == 6E accepted; stale 2.2.0/2.2.1 не переиспользован); fresh-документы: pass 1 — miss (fresh QDE render), pass 2 — hit (reuse без повторного рендера); no-fallback (сломанный `QM_TEMPLATES_DIR`): 503 `TEMPLATE_NOT_INSTALLED`, ноль legacy PDF и артефактов; fallback: 200 legacy PDF + `X-QDE-Fallback: emergency` + артефакт `django-legacy/weasyprint/.../emergency_fallback`; rollback: mode=legacy, sha совпали с before-state. Стенд оставлен в исходном режиме `legacy`; production-переключение — за пользователем.
 
-**Latency:** legacy p95 (n=12, cold) ≈ 359 ms; QDE первый проход p95 (включая cold render) ≈ 339 ms; QDE steady-state (artifact hit, 6 representative) p95 ≈ 52 ms. Gate §6.4.5 `p95 ≤ 2× legacy` выполнен; corpus 6D p95 = 240 ms (n=5768).
+**Latency:** legacy p95 (n=12) = 198 ms (max 359 ms); QDE первый проход p95 = 220 ms (включая fresh render; 1.11× legacy); QDE steady-state (artifact hit) p95 = 42 ms (0.21× legacy). Gate §6.4.5 `p95 ≤ 2× legacy` выполнен; corpus 6D p95 = 240 ms (n=5768).
 
 **Findings (non-blocking, не чинились):**
 1. BFF `DocumentRenderView` (`apps/bff_api/documents_views.py`, `GET /api/.../documents/<id>/render?format=pdf`) вне явного file-scope §10.6 остаётся на legacy-рендере при mode=`qde`; Angular waybill flow его не использует (открывает `documents:pdf`). Требуется решение о включении в cutover.

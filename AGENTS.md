@@ -112,6 +112,10 @@ This workspace contains one authoritative backend, one active web client, one hi
 - `WarehouseMobile/`: run `gradlew.bat test` when Android code is touched.
 - `WarehouseAIWorkstation/`: run `dotnet test WarehouseAIWorkstation.sln` only when the user explicitly asks to work on it.
 
+## Git & Release Workflow
+
+- Canonical workflow (branch roles, quick-fix from deployed SHA, backport rules, release manifest): `docs/DEVELOPMENT_WORKFLOW.md`. Follow it for branching, releases, and PRs; this file keeps only workspace-level rules.
+
 ## Documentation Rules
 
 - Update `README.md`, `ARCHITECTURE.md`, `INDEX.md`, `AI_CONTEXT.md`, and `AI_ENTRY_POINTS.md` when project roles, entry points, or verification commands change.

@@ -1,0 +1,39 @@
+# Pilot release manifest — QUICK-FIX PILOT (TEST ONLY, not production)
+# Workflow: docs/DEVELOPMENT_WORKFLOW.md §3 (quick fix from deployed SHA)
+release: pilot-search-fallback-1
+task_id: pilot-search-fallback
+created: 2026-10-27T09:25+09:00
+base:                    # фактически развёрнутый production (audit 2026-10-26)
+  syncserver: { git: cfb93e120dd4bc8ff2d4b08530e06bbc5d54ca6f }
+  warehouse_web: { git: 073fada2d0fb30865f59751d403641f9438a47d0 }
+  db_schema: 0038_add_agent_role
+candidate:
+  syncserver:
+    fix_branch: fix/pilot-search-fallback      # head ae92e53682c324d4d2603f1b7c33a0aa338b750d
+    release_branch: release/pilot-search-fallback
+    commits:                  # VPS-only hotfix, preserved via bundle
+      - f0c649d0e8a414ff0e7e2911adcccbcbdbb95ae1
+      - 9cc17d318be3b3ac9c44f9026b967173e3db17e0
+      - d5be1f354cc8a7cd0dd5e63fd70c621480fda076
+    image:
+      tag: syncserver:release-pilot-search-fallback-ae92e53
+      image_id: sha256:30711c489d2cf12f9779e8927220ba2ebb413d0246b3ee7f4c64a217e8eb80a6
+      note: локальная сборка (без registry digest); provenance = git worktree ae92e53
+deployment:               # УСЛОВНЫЙ деплой: контейнер feature-env, не production
+  kind: feature-env (feat-pilot-hotfix, 127.0.0.1:9100)
+  deployed_at: 2026-10-27T09:21+09:00
+  health: "GET /api/v1/health -> {\"status\":\"ok\"}"
+  smoke: "GET /api/v1/catalog/search/items без токена -> 400 (роутинг жив)"
+  db: отдельный postgres feat-pilot-hotfix_pgdata, alembic head 0038_add_agent_role
+backport:
+  branch: backport/pilot-search-fallback   # от origin/dev (cfb93e1), cherry-pick -x
+  head: eea61da
+  content_equivalence: "git diff d5be1f3 HEAD -> пусто (деревья идентичны)"
+  merge_tree_vs_dev: чисто (c902c8c, конфликтов не предсказано)
+parallel_conflict_demo:
+  branch: feat/pilot-parallel (2 коммита от cfb93e1)
+  integration: temp detached /tmp/ss-integrate @ c5ad5ea
+  conflict: app/repos/catalog_repo.py (import search_utils) — разрешён в пользу hotfix-формы
+notes: >
+  Результаты тестов и статусы — в docs/audit/PILOT_QUICKFIX_REPORT_2026-10-27.md.
+  Этот манифест описывает ТЕСТОВЫЙ цикл; production release set (prod.yaml) не создавался.
